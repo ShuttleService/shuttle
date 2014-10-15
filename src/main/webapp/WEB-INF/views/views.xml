@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+    <definition name="home" template="/WEB-INF/views/home.jsp">
+        <put-attribute name="body" value="" />
+        <put-attribute name="title" value="Shuttle Service. Software As A Service."/>
+    </definition>
+    <definition name="driver" extends="home">
+        <put-attribute name="body" value="/WEB-INF/views/driver.jsp"/>
+        <put-attribute name="title" value="Drivers"/>
+    </definition>
+    <definition name="trip" extends="home">
+        <put-attribute name="body" value="/WEB-INF/views/trip.jsp"/>
+        <put-attribute name="title" value="Trips"/>
+    </definition>
+    <definition name="admin" extends="home">
+        <put-attribute name="body" value="/WEB-INF/views/admin.jsp" />
+        <put-attribute name="title" value="Administration"/>
+    </definition>
+    <definition name="vehicle" extends="home">
+        <put-attribute name="body" value="/WEB-INF/views/vehicle.jsp"/>
+        <put-attribute name="title" value="Vehicles"/>
+    </definition>
+    <definition name="review" extends="home">
+        <put-attribute name="body" value="/WEB-INF/views/review.jsp"/>
+        <put-attribute name="title" value="Reviews"/>
+    </definition>
+    <definition name="login" template="/WEB-INF/views/login.jsp"/>
+</tiles-definitions>
