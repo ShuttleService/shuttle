@@ -25,5 +25,9 @@
         <put-attribute name="body" value="/WEB-INF/views/review.jsp"/>
         <put-attribute name="title" value="Reviews"/>
     </definition>
+    <definition name="company" extends="home">
+        <put-attribute name="body" value="/WEB-INF/views/company.jsp"/>
+        <put-attribute name="title" value="Company Name"/>
+    </definition>
     <definition name="login" template="/WEB-INF/views/login.jsp"/>
 </tiles-definitions>

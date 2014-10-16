@@ -1,5 +1,6 @@
 package com.real.apps.shuttle.controller;
 
+import com.real.apps.shuttle.model.Company;
 import com.real.apps.shuttle.model.Driver;
 import com.real.apps.shuttle.service.DriverService;
 import org.apache.log4j.Logger;
@@ -30,6 +31,7 @@ public class DriverController {
     @RequestMapping(method = RequestMethod.GET,value = "/list/{skip}/{limit}" )
     @ResponseBody
     public List<Driver> list(@PathVariable("skip") int skip,@PathVariable("limit") int limit){
+        logger.debug(String.format("Getting List With {skip%d,limit%d}",skip,limit));
         return service.list(skip,limit);
     }
 
@@ -60,6 +62,8 @@ public class DriverController {
         logger.debug(String.format("Getting One With id %s",id));
         return service.findOne(id);
     }
+
+
     public void setService(DriverService service) {
         this.service = service;
     }
