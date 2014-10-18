@@ -8,23 +8,23 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal well">
-                    <div class="form-group">
+                <form class="form-horizontal well col-xs-12">
+                    <div class="form-group col-xs-6">
                         <input type="text" class="form-control" placeholder="Make">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-xs-6">
                         <input type="text" class="form-control" placeholder="Model">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-xs-6">
                         <input type="number" class="form-control" placeholder="Year Model">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-xs-6">
                         <input type="text" class="form-control" placeholder="Type">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-xs-6">
                         <input type="number" class="form-control" placeholder="Capacity">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-xs-6">
                         <input type="text" class="form-control" placeholder="Number Plate">
                     </div>
                 </form>

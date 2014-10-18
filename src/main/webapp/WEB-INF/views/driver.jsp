@@ -8,23 +8,23 @@
                 <button type="button" data-dismiss="modal" class="close">&times;</button>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal well">
-                    <div class="form-group">
+                <form class="form-horizontal well col-xs-12">
+                    <div class="form-group col-xs-6">
                         <input type="text" placeholder="First Name" class="form-control">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-xs-6">
                         <input type="text" placeholder="Surname" class="form-control">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-xs-6">
                         <input type="email" class="form-control" placeholder="Email Address">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-xs-6">
                         <input type="tel" class="form-control" placeholder="Cellphone Number">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-xs-6">
                         <input type="text" class="form-control" placeholder="Drivers License Class">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-xs-6">
                         <input type="text" class="form-control" placeholder="Drivers License Number">
                     </div>
                 </form>

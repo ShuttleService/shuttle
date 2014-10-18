@@ -36,38 +36,38 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal well">
-                    <div class="form-group">
+                <form class="form-inline well">
+                    <div class="form-group col-xs-6">
                         <input type="email" class="form-control" placeholder="Email">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-xs-6">
                         <input type="text" placeholder="User Name" class="form-control">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-xs-6">
                         <input type="password" class="form-control" placeholder="Password">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-xs-6">
                         <input type="password" placeholder="Retype Password" class="form-control">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-xs-6">
                         <input type="tel" class="form-control" placeholder="Cell Number">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-xs-6">
                         <input type="date" class="form-control" placeholder="Date Of Birth (MM-DD-YYYY)">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-xs-6">
                         <input type="text" class="form-control" placeholder="Street Address">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-xs-6">
                         <input type="text" class="form-control" placeholder="Suburb">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-xs-6">
                         <input type="text" class="form-control" placeholder="City/Town">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-xs-6">
                         <input type="text" class="form-control " placeholder="Province">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-xs-6">
                         <input type="number" class="form-control" placeholder="Postal Code">
                     </div>
                 </form>
