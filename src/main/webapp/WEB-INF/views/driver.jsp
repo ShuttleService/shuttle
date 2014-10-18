@@ -8,7 +8,7 @@
                 <button type="button" data-dismiss="modal" class="close">&times;</button>
             </div>
             <div class="modal-body">
-                I Am The Body.
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
