@@ -40,7 +40,7 @@
                     <div class="form-group">
                         <input type="email" class="form-control" placeholder="Email">
                     </div>
-                    <div class="form-group ">
+                    <div class="form-group">
                         <input type="text" placeholder="User Name" class="form-control">
                     </div>
                     <div class="form-group">
