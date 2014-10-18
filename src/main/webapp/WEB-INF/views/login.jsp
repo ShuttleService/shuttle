@@ -15,13 +15,10 @@
             <span class="col-xs-5"></span>
             <form:form cssClass="form-signin col-xs-2" commandName="login">
                 <div class="form-group">
-                    <label for="userName" class="input-group-addon">User Name<form:input path="userName" id="userName"
-                                                                                         cssClass="form-control"/> </label>
+                   <form:input path="userName" id="userName" cssClass="form-control" placeholder="User Name"/>
                 </div>
                 <div class="form-group">
-                    <label form="password" class="input-group-addon">Password<form:input path="password" type="password"
-                                                                                         cssClass="form-control"
-                                                                                         id="password"/></label>
+                    <form:input path="password" type="password" cssClass="form-control" id="password" placeholder="Password"/>
                 </div>
                 <form:button type="submit" class="btn btn-primary">Login</form:button>
                 <form:button type="button" class="btn btn-default" data-target="#signUp"
@@ -39,63 +36,39 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <form class="form-inline col-xs-12 well">
-                    <div class="form-group col-xs-6">
-                        <label class="input-group">Email
-                            <input type="email" class="form-control" placeholder="me@example.co.za">
-                        </label>
+                <form class="form-horizontal well">
+                    <div class="form-group">
+                        <input type="email" class="form-control" placeholder="Email">
                     </div>
-                    <div class="form-group col-xs-6">
-                        <label class="input-group">User Name
-                            <input type="text" placeholder="User Name" class="form-control">
-                        </label>
+                    <div class="form-group ">
+                        <input type="text" placeholder="User Name" class="form-control">
                     </div>
-                    <div class="form-group col-xs-6">
-                        <label class="input-group">Password
-                            <input type="password" class="form-control" placeholder="Password">
-                        </label>
+                    <div class="form-group">
+                        <input type="password" class="form-control" placeholder="Password">
                     </div>
-                    <div class="form-group col-xs-6">
-                        <label class="input-group" >Retype Password
-                            <input type="password" placeholder="Retype Password" class="form-control">
-                        </label>
+                    <div class="form-group">
+                        <input type="password" placeholder="Retype Password" class="form-control">
                     </div>
-                    <div class="form-group col-xs-6">
-                        <label class="input-group">Cell Number
-                            <input type="tel" class="form-control" placeholder="Cell Number">
-                        </label>
+                    <div class="form-group">
+                        <input type="tel" class="form-control" placeholder="Cell Number">
                     </div>
-                    <div class="form-group col-xs-6">
-                        <label class="input-group">Date Of Birth
-                            <input type="date" class="form-control" placeholder="MM-DD-YYYY">
-                        </label>
+                    <div class="form-group">
+                        <input type="date" class="form-control" placeholder="Date Of Birth (MM-DD-YYYY)">
                     </div>
-                    <div class="form-group col-xs-6">
-                        <label class="input-group">Street Address
-                            <input type="text" class="form-control" placeholder="Street Address">
-                        </label>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Street Address">
                     </div>
-
-                    <div class="form-group col-xs-6">
-                        <label class="input-group">Suburb
-                            <input type="text" class="form-control" placeholder="Suburb">
-                        </label>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Suburb">
                     </div>
-
-                    <div class="form-group col-xs-6">
-                        <label class="input-group">City/Town
-                            <input type="text" class="form-control" placeholder="City/Town">
-                        </label>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="City/Town">
                     </div>
-                    <div class="form-group col-xs-6">
-                        <label class="input-group">Province
-                            <input type="text" class="form-control " placeholder="Province">
-                        </label>
+                    <div class="form-group">
+                        <input type="text" class="form-control " placeholder="Province">
                     </div>
-                    <div class="form-group col-xs-6">
-                        <label class="input-group">Postal Code
-                            <input type="number" class="form-control" placeholder="Postal Code">
-                        </label>
+                    <div class="form-group">
+                        <input type="number" class="form-control" placeholder="Postal Code">
                     </div>
                 </form>
             </div>
