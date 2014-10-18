@@ -30,18 +30,19 @@
                         <li><a href="<spring:url value='vehicle' />">Vehicles</a></li>
                         <li><a href="<spring:url value="review"/>">Reviews</a></li>
                         <li class="dropdown">
-                            <a data-toggle="dropdown" class="dropdown-toggle" data-target="#"
-                               href="<spring:url value='/company'/>">Admin<b class="caret"></b> </a>
+                            <a data-toggle="dropdown" class="dropdown-toggle" data-target="#" href="#">Admin<b class="caret"></b> </a>
                             <ul class="dropdown-menu">
                                 <li><a href="<spring:url value='/company'/>">Companies</a></li>
                             </ul>
                         </li>
                     </ul>
                 </div>
-
             </div>
 
         </nav>
+    </div>
+    <div class="pull-right">
+        <button data-toggle="modal" data-target="#add"><span class="glyphicon-plus"></span></button>
     </div>
     <div class="row">
         <div class="col-xs-12 text-center">

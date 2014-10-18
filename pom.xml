@@ -154,7 +154,6 @@
                     <scanIntervalSeconds>1</scanIntervalSeconds>
                     <stopKey>stop</stopKey>
                     <stopPort>8081</stopPort>
-
                 </configuration>
             </plugin>
         </plugins>
