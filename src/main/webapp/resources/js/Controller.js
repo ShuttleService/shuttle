@@ -21,9 +21,17 @@ angular.module('controllers', ['services']).
 
     controller('ReviewController', function ($scope, ReviewService) {
 
-        $scope.query = function(){
+        $scope.query = function () {
 
-            $scope.reviews = ReviewService.query({skip:$scope.skip,limit:$scope.limit});
+            $scope.reviews = ReviewService.query({skip: $scope.skip, limit: $scope.limit});
+        }
+    }).
+
+    controller('CompanyController', function ($scope, CompanyService) {
+
+        $scope.get = function (id) {
+
+            $scope.company = CompanyService.get({id: $scope.id});
         }
     })
 

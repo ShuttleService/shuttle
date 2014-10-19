@@ -30,13 +30,13 @@ describe('The Company Service Test', function () {
 
     it('Should Call Get And Return The Got Company', function () {
 
-        var company = {name: 'Test Company Name To Get', id: 'Test Company Id To Get'};
+        var company = {name: 'Test Company Name To Get', id: 'TestCompanyIdToGet'};
 
-        $httpBackend.expectGET(CONTEXT_ROOT + '/company').respond(company);
+        $httpBackend.expectGET(CONTEXT_ROOT + '/company/' + company.id).respond(company);
         var actualCompany;
 
-        CompanyService.get(function(data){
-            console.log('After Getting The Company The Returned Data '+data);
+        CompanyService.get({_id: company.id}, function (data) {
+            console.log('After Getting The Company The Returned Data ' + data);
             actualCompany = data;
         });
 
@@ -47,18 +47,18 @@ describe('The Company Service Test', function () {
 
     });
 
-    it('Should Call Query On The Service And Return A List Of Companies',function(){
+    it('Should Call Query On The Service And Return A List Of Companies', function () {
 
-        var company = {name:'Test Company Name To Be Gotten In A List',id:'Test Company Id To Be Gotten In A List'};
+        var company = {name: 'Test Company Name To Be Gotten In A List', id: 'Test Company Id To Be Gotten In A List'};
         var companyArray = [company];
         var skip = 12;
-        var limit =30;
+        var limit = 30;
 
-        $httpBackend.expectGET(CONTEXT_ROOT+'/company/'+skip+'/'+limit).respond(companyArray);
+        $httpBackend.expectGET(CONTEXT_ROOT + '/company/' + skip + '/' + limit).respond(companyArray);
         var actualCompanyArray;
 
-        CompanyService.query({skip:skip,limit:limit},function(data){
-          actualCompanyArray = data;
+        CompanyService.query({skip: skip, limit: limit}, function (data) {
+            actualCompanyArray = data;
         });
 
         $httpBackend.flush();
@@ -72,12 +72,11 @@ describe('The Company Service Test', function () {
 
         var url = CONTEXT_ROOT + '/company';
 
-        $httpBackend.expectPOST(url,company).respond(company);
+        $httpBackend.expectPOST(url, company).respond(company);
 
         var actualCompany;
 
         CompanyService.save(company, function (data) {
-
             actualCompany = data;
         });
 
@@ -88,15 +87,15 @@ describe('The Company Service Test', function () {
 
     });
 
-    it('Should Put The Company To The Correct URL',function(){
-        var company = {name:'Test Company Name To Put',id:'Test Company Id To Put'};
+    it('Should Put The Company To The Correct URL', function () {
+        var company = {name: 'Test Company Name To Put', id: 'Test Company Id To Put'};
 
-        var url = CONTEXT_ROOT+'/company';
+        var url = CONTEXT_ROOT + '/company';
 
-        $httpBackend.expectPUT(url,company).respond(company);
+        $httpBackend.expectPUT(url, company).respond(company);
         var actualCompany;
 
-        CompanyService.put(company,function(data){
+        CompanyService.put(company, function (data) {
             actualCompany = data;
         });
 
@@ -106,16 +105,15 @@ describe('The Company Service Test', function () {
         expect(actualCompany.id).toEqual(company.id);
     });
 
-    it('Should Delete The Company On The Correct URL',function(){
-        var company = {name:'Test Company Name To Delete',id:'TestCompanyIDToDelete'};
+    it('Should Delete The Company On The Correct URL', function () {
+        var company = {name: 'Test Company Name To Delete', id: 'TestCompanyIDToDelete'};
 
-        var url = CONTEXT_ROOT +'/company?id='+company.id;
+        var url = CONTEXT_ROOT + '/company/' + company.id;
 
         $httpBackend.expectDELETE(url).respond(company);
-
         var actualCompany;
 
-        CompanyService.delete({id:company.id},function(data){
+        CompanyService.remove({_id: company.id}, function (data) {
             actualCompany = data;
         });
 

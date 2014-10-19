@@ -12,15 +12,15 @@ angular.module('services', ['ngResource']).
 
     factory('TripService', function ($resource, CONTEXT_ROOT) {
 
-        return $resource(CONTEXT_ROOT+'/trip/:skip/:limit');
+        return $resource(CONTEXT_ROOT + '/trip/:skip/:limit');
     }).
 
-    factory('ReviewService',function($resource,CONTEXT_ROOT){
+    factory('ReviewService', function ($resource, CONTEXT_ROOT) {
 
-        return $resource(CONTEXT_ROOT+'/review/:skip/:limit');
+        return $resource(CONTEXT_ROOT + '/review/:skip/:limit');
     }).
 
-    factory('CompanyService',function($resource,CONTEXT_ROOT){
+    factory('CompanyService', function ($resource, CONTEXT_ROOT) {
 
-        return $resource(CONTEXT_ROOT+'/company/:skip/:limit',{skip:'@skip',limit:'@limit'},{put:{method:'put'}});
+        return $resource(CONTEXT_ROOT + '/company/:_id/:skip/:limit', {_id: '@_id', skip: '@skip', limit: '@limit'}, {put: {method: 'put'}});
     })
