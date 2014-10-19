@@ -20,24 +20,112 @@ describe('The Company Service Test', function () {
     it('Should Verify That The $resource Methods Are exposed', function () {
 
         expect(CompanyService.get).toBeDefined();
+        expect(CompanyService.delete).toBeDefined();
+        expect(CompanyService.remove).toBeDefined();
+        expect(CompanyService.query).toBeDefined();
+        expect(CompanyService.save).toBeDefined();
+        expect(CompanyService.put).toBeDefined();
+
     });
 
     it('Should Call Get And Return The Got Company', function () {
+
+        var company = {name: 'Test Company Name To Get', id: 'Test Company Id To Get'};
+
+        $httpBackend.expectGET(CONTEXT_ROOT + '/company').respond(company);
+        var actualCompany;
+
+        CompanyService.get(function(data){
+            console.log('After Getting The Company The Returned Data '+data);
+            actualCompany = data;
+        });
+
+        $httpBackend.flush();
+
+        expect(actualCompany.name).toEqual(company.name);
+        expect(actualCompany.id).toEqual(company.id);
+
+    });
+
+    it('Should Call Query On The Service And Return A List Of Companies',function(){
+
+        var company = {name:'Test Company Name To Be Gotten In A List',id:'Test Company Id To Be Gotten In A List'};
+        var companyArray = [company];
+        var skip = 12;
+        var limit =30;
+
+        $httpBackend.expectGET(CONTEXT_ROOT+'/company/'+skip+'/'+limit).respond(companyArray);
+        var actualCompanyArray;
+
+        CompanyService.query({skip:skip,limit:limit},function(data){
+          actualCompanyArray = data;
+        });
+
+        $httpBackend.flush();
+        expect(actualCompanyArray[0].name).toEqual(company.name);
+        expect(actualCompanyArray[0].id).toEqual(company.id);
     });
 
     it('Should Post The Company To The Correct URL', function () {
 
-        var company = {name: 'Test Company Name', id: 'Test Company Id'};
+        var company = {name: 'Test Company Name To Post', id: 'Test Company Id To Post'};
 
         var url = CONTEXT_ROOT + '/company';
 
-        $httpBackend.expectPOST(url, company).respond(company);
+        $httpBackend.expectPOST(url,company).respond(company);
 
-        var actualCompany = CompanyService.post(url, company);
+        var actualCompany;
+
+        CompanyService.save(company, function (data) {
+
+            actualCompany = data;
+        });
+
         $httpBackend.flush();
-        expect(actualCompany).toEqual(company);
+
+        expect(actualCompany.name).toEqual(company.name);
+        expect(actualCompany.id).toEqual(company.id);
 
     });
+
+    it('Should Put The Company To The Correct URL',function(){
+        var company = {name:'Test Company Name To Put',id:'Test Company Id To Put'};
+
+        var url = CONTEXT_ROOT+'/company';
+
+        $httpBackend.expectPUT(url,company).respond(company);
+        var actualCompany;
+
+        CompanyService.put(company,function(data){
+            actualCompany = data;
+        });
+
+        $httpBackend.flush();
+
+        expect(actualCompany.name).toEqual(company.name);
+        expect(actualCompany.id).toEqual(company.id);
+    });
+
+    it('Should Delete The Company On The Correct URL',function(){
+        var company = {name:'Test Company Name To Delete',id:'TestCompanyIDToDelete'};
+
+        var url = CONTEXT_ROOT +'/company?id='+company.id;
+
+        $httpBackend.expectDELETE(url).respond(company);
+
+        var actualCompany;
+
+        CompanyService.delete({id:company.id},function(data){
+            actualCompany = data;
+        });
+
+        $httpBackend.flush();
+
+        expect(actualCompany.name).toEqual(company.name);
+        expect(actualCompany.id).toEqual(company.id);
+
+    });
+
 
     afterEach(function () {
         $httpBackend.verifyNoOutstandingRequest();

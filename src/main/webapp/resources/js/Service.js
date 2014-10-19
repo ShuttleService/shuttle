@@ -22,5 +22,5 @@ angular.module('services', ['ngResource']).
 
     factory('CompanyService',function($resource,CONTEXT_ROOT){
 
-        return $resource(CONTEXT_ROOT+'/company/:skip/:limit');
+        return $resource(CONTEXT_ROOT+'/company/:skip/:limit',{skip:'@skip',limit:'@limit'},{put:{method:'put'}});
     })
