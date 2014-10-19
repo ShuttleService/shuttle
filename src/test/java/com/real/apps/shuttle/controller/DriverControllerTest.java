@@ -78,7 +78,7 @@ public class DriverControllerTest {
             oneOf(service).list(skip, limit);
             will(returnValue(drivers));
         }});
-        mockMvc.perform(get("/" + VIEW_PAGE + "/list/" + skip + "/" + limit)).andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$[0].firstName").value(firstName));
+        mockMvc.perform(get("/" + VIEW_PAGE + "/" + skip + "/" + limit)).andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$[0].firstName").value(firstName));
     }
 
     @Test

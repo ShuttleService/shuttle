@@ -26,7 +26,7 @@ public class CompanyController {
         return VIEW_PAGE;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/list/{skip}/{limit}")
+    @RequestMapping(method = RequestMethod.GET, value = "/{skip}/{limit}")
     @ResponseBody
     public List<Company> list(@PathVariable("skip") int skip, @PathVariable("limit") int limit) {
         logger.debug(String.format("Getting List With {skip:%d,limit:%d}", skip, limit));

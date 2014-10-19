@@ -73,7 +73,7 @@ public class TripControllerTest {
 
         controller.setService(service);
 
-        mockMvc.perform(get("/" + VIEW_PAGE + "/list/" + skip + "/" + limit)).andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$[0].source").value(source));
+        mockMvc.perform(get("/" + VIEW_PAGE + "/" + skip + "/" + limit)).andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$[0].source").value(source));
     }
 
     @Test

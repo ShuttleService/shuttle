@@ -27,7 +27,7 @@ public class TripController {
         return VIEW_NAME;
     }
 
-    @RequestMapping(value = "/list/{skip}/{limit}")
+    @RequestMapping(value = "/{skip}/{limit}")
     @ResponseBody
     public List<Trip> list(@PathVariable("skip") int skip, @PathVariable("limit") int limit) {
 

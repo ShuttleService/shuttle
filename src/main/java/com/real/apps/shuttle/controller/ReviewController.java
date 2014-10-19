@@ -32,7 +32,7 @@ public class ReviewController {
         logger.debug(String.format("Posting The Review %s",review));
         return service.insert(review);
      }
-    @RequestMapping("/list/{skip}/{limit}")
+    @RequestMapping("/{skip}/{limit}")
     @ResponseBody
     public List<Review> list(@PathVariable("skip")int skip,@PathVariable("limit") int limit){
         return service.list(skip,limit);

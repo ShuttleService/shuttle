@@ -75,7 +75,7 @@ public class CompanyControllerTest {
             will(returnValue(list));
         }});
 
-        mockMvc.perform(get("/" + VIEW_PAGE + "/list/" + skip + "/" + limit)).andDo(print()).
+        mockMvc.perform(get("/" + VIEW_PAGE + "/" + skip + "/" + limit)).andDo(print()).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$[0].slug").value(slug));
     }

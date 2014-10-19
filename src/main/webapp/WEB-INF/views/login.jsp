@@ -36,7 +36,7 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <form class="form-inline well">
+                <form class="form-horizontal well col-xs-12">
                     <div class="form-group col-xs-6">
                         <input type="email" class="form-control" placeholder="Email">
                     </div>

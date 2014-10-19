@@ -76,7 +76,7 @@ public class ReviewControllerTest {
             will(returnValue(reviews));
         }});
 
-        mockMvc.perform(get(String.format("/%s/list/%d/%d", ReviewController.VIEW_PAGE, skip, limit))).andDo(print()).andExpect(jsonPath("$[0].reviews[0]").value(text));
+        mockMvc.perform(get(String.format("/%s/%d/%d", ReviewController.VIEW_PAGE, skip, limit))).andDo(print()).andExpect(jsonPath("$[0].reviews[0]").value(text));
     }
 
     @Test

@@ -27,7 +27,7 @@ public class VehicleController {
         return VIEW_PAGE;
     }
 
-    @RequestMapping(value = "/list/{skip}/{limit}")
+    @RequestMapping(value = "/{skip}/{limit}")
     @ResponseBody
     public List<Vehicle> list(@PathVariable("skip") int skip,@PathVariable("limit") int limit){
         logger.debug(String.format("Reciving a list request for {skip%d,limit%d}",skip,limit));

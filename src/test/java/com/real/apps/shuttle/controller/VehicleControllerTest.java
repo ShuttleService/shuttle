@@ -79,7 +79,7 @@ public class VehicleControllerTest {
             will(returnValue(vehicles));
         }});
 
-        mockMvc.perform(get("/" + VIEW_PAGE + "/list/" + skip + "/" + limit)).andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$[0].licenseNumber").value(licenseNumber));
+        mockMvc.perform(get("/" + VIEW_PAGE + "/" + skip + "/" + limit)).andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$[0].licenseNumber").value(licenseNumber));
     }
 
     @Test

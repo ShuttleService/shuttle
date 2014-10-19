@@ -18,4 +18,9 @@ angular.module('services', ['ngResource']).
     factory('ReviewService',function($resource,CONTEXT_ROOT){
 
         return $resource(CONTEXT_ROOT+'/review/:skip/:limit');
+    }).
+
+    factory('CompanyService',function($resource,CONTEXT_ROOT){
+
+        return $resource(CONTEXT_ROOT+'/company/:skip/:limit');
     })
