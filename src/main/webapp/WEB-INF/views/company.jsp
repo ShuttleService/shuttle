@@ -35,7 +35,7 @@
             <div class="modal-footer">
                 <button type="reset" class="btn btn-default">Reset</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" ng-enabled="canSave()" ng-click="saveClick()">Save</button>
+                <button type="button" class="btn btn-primary" ng-disabled="!canSave()" ng-click="saveClick()">Save</button>
             </div>
         </div>
     </div>
