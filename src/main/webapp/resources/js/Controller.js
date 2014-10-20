@@ -27,11 +27,29 @@ angular.module('controllers', ['services']).
         }
     }).
 
-    controller('CompanyController', function ($scope, CompanyService) {
+    controller('CompanyController', function ($scope, CompanyService,FormSubmissionUtilService) {
+
+        $scope.company = {};
+        $scope.new    = true;
 
         $scope.get = function (id) {
 
             $scope.company = CompanyService.get({id: $scope.id});
+        };
+
+        $scope.canSave = function(){
+
+            return FormSubmissionUtilService.canSave($scope.addForm) ;
+        }
+
+        $scope.saveClick = function(){
+
+            console.log('Clicked Save Button');
+
+            if($scope.new === true ){
+
+                CompanyService.save($scope.company);
+            }
         }
     })
 

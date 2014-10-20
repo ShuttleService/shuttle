@@ -1,6 +1,6 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<div class="modal fade" id="add">
+<div class="modal fade" id="add" ng-controller="CompanyController">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -8,31 +8,31 @@
                 <button type="button" class="close" data-dismiss="modal" >&times;</button>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal well col-xs-12">
+                <form class="form-horizontal well col-xs-12" name="addForm">
                     <div class="form-group col-xs-6">
-                        <input type="text" class="form-control" placeholder="Company Name">
+                        <input type="text" class="form-control" name="name" placeholder="Company Name" ng-model="company.name" ng-required>
                     </div>
                     <div class="form-group col-xs-6">
-                        <input type="text" class="form-control" placeholder="Trading As">
+                        <input type="text" class="form-control" name="tradingAs" placeholder="Trading As" ng-model="company.tradingAs" ng-required>
                     </div>
                     <div class="form-group col-xs-6">
-                        <input type="text" class="form-control" placeholder="Slug">
+                        <input type="text" class="form-control" name="slug" placeholder="Slug" ng-required ng-model="company.slug">
                     </div>
                     <div class="form-group col-xs-6">
-                        <input type="text" class="form-control" placeholder="Registration Number">
+                        <input type="text" class="form-control" name="registrationNumber" placeholder="Registration Number" ng-model="company.registrationNumber" ng-required>
                     </div>
                     <div class="form-group col-xs-6">
-                        <input type="number" class="form-control" placeholder="VAT Number">
+                        <input type="number" class="form-control" name="vatNumber" placeholder="VAT Number" ng-model="company.vatNumber" ng-required>
                     </div>
                     <div class="form-group col-xs-6">
-                        <input type="text" class="form-control" placeholder="Logo">
+                        <input type="text" class="form-control" name="logo" placeholder="Logo" ng-model="company.logo">
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="reset" class="btn btn-default">Reset</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-primary" ng-enabled="canSave()" ng-click="saveClick()">Save</button>
             </div>
         </div>
     </div>
