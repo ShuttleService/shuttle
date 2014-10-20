@@ -1,7 +1,6 @@
 package com.real.apps.shuttle.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.real.apps.shuttle.config.MvcConfiguration;
 import com.real.apps.shuttle.model.Review;
 import com.real.apps.shuttle.service.ReviewService;
@@ -92,9 +91,8 @@ public class ReviewControllerTest {
             will(returnValue(review));
         }});
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        byte[] reviewByte = objectMapper.writeValueAsBytes(review);
-        mockMvc.perform(post("/" + ReviewController.VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(reviewByte)).
+        String reviewString = new Gson().toJson(review);
+        mockMvc.perform(post("/" + ReviewController.VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(reviewString)).
                 andDo(print()).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.reviews[0]").value(text));
@@ -106,14 +104,14 @@ public class ReviewControllerTest {
         final Review review = new Review();
         review.setReviews(reviews);
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        byte[] reviewByte = objectMapper.writeValueAsBytes(review);
+        String reviewString = new Gson().toJson(review);
         controller.setService(service);
         context.checking(new Expectations(){{
             oneOf(service).delete(with(any(Review.class)));
             will(returnValue(review));
         }});
-        mockMvc.perform(delete("/"+ReviewController.VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(reviewByte)).andDo(print()).
+
+        mockMvc.perform(delete("/"+ReviewController.VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(reviewString)).andDo(print()).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.reviews[0]").value(reviews[0]));
     }
@@ -125,14 +123,14 @@ public class ReviewControllerTest {
         final Review review = new Review();
         review.setReviews(reviews);
 
-        byte[] reviewByte = new ObjectMapper().writeValueAsBytes(review);
+        String reviewString = new Gson().toJson(review);
         controller.setService(service);
         context.checking(new Expectations(){{
             oneOf(service).update(with(any(Review.class)));
             will(returnValue(review));
         }});
 
-        mockMvc.perform(put("/"+ReviewController.VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(reviewByte)).andDo(print()).
+        mockMvc.perform(put("/"+ReviewController.VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(reviewString)).andDo(print()).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.reviews[0]").value(text));
     }
@@ -150,6 +148,6 @@ public class ReviewControllerTest {
         controller.setService(service);
         mockMvc.perform(get("/"+ReviewController.VIEW_PAGE+"/one/"+id)).andDo(print()).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.id.timestamp").value(id.getTimestamp()));
+                andExpect(jsonPath("$.id._time").value(id.getTimestamp()));
     }
 }

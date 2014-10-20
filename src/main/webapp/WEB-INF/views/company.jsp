@@ -10,7 +10,7 @@
             <div class="modal-body">
                 <form class="form-horizontal well col-xs-12" name="addForm">
                     <div class="form-group col-xs-6">
-                        <input type="text" class="form-control" name="name" placeholder="Company Name" ng-model="company.name" ng-required>
+                        <input type="text" class="form-control" name="name" placeholder="Company Full Name" ng-model="company.fullName" ng-required>
                     </div>
                     <div class="form-group col-xs-6">
                         <input type="text" class="form-control" name="tradingAs" placeholder="Trading As" ng-model="company.tradingAs" ng-required>
@@ -26,6 +26,9 @@
                     </div>
                     <div class="form-group col-xs-6">
                         <input type="text" class="form-control" name="logo" placeholder="Logo" ng-model="company.logo">
+                    </div>
+                    <div class="form-group col-xs-12">
+                        <textarea class="col-xs-12" data-ng-model="company.description" placeholder="Description" ng-required></textarea>
                     </div>
                 </form>
             </div>

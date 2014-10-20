@@ -3,6 +3,8 @@ package com.real.apps.shuttle.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.json.GsonHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -32,6 +34,11 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter {
         TilesConfigurer configurer = new TilesConfigurer();
         configurer.setDefinitions("/WEB-INF/views/views.xml");
         return configurer;
+    }
+
+    @Override
+    public void configureMessageConverters(java.util.List<org.springframework.http.converter.HttpMessageConverter<?>> converters) {
+        converters.add(new GsonHttpMessageConverter());
     }
 
 }

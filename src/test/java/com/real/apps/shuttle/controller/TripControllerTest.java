@@ -1,7 +1,6 @@
 package com.real.apps.shuttle.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.real.apps.shuttle.config.MvcConfiguration;
 import com.real.apps.shuttle.model.Trip;
 import com.real.apps.shuttle.service.TripService;
@@ -91,9 +90,8 @@ public class TripControllerTest {
             }
         });
 
-        ObjectMapper mapper = new ObjectMapper();
-        byte[] tripByte = mapper.writeValueAsBytes(trip);
-        mockMvc.perform(post("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(tripByte)).andDo(print()).andExpect(jsonPath("$.source").value(source));
+        String tripString = new Gson().toJson(trip);
+        mockMvc.perform(post("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(tripString)).andDo(print()).andExpect(jsonPath("$.source").value(source));
     }
 
     @Test
@@ -101,7 +99,7 @@ public class TripControllerTest {
         String source = "Test Source To Delete";
         final Trip trip = new Trip();
         trip.setSource(source);
-        byte[] tripByte = new ObjectMapper().writeValueAsBytes(trip);
+        String tripString = new Gson().toJson(trip);
         controller.setService(service);
         context.checking(new Expectations() {
             {
@@ -110,7 +108,7 @@ public class TripControllerTest {
             }
         });
 
-        mockMvc.perform(delete("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(tripByte)).andDo(print()).
+        mockMvc.perform(delete("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(tripString)).andDo(print()).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.source").value(source));
     }
@@ -126,8 +124,8 @@ public class TripControllerTest {
             oneOf(service).update(with(any(Trip.class)));
             will(returnValue(trip));
         }});
-        byte[] tripByte = new ObjectMapper().writeValueAsBytes(trip);
-        mockMvc.perform(put("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(tripByte)).andDo(print()).
+        String tripString = new Gson().toJson(trip);
+        mockMvc.perform(put("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(tripString)).andDo(print()).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.source").value(source));
     }
@@ -145,11 +143,11 @@ public class TripControllerTest {
             will(returnValue(trip));
         }});
 
-        byte tripByte[] = new ObjectMapper().writeValueAsBytes(trip);
+        String tripString = new Gson().toJson(trip);
 
         mockMvc.perform(get("/"+VIEW_PAGE+"/one/"+id)).andDo(print()).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.id.timestamp").value(id.getTimestamp()));
+                andExpect(jsonPath("$.id._time").value(id.getTimestamp()));
     }
 
 

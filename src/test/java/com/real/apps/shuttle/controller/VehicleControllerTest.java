@@ -1,7 +1,6 @@
 package com.real.apps.shuttle.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.real.apps.shuttle.config.MvcConfiguration;
 import com.real.apps.shuttle.model.Vehicle;
 import com.real.apps.shuttle.service.VehicleService;
@@ -25,13 +24,9 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Created by zorodzayi on 14/10/09.
@@ -95,8 +90,8 @@ public class VehicleControllerTest {
                 will(returnValue(vehicle));
             }
         });
-        byte[] vehicleBytes = new ObjectMapper().writeValueAsBytes(vehicle);
-        mockMvc.perform(post("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(vehicleBytes)).andDo(print()).
+        String vehicleString = new Gson().toJson(vehicle);
+        mockMvc.perform(post("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(vehicleString)).andDo(print()).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.licenseNumber").value(licenseNumber));
     }
@@ -114,9 +109,9 @@ public class VehicleControllerTest {
             will(returnValue(vehicle));
         }});
 
-        byte[] vehicleBytes = new ObjectMapper().writeValueAsBytes(vehicle);
+        String vehicleString = new Gson().toJson(vehicle);
 
-        mockMvc.perform(put("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(vehicleBytes)).andDo(print()).
+        mockMvc.perform(put("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(vehicleString)).andDo(print()).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.licenseNumber").value(licenseNumber));
     }
@@ -129,13 +124,13 @@ public class VehicleControllerTest {
 
         controller.setService(service);
 
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
             oneOf(service).findOne(id);
             will(returnValue(vehicle));
         }});
 
-        mockMvc.perform(get("/"+VIEW_PAGE+"/one/"+id)).andDo(print()).
+        mockMvc.perform(get("/" + VIEW_PAGE + "/one/" + id)).andDo(print()).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("id.timestamp").value(id.getTimestamp()));
+                andExpect(jsonPath("id._time").value(id.getTimestamp()));
     }
 }

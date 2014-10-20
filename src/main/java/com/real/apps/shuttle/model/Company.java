@@ -5,6 +5,7 @@ import org.bson.types.ObjectId;
 /**
  * Created by zorodzayi on 14/10/16.
  */
+
 public class Company {
     private ObjectId id;
     private String slug;
@@ -53,7 +54,7 @@ public class Company {
     }
 
     @Override
-    public String toString(){
-        return String.format("{id:%s,slug:%s,tradingAs:%s,fullName:%s,description:%s}",id,slug,tradingAs,fullName,description);
+    public String toString() {
+        return String.format("{id:%s,slug:%s,tradingAs:%s,fullName:%s,description:%s}", id, slug, tradingAs, fullName, description);
     }
 }

@@ -1,7 +1,6 @@
 package com.real.apps.shuttle.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.real.apps.shuttle.config.MvcConfiguration;
 import com.real.apps.shuttle.model.Company;
 import com.real.apps.shuttle.service.CompanyService;
@@ -81,7 +80,7 @@ public class CompanyControllerTest {
     }
 
     @Test
-    public void shouldCallServiceInsertAndReturnTheInsertedCompany() throws Exception {
+    public void shouldCallServiceInsertAndRe7turnTheInsertedCompany() throws Exception {
         final Company company = new Company();
         String slug = "Test Slug To Insert";
         company.setSlug(slug);
@@ -93,8 +92,10 @@ public class CompanyControllerTest {
             will(returnValue(company));
         }});
 
-        byte[] companyBytes = new ObjectMapper().writeValueAsBytes(company);
-        mockMvc.perform(post("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(companyBytes)).
+        Gson gson = new Gson();
+        String companyString = gson.toJson(company);
+
+        mockMvc.perform(post("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(companyString)).
                 andDo(print()).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.slug").value(slug));
@@ -112,9 +113,9 @@ public class CompanyControllerTest {
             will(returnValue(company));
         }});
 
-        byte[] companyBytes =  new ObjectMapper().writeValueAsBytes(company);
+        String companyString = new Gson().toJson(company);
 
-        mockMvc.perform(put("/"+VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(companyBytes)).andDo(print()).
+        mockMvc.perform(put("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(companyString)).andDo(print()).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.slug").value(slug));
 
@@ -128,13 +129,13 @@ public class CompanyControllerTest {
 
         controller.setService(service);
 
-        final byte[] companyBytes = new ObjectMapper().writeValueAsBytes(company);
-        context.checking(new Expectations(){{
+        final String companyString = new Gson().toJson(company);
+        context.checking(new Expectations() {{
             oneOf(service).delete(with(any(Company.class)));
             will(returnValue(company));
         }});
 
-        mockMvc.perform(delete("/"+VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(companyBytes)).andDo(print()).
+        mockMvc.perform(delete("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(companyString)).andDo(print()).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.slug").value(slug));
     }
@@ -147,13 +148,13 @@ public class CompanyControllerTest {
 
         controller.setService(service);
 
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
             oneOf(service).findOne(id);
             will(returnValue(company));
         }});
 
-        mockMvc.perform(get("/"+VIEW_PAGE+"/one/"+id)).andDo(print()).
+        mockMvc.perform(get("/" + VIEW_PAGE + "/one/" + id)).andDo(print()).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.id.timestamp").value(id.getTimestamp()));
+                andExpect(jsonPath("$.id._time").value(id.getTimestamp()));
     }
 }

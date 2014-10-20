@@ -1,14 +1,11 @@
 package com.real.apps.shuttle.controller;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.real.apps.shuttle.config.MvcConfiguration;
 import com.real.apps.shuttle.model.Driver;
 import com.real.apps.shuttle.service.DriverService;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
-import org.fest.assertions.Assertions;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnitRuleMockery;
@@ -94,11 +91,10 @@ public class DriverControllerTest {
             will(returnValue(driver));
         }});
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-        byte[] driverBytes = objectMapper.writeValueAsBytes(driver);
-        logger.debug("The String From The Object Mapped Object " + new String(driverBytes));
-        mockMvc.perform(post("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(driverBytes)).
+        String driverString = new Gson().toJson(driver);
+
+        logger.debug("The String From The Object Mapped Object " + driverString);
+        mockMvc.perform(post("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(driverString)).
                 andDo(print()).
                 andExpect(status().
                         isOk()).
@@ -116,8 +112,8 @@ public class DriverControllerTest {
             will(returnValue(driver));
         }});
 
-        byte[] driverByte = new ObjectMapper().writeValueAsBytes(driver);
-        mockMvc.perform(delete("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(driverByte)).andDo(print()).
+        String driverString = new Gson().toJson(driver);
+        mockMvc.perform(delete("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(driverString)).andDo(print()).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.firstName").value(firstName));
     }
@@ -133,8 +129,8 @@ public class DriverControllerTest {
             will(returnValue(driver));
         }});
 
-        byte[] driveBytes = new ObjectMapper().writeValueAsBytes(driver);
-        mockMvc.perform(put("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(driveBytes)).andDo(print()).
+        String driverString = new Gson().toJson(driver);
+        mockMvc.perform(put("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(driverString)).andDo(print()).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.firstName").value(firstName));
     }
@@ -154,6 +150,6 @@ public class DriverControllerTest {
 
         mockMvc.perform(get("/" + VIEW_PAGE + "/one/" + id)).andDo(print()).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.id.timestamp").value(id.getTimestamp()));
+                andExpect(jsonPath("$.id._time").value(id.getTimestamp()));
     }
 }
