@@ -10,25 +10,25 @@
             <div class="modal-body">
                 <form class="form-horizontal well col-xs-12" name="addForm">
                     <div class="form-group col-xs-6">
-                        <input type="text" class="form-control" name="name" placeholder="Company Full Name" ng-model="company.fullName" ng-required>
+                        <input type="text" class="form-control" ng-minlength="2" name="name" placeholder="Company Full Name" ng-model="company.fullName" ng-required>
                     </div>
                     <div class="form-group col-xs-6">
-                        <input type="text" class="form-control" name="tradingAs" placeholder="Trading As" ng-model="company.tradingAs" ng-required>
+                        <input type="text" class="form-control" ng-minlength="2" name="tradingAs" placeholder="Trading As" ng-model="company.tradingAs" ng-required>
                     </div>
                     <div class="form-group col-xs-6">
-                        <input type="text" class="form-control" name="slug" placeholder="Slug" ng-required ng-model="company.slug">
+                        <input type="text" class="form-control" ng-minlength="2" name="slug" placeholder="Slug" ng-required ng-model="company.slug">
                     </div>
                     <div class="form-group col-xs-6">
-                        <input type="text" class="form-control" name="registrationNumber" placeholder="Registration Number" ng-model="company.registrationNumber" ng-required>
+                        <input type="number" class="form-control" ng-minlength="10" name="registrationNumber" placeholder="Registration Number" ng-model="company.registrationNumber" ng-required>
                     </div>
                     <div class="form-group col-xs-6">
-                        <input type="number" class="form-control" name="vatNumber" placeholder="VAT Number" ng-model="company.vatNumber" ng-required>
+                        <input type="number" class="form-control"ng-minlength="10" name="vatNumber" placeholder="VAT Number" ng-model="company.vatNumber" ng-required>
                     </div>
                     <div class="form-group col-xs-6">
-                        <input type="text" class="form-control" name="logo" placeholder="Logo" ng-model="company.logo">
+                        <input type="text" class="form-control"  name="logo" placeholder="Logo" ng-model="company.logo">
                     </div>
                     <div class="form-group col-xs-12">
-                        <textarea class="col-xs-12" data-ng-model="company.description" placeholder="Description" ng-required></textarea>
+                        <textarea class="col-xs-12" ng-minlength="2" data-ng-model="company.description" placeholder="Description" ng-required></textarea>
                     </div>
                 </form>
             </div>

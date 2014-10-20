@@ -4,12 +4,26 @@
 
 angular.module('controllers', ['services']).
 
-    controller('DriverController', function ($scope, DriverService) {
-
+    controller('DriverController', function ($scope, DriverService,FormSubmissionUtilService) {
+        $scope.new = true;
+        $scope.driver = {};
         $scope.query = function () {
 
             $scope.drivers = DriverService.query({skip: $scope.skip, limit: $scope.limit});
-        }
+        };
+
+        $scope.canSave = function(){
+
+            return FormSubmissionUtilService.canSave($scope.addForm);
+        };
+
+        $scope.saveClick = function(){
+
+            if($scope.new === true ){
+
+                DriverService.save($scope.driver);
+            }
+        };
     }).
 
     controller('TripController', function ($scope, TripService) {
@@ -40,7 +54,7 @@ angular.module('controllers', ['services']).
         $scope.canSave = function(){
 
             return FormSubmissionUtilService.canSave($scope.addForm) ;
-        }
+        };
 
         $scope.saveClick = function(){
 
