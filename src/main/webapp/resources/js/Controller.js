@@ -26,11 +26,25 @@ angular.module('controllers', ['services']).
         };
     }).
 
-    controller('TripController', function ($scope, TripService) {
-
+    controller('TripController', function ($scope, TripService,FormSubmissionUtilService) {
+        $scope.trip = {};
+        $scope.new = true;
         $scope.query = function () {
             $scope.trips = TripService.query({skip: $scope.skip, limit: $scope.limit});
-        }
+        };
+
+        $scope.canSave = function(){
+
+            return FormSubmissionUtilService.canSave($scope.addForm);
+        };
+
+        $scope.saveClick = function(){
+            console.log('Clicked The Save Button');
+            if($scope.new === true){
+                console.log('About To Post Since This Is A New Trip');
+                $scope.trip = TripService.save($scope.trip);
+            };
+        };
     }).
 
     controller('ReviewController', function ($scope, ReviewService,FormSubmissionUtilService) {

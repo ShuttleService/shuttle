@@ -79,7 +79,7 @@ describe('Company Controller Test', function () {
 
         $controller('CompanyController',{
             $scope:$scope
-        })
+        });
 
         expect($scope.company).toBeDefined();
         expect($scope.new).toEqual(true);

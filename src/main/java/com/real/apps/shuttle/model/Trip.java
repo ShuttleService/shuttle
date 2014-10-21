@@ -8,6 +8,60 @@ import org.bson.types.ObjectId;
 public class Trip {
     private ObjectId id;
     private String source;
+    private String clientName;
+    private String destination;
+    private int pricePerKm;
+    private int price;
+    private String vehicle;
+    private String driver;
+
+    public String getClientName() {
+        return clientName;
+    }
+
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    public int getPricePerKm() {
+        return pricePerKm;
+    }
+
+    public void setPricePerKm(int pricePerKm) {
+        this.pricePerKm = pricePerKm;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public String getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(String vehicle) {
+        this.vehicle = vehicle;
+    }
+
+    public String getDriver() {
+        return driver;
+    }
+
+    public void setDriver(String driver) {
+        this.driver = driver;
+    }
 
     public String getSource() {
         return source;
@@ -28,6 +82,6 @@ public class Trip {
     @Override
     public String toString() {
 
-        return String.format("{source:%s}", source);
+        return String.format("{source:%s,id:%s,clientName:%s,destination:%s,pricePerKm:%d,price:%d,vehicle:%s,driver:%s}", source,id,clientName,destination,pricePerKm,price,vehicle,driver);
     }
 }
