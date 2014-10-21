@@ -76,12 +76,12 @@ describe('Testing The Trip Controller', function () {
         });
 
         $scope.new = true;
-        var trip = {source:'Test Trip Source To POST'};
-        var savedTrip = {source:'Test Trip Source POSTED'};
+        var trip = {source: 'Test Trip Source To POST'};
+        var savedTrip = {source: 'Test Trip Source POSTED'};
 
         $scope.trip = trip;
 
-        spyOn(TripService,'save').andReturn(savedTrip);
+        spyOn(TripService, 'save').andReturn(savedTrip);
 
         expect($scope.saveClick).toBeDefined();
 
@@ -89,5 +89,25 @@ describe('Testing The Trip Controller', function () {
 
         expect(TripService.save).toHaveBeenCalledWith(trip);
         expect($scope.trip).toEqual(savedTrip);
+    });
+
+    it('Should Calculate The Product Of price Per Km And The Distance And Set The Price On The ', function () {
+
+        $controller('TripController', {
+            $scope:$scope
+        });
+
+        expect($scope.price).toBeDefined();
+
+        $scope.trip = {};
+        var pricePerKm = 11;
+        var distance   = 13;
+
+        $scope.trip.distance = distance;
+        $scope.trip.pricePerKm      = pricePerKm;
+
+        $scope.price();
+
+        expect($scope.trip.price).toEqual(distance * pricePerKm);
     });
 });

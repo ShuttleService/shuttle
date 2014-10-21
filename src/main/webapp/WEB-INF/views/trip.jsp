@@ -19,13 +19,13 @@
                         <input type="text" class="form-control" placeholder="Destination" ng-minlength="1" name="destination" ng-model="trip.destination" ng-required>
                     </div>
                     <div class="form-group col-xs-6">
-                        <input type="number" class="form-control col-xs-4" placeholder="Distance" minlength="1" name="distance" ng-model="trip.distance" ng-required>
+                        <input type="number" class="form-control col-xs-4" placeholder="Distance" minlength="1" name="distance" ng-model="trip.distance"  ng-change="price()" ng-required>
                     </div>
                     <div class="form-group col-xs-6">
-                        <input type="number" class="form-control col-xs-4" placeholder="Price Per Km" minlength="1" name="pricePerKm" ng-model="trip.pricePerKm" ng-required>
+                        <input type="number" class="form-control col-xs-4" placeholder="Price Per Km" minlength="1" name="pricePerKm" ng-model="trip.pricePerKm" ng-change="price()" ng-required>
                     </div>
                     <div class="form-group col-xs-6">
-                        <input type="number" class="form-control" placeholder="Price" minlength="1" name="price" ng-model="trip.price" ng-required>
+                        <input type="number" class="form-control" placeholder="Price" minlength="1" name="price" ng-model="trip.price" ng-required readonly>
                     </div>
                     <div class="form-group col-xs-6">
                         <input type="text" class="form-control" placeholder="Vehicle" minlength="1" name="vehicle" ng-model="trip.vehicle" ng-required>

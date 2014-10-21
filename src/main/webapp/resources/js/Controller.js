@@ -43,7 +43,12 @@ angular.module('controllers', ['services']).
             if($scope.new === true){
                 console.log('About To Post Since This Is A New Trip');
                 $scope.trip = TripService.save($scope.trip);
-            };
+            }
+        };
+
+        $scope.price = function(){
+            console.log('Calculating The Price .');
+            $scope.trip.price = $scope.trip.pricePerKm * $scope.trip.distance;
         };
     }).
 
