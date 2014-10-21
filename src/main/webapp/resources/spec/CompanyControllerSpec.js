@@ -91,13 +91,17 @@ describe('Company Controller Test', function () {
             $scope:$scope
         });
 
-        $scope.company = {name:'Test Company Name To Be Called With Service.save'};
+        var companyToSave = {name:'Test Company Name To Be Called With Posted'};
+        var savedCompany = {name:'Test Company Name To Be Returned From After POST'};
+        $scope.company = companyToSave;
+
         $scope.new = true;
 
-        spyOn(CompanyService,'save');
+        spyOn(CompanyService,'save').andReturn(savedCompany);
         expect($scope.saveClick).toBeDefined();
         $scope.saveClick();
 
-        expect(CompanyService.save).toHaveBeenCalledWith($scope.company);
+        expect(CompanyService.save).toHaveBeenCalledWith(companyToSave);
+        expect($scope.company).toEqual(savedCompany);
     });
 });

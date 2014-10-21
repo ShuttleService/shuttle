@@ -76,14 +76,19 @@ describe('Testing The Driver Controller', function () {
             $scope: $scope
         });
 
-        $scope.driver = {name: 'Test Driver Name To Be Posted', id: 'Test Driver Id To Be Posted'};
+        var driverToSave = {name: 'Test Driver Name To Be Posted', id: 'Test Driver Id To Be Posted'};
+        var savedDriver = {name: 'Test Driver Name To Be Returned After We Posted', id: 'Test Driver Id To Returned After We Posted'};
+        $scope.driver = driverToSave;
+
         $scope.new = true;
-        spyOn(DriverService, 'save');
+        spyOn(DriverService, 'save').andReturn(savedDriver);
 
         expect($scope.saveClick).toBeDefined();
         $scope.saveClick();
 
-        expect(DriverService.save).toHaveBeenCalledWith($scope.driver);
+        expect(DriverService.save).toHaveBeenCalledWith(driverToSave);
+        expect($scope.driver).toEqual(savedDriver);
 
     });
+
 });

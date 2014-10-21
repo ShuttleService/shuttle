@@ -25,6 +25,7 @@ public class Review {
         this.reviews = reviews;
     }
 
+
     @Override
     public String toString() {
 
@@ -37,6 +38,6 @@ public class Review {
                 reviews.append(",").append(review);
             }
         }
-        return String.format("{id:%s,reviews:%s}",id,reviews);
+        return String.format("{id:%s,reviews:[%s]}",id,reviews);
     }
 }
