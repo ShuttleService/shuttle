@@ -34,4 +34,9 @@ angular.module('services', ['ngResource']).
                 return form.$valid === true && form.$dirty === true;
             }
         }
-    })
+    }).
+
+    factory('UserService',function($resource,CONTEXT_ROOT){
+
+       return $resource(CONTEXT_ROOT+'/user/:_id/:skip/:limit',{_id:'@_id',skip:'@skip',limit:'@limit'},{put:{method:'PUT'}});
+    });

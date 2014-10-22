@@ -108,6 +108,20 @@ angular.module('controllers', ['services']).
                 $scope.company = CompanyService.save($scope.company);
             }
         }
+    }).
+
+    controller('UserController',function($scope,UserService,FormSubmissionUtilService){
+
+        $scope.user = {};
+        $scope.saveClick = function(){
+
+            $scope.user = UserService.save($scope.user);
+        };
+
+        $scope.canSave = function(){
+
+            return FormSubmissionUtilService.canSave($scope.addForm);
+        }
     });
 
 
