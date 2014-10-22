@@ -82,6 +82,7 @@ public class LoginControllerTest {
         assertPost(result,user);
         result = mockMvc.perform(post("/")).andDo(print()).andReturn();
         assertPost(result,user);
+        context.assertIsSatisfied();
     }
 
     private void assertPost(MvcResult result,User user){

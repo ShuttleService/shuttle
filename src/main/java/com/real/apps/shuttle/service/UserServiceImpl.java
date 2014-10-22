@@ -14,4 +14,9 @@ public class UserServiceImpl implements UserService{
     public List<User> list(int skip, int limit) {
         return null;
     }
+
+    @Override
+    public User insert(User user) {
+        return null;
+    }
 }

@@ -1,5 +1,6 @@
 package com.real.apps.shuttle.controller;
 
+import com.google.gson.Gson;
 import com.real.apps.shuttle.config.MvcConfiguration;
 import com.real.apps.shuttle.model.User;
 import com.real.apps.shuttle.service.UserService;
@@ -11,6 +12,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -22,10 +24,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Created by zorodzayi on 14/10/22.
@@ -74,5 +75,25 @@ public class UserControllerTest {
 
         controller.setService(service);
         mockMvc.perform(get("/" + VIEW_PAGE + "/" + skip + "/" + limit)).andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$[0].firstName").value(firstName));
+        context.assertIsSatisfied();
+    }
+
+    @Test
+    public void shouldCallUserServiceInsertAndReturnTheInsertedUser() throws Exception {
+        String firstName = "Test First Name For User To Insert ";
+        final  User user = new User();
+        user.setFirstName(firstName);
+
+        context.checking(new Expectations(){{
+            oneOf(service).insert(with(any(User.class)));
+            will(returnValue(user));
+        }});
+        String userJsonString = new Gson().toJson(user);
+
+        controller.setService(service);
+
+        mockMvc.perform(post("/"+VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(userJsonString)).andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$.firstName").
+                value(firstName));
+        context.assertIsSatisfied();
     }
 }

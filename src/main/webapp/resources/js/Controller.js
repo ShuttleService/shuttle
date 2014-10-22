@@ -110,12 +110,16 @@ angular.module('controllers', ['services']).
         }
     }).
 
-    controller('UserController',function($scope,UserService,FormSubmissionUtilService){
+    controller('UserController',function($scope,UserService,FormSubmissionUtilService,$log){
 
         $scope.user = {};
+        $scope.new = true;
+
         $scope.saveClick = function(){
+            console.log('Clicked Submit Button');
 
             $scope.user = UserService.save($scope.user);
+            $log.info('Submitted To The Rest Service');
         };
 
         $scope.canSave = function(){

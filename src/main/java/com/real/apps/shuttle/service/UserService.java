@@ -9,4 +9,5 @@ import java.util.List;
  */
 public interface UserService {
     List<User> list(int skip,int limit);
+    User insert(User user);
 }
