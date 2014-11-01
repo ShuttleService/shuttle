@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Created by zorodzayi on 14/10/16.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = MvcConfiguration.class)
+@ContextConfiguration(classes = {MvcConfiguration.class})
 @WebAppConfiguration
 public class CompanyControllerTest {
 

@@ -1,7 +1,9 @@
 package com.real.apps.shuttle.service;
 
 import com.real.apps.shuttle.model.Company;
+import com.real.apps.shuttle.respository.CompanyRepository;
 import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,9 +13,12 @@ import java.util.List;
  */
 @Service
 public class CompanyServiceImpl implements CompanyService {
+    @Autowired
+    private CompanyRepository repository;
     @Override
     public Company insert(Company company) {
-        return null;
+
+        return repository.save(company);
     }
 
     @Override
@@ -34,5 +39,9 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public Company delete(Company company) {
         return null;
+    }
+
+    public void setRepository(CompanyRepository repository) {
+        this.repository = repository;
     }
 }

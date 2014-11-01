@@ -57,7 +57,7 @@
                         <input type="tel" class="form-control" placeholder="Cell Number" ng-minlength="10" name="cellNumber" ng-model="user.cellNumber" ng-required>
                     </div>
                     <div class="form-group col-xs-6">
-                        <input type="date" class="form-control" placeholder="Date Of Birth (MM-DD-YYYY)" ng-minlength="10" name="dateOfBirth" ng-model="user.dateOfBirth" ng-required>
+                        <input type="date" class="form-control" placeholder="Date Of Birth" ng-minlength="10" name="dateOfBirth" ng-model="user.dateOfBirth" ng-required>
                     </div>
                     <div class="form-group col-xs-11">
                         <textarea type="text" class="form-control" placeholder="Street Address" ng-minlength="2" name="streetAddress" ng-model="user.streetAddress" ng-required></textarea>

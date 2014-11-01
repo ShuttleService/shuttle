@@ -1,8 +1,9 @@
 package com.real.apps.shuttle.service;
 
-import com.real.apps.shuttle.model.Review;
 import com.real.apps.shuttle.model.Trip;
+import com.real.apps.shuttle.respository.TripRepository;
 import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,6 +13,9 @@ import java.util.List;
  */
 @Service
 public class TripServiceImpl implements TripService {
+    @Autowired
+    private TripRepository repository;
+
     @Override
     public List<Trip> list(int skip, int limit) {
         return null;
@@ -19,7 +23,7 @@ public class TripServiceImpl implements TripService {
 
     @Override
     public Trip insert(Trip trip) {
-        return null;
+        return repository.save(trip);
     }
 
     @Override
@@ -37,5 +41,7 @@ public class TripServiceImpl implements TripService {
         return null;
     }
 
-
+    public void setRepository(TripRepository repository) {
+        this.repository = repository;
+    }
 }

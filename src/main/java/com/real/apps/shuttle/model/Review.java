@@ -40,4 +40,20 @@ public class Review {
         }
         return String.format("{id:%s,reviews:[%s]}", id, reviews);
     }
+    @Override
+    public boolean equals(Object object){
+        if( this == object){
+            return true;
+        }
+        if(id == null){
+            return false;
+        }
+
+        if(!(object instanceof Review)){
+            return false;
+        }
+
+        Review review = (Review)object;
+        return id.equals(review.getId());
+    }
 }

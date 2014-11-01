@@ -57,4 +57,20 @@ public class Company {
     public String toString() {
         return String.format("{id:%s,slug:%s,tradingAs:%s,fullName:%s,description:%s}", id, slug, tradingAs, fullName, description);
     }
+
+    @Override
+    public boolean equals(Object object) {
+        if(this == object){
+            return true;
+        }
+        if(id == null){
+            return false;
+        }
+
+        if(! (object instanceof Company) ){
+            return false;
+        }
+        Company company = (Company)object;
+        return company.getId() != null && company.getId().equals(id);
+    }
 }

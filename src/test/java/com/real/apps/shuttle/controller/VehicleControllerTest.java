@@ -3,6 +3,8 @@ package com.real.apps.shuttle.controller;
 import com.google.gson.Gson;
 import com.real.apps.shuttle.config.MvcConfiguration;
 import com.real.apps.shuttle.model.Vehicle;
+import com.real.apps.shuttle.respository.RepositoryConfig;
+import com.real.apps.shuttle.service.ServiceConfig;
 import com.real.apps.shuttle.service.VehicleService;
 import org.bson.types.ObjectId;
 import org.jmock.Expectations;

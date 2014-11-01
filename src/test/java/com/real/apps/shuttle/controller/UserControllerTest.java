@@ -3,6 +3,8 @@ package com.real.apps.shuttle.controller;
 import com.google.gson.Gson;
 import com.real.apps.shuttle.config.MvcConfiguration;
 import com.real.apps.shuttle.model.User;
+import com.real.apps.shuttle.respository.RepositoryConfig;
+import com.real.apps.shuttle.service.ServiceConfig;
 import com.real.apps.shuttle.service.UserService;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -32,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Created by zorodzayi on 14/10/22.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = MvcConfiguration.class)
+@ContextConfiguration(classes = {MvcConfiguration.class})
 @WebAppConfiguration
 public class UserControllerTest {
 

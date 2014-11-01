@@ -2,7 +2,9 @@ package com.real.apps.shuttle.controller;
 
 import com.real.apps.shuttle.config.MvcConfiguration;
 import com.real.apps.shuttle.model.User;
+import com.real.apps.shuttle.respository.RepositoryConfig;
 import com.real.apps.shuttle.service.LoginService;
+import com.real.apps.shuttle.service.ServiceConfig;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnitRuleMockery;
@@ -19,7 +21,9 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -63,7 +67,7 @@ public class LoginControllerTest {
     @Test
     public void shouldPopulateLoginCommandObject() throws Exception {
         MvcResult result = mockMvc.perform(get("/" + LOGIN)).andDo(print()).andExpect(model().attributeExists(LOGIN)).andReturn();
-        assertThat(result.getModelAndView().getModel().get(LOGIN)).isInstanceOf(User.class);
+        assertThat(result.getModelAndView().getModel().get(LOGIN),instanceOf(User.class));
     }
 
     @Test
@@ -86,7 +90,8 @@ public class LoginControllerTest {
     }
 
     private void assertPost(MvcResult result,User user){
-        assertThat(result.getModelAndView().getViewName()).isEqualTo("redirect:home");
-        assertThat(result.getModelAndView().getModel().get("user")).isEqualTo(user);
+        assertThat(result.getModelAndView().getViewName(),is("redirect:home"));
+        assertThat((User)result.getModelAndView().getModel().get("user"),is(user));
+
     }
 }

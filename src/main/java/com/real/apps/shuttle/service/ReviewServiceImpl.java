@@ -1,7 +1,9 @@
 package com.real.apps.shuttle.service;
 
 import com.real.apps.shuttle.model.Review;
+import com.real.apps.shuttle.respository.ReviewRepository;
 import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,6 +13,9 @@ import java.util.List;
  */
 @Service
 public class ReviewServiceImpl implements ReviewService {
+    @Autowired
+    private ReviewRepository repository;
+
     @Override
     public List<Review> list(int skip, int limit) {
         return null;
@@ -18,7 +23,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public Review insert(Review review) {
-        return null;
+        return repository.save(review);
     }
 
     @Override
@@ -34,5 +39,9 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Review findOne(ObjectId id) {
         return null;
+    }
+
+    public void setRepository(ReviewRepository repository) {
+        this.repository = repository;
     }
 }

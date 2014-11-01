@@ -76,4 +76,20 @@ public class Driver {
         return String.format("{id:%s,firstName:%s,surname:%s,email:%s,driversLicenseNumber:%s,driversLicenseClass:%s,companyId:%s}",id,firstName,
                 surname,email,driversLicenseNumber,driversLicenseClass,companyId);
     }
+    @Override
+    public boolean equals(Object object){
+        if(this == object){
+            return true;
+        }
+        if(id == null ){
+            return false;
+        }
+        if(!(object instanceof Driver)){
+            return false;
+        }
+
+        Driver driver = (Driver)object;
+
+        return driver.getId() != null && driver.getId().equals(id);
+    }
 }

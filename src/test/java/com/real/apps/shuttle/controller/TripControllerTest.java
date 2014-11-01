@@ -3,6 +3,8 @@ package com.real.apps.shuttle.controller;
 import com.google.gson.Gson;
 import com.real.apps.shuttle.config.MvcConfiguration;
 import com.real.apps.shuttle.model.Trip;
+import com.real.apps.shuttle.respository.RepositoryConfig;
+import com.real.apps.shuttle.service.ServiceConfig;
 import com.real.apps.shuttle.service.TripService;
 import org.bson.types.ObjectId;
 import org.jmock.Expectations;
@@ -32,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Created by zorodzayi on 14/10/05.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {MvcConfiguration.class})
+@ContextConfiguration(classes = {MvcConfiguration.class, ServiceConfig.class, RepositoryConfig.class})
 @WebAppConfiguration
 public class TripControllerTest {
     @Autowired

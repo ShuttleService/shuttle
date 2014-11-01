@@ -2,6 +2,7 @@ package com.real.apps.shuttle.model;
 
 import org.bson.types.ObjectId;
 
+import javax.jws.soap.SOAPBinding;
 import java.util.Date;
 
 /**
@@ -122,5 +123,21 @@ public class User {
 
         return String.format("{id:%s,userName:%s,password%s,firstName:%s,email:%s,cellNumber:%s,dateOfBirth:%s,streetAddress:%s,surburb:%s,town:%s,province:%s,postalCode:%s}",
                 id, userName, password, firstName, email, cellNumber, dateOfBirth, streetAddress, suburb, town, province, postalCode);
+    }
+    @Override
+    public boolean equals(Object object){
+        if(this == object ){
+            return true;
+        }
+        if(id == null){
+            return false;
+        }
+
+        if(!(object instanceof  User)){
+            return false;
+        }
+
+        User user = (User)object;
+        return id.equals(user.getId());
     }
 }

@@ -82,6 +82,20 @@ public class Trip {
     @Override
     public String toString() {
 
-        return String.format("{source:%s,id:%s,clientName:%s,destination:%s,pricePerKm:%d,price:%d,vehicle:%s,driver:%s}", source,id,clientName,destination,pricePerKm,price,vehicle,driver);
+        return String.format("{source:%s,id:%s,clientName:%s,destination:%s,pricePerKm:%d,price:%d,vehicle:%s,driver:%s}", source, id, clientName, destination, pricePerKm, price, vehicle, driver);
+    }
+    @Override
+    public boolean equals(Object object){
+        if(this == object){
+            return true;
+        }
+        if(id == null){
+            return false;
+        }
+        if(!( object instanceof Trip)){
+            return false;
+        }
+        Trip trip = (Trip)object;
+        return id.equals(trip.getId());
     }
 }
