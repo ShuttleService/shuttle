@@ -4,12 +4,15 @@ import com.real.apps.shuttle.model.Review;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
@@ -30,10 +33,23 @@ public class ReviewRepositoryTest {
         Review review = new Review();
         review.setReviews(reviews);
         Review saved = repository.save(review);
-        assertThat(saved.getId(),notNullValue());
-        Query query = new Query(Criteria.where("id").is(saved.getId()));
-        Review found = operations.findOne(query,Review.class);
-        assertThat(found,notNullValue());
-        operations.remove(query,Review.class);
+        assertThat(saved.getId(), notNullValue());
+        Query query = new Query((Criteria.where("reviews").is(reviews)));
+        Review found = operations.findOne(query, Review.class);
+        assertThat(found, notNullValue());
+        operations.remove(query, Review.class);
+    }
+
+    @Test
+    public void shouldFindNNumberOfReviews() {
+        int skip = 0;
+        int limit = 2;
+
+        Review review = new Review();
+        operations.save(review);
+        operations.save(review);
+        Page<Review> page = repository.findAll(new PageRequest(skip, limit));
+        assertThat(page.getSize(), is(limit));
+        operations.dropCollection("review");
     }
 }

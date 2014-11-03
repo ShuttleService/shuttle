@@ -91,4 +91,22 @@ describe('Testing The Driver Controller', function () {
 
     });
 
+    it('Should Call get with the given skip and limit and set the returned page on the scope',function(){
+        $controller('DriverController',{
+            $scope:$scope
+        });
+        var skip = 10;
+        var limit = 100;
+        var page = {size:limit};
+        var params = {skip:skip,limit:limit};
+        spyOn(DriverService,'get').andReturn(page);
+        expect($scope.list).toBeDefined();
+
+        $scope.skip = skip;
+        $scope.limit = limit;
+        $scope.list();
+        expect(DriverService.get).toHaveBeenCalledWith(params);
+        expect($scope.page).toEqual(page);
+    });
+
 });

@@ -2,6 +2,7 @@ package com.real.apps.shuttle.respository;
 
 import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
+import com.mongodb.ReadPreference;
 import com.mongodb.WriteConcern;
 import com.real.apps.shuttle.model.User;
 import org.springframework.context.annotation.ComponentScan;
@@ -26,6 +27,8 @@ public class RepositoryConfig extends AbstractMongoConfiguration {
     public Mongo mongo() throws Exception {
         MongoClient client = new MongoClient();
         client.setWriteConcern(WriteConcern.SAFE);
+        client.setReadPreference(ReadPreference.nearest());
+
         return client;
     }
 

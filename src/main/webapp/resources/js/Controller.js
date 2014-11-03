@@ -4,7 +4,7 @@
 
 angular.module('controllers', ['services']).
 
-    controller('DriverController', function ($scope, DriverService, FormSubmissionUtilService) {
+    controller('DriverController', function ($scope,$log,DriverService, FormSubmissionUtilService) {
         $scope.new = true;
         $scope.driver = {};
         $scope.query = function () {
@@ -24,9 +24,16 @@ angular.module('controllers', ['services']).
                 $scope.driver = DriverService.save($scope.driver);
             }
         };
+
+        $scope.list = function(){
+            var params = {skip:$scope.skip,limit:$scope.limit};
+            $log.debug('Calling get with '+params);
+            $scope.page = DriverService.get(params);
+            $log.debug('Got the page '+$scope.page);
+        };
     }).
 
-    controller('TripController', function ($scope, TripService,FormSubmissionUtilService) {
+    controller('TripController', function ($scope, TripService,FormSubmissionUtilService,$log) {
         $scope.trip = {};
         $scope.new = true;
         $scope.query = function () {
@@ -50,9 +57,15 @@ angular.module('controllers', ['services']).
             console.log('Calculating The Price .');
             $scope.trip.price = $scope.trip.pricePerKm * $scope.trip.distance;
         };
+
+        $scope.list = function(){
+            var params = {skip:$scope.skip,limit:$scope.limit};
+            $log.debug('Calling Get With '+params);
+            $scope.page = TripService.get(params);
+        }
     }).
 
-    controller('ReviewController', function ($scope, ReviewService,FormSubmissionUtilService) {
+    controller('ReviewController', function ($scope, ReviewService,FormSubmissionUtilService,$log) {
 
         $scope.review = {};
         $scope.new = true;
@@ -82,14 +95,21 @@ angular.module('controllers', ['services']).
             }
             console.log('Set The Review To ' + $scope.review);
         };
+
+        $scope.list = function(){
+            var params = {skip:$scope.skip,limit:$scope.limit};
+            $log.debug('Listing The Reviews {Params:'+params+'}');
+            var page = ReviewService.get(params);
+            $scope.page = ReviewService.get(params);
+        };
     }).
 
-    controller('CompanyController', function ($scope, CompanyService, FormSubmissionUtilService) {
+    controller('CompanyController', function ($scope,$log,CompanyService, FormSubmissionUtilService) {
 
         $scope.company = {};
         $scope.new = true;
 
-        $scope.get = function (id) {
+        $scope.get = function () {
 
             $scope.company = CompanyService.get({id: $scope.id});
         };
@@ -104,9 +124,15 @@ angular.module('controllers', ['services']).
             console.log('Clicked Save Button');
 
             if ($scope.new === true) {
-
                 $scope.company = CompanyService.save($scope.company);
             }
+        };
+
+        $scope.list = function(){
+            var params = {skip:$scope.skip,limit:$scope.limit};
+            $log.debug('Calling list with '+params);
+            $scope.page = CompanyService.get(params)
+            $log.debug('Got Back {page:'+$scope.page+'}');
         }
     }).
 
@@ -125,7 +151,12 @@ angular.module('controllers', ['services']).
         $scope.canSave = function(){
 
             return FormSubmissionUtilService.canSave($scope.addForm);
+        };
+
+        $scope.list = function(){
+            var params = {skip:$scope.skip,limit:$scope.limit};
+            $log.debug('Calling Get With The Params '+params);
+            $scope.page = UserService.get(params);
         }
     });
-
 

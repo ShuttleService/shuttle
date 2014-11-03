@@ -10,7 +10,7 @@ describe('Company Controller Test', function () {
 
     beforeEach(module('controllers'));
 
-    beforeEach(inject(function ($rootScope, _$controller_, _CompanyService_,_FormSubmissionUtilService_) {
+    beforeEach(inject(function ($rootScope, _$controller_, _CompanyService_, _FormSubmissionUtilService_) {
 
         $scope = $rootScope.$new();
         CompanyService = _CompanyService_;
@@ -28,7 +28,7 @@ describe('Company Controller Test', function () {
             $scope: $scope
         });
 
-        spyOn(FormSubmissionUtilService,'canSave').andReturn(false);
+        spyOn(FormSubmissionUtilService, 'canSave').andReturn(false);
         $scope.addForm = addForm;
         expect($scope.canSave).toBeDefined();
 
@@ -40,11 +40,11 @@ describe('Company Controller Test', function () {
         var addForm = {$dirty: true, $valid: true};
 
         $controller('CompanyController', {
-            $scope : $scope
+            $scope: $scope
         });
 
         $scope.addForm = addForm;
-        spyOn(FormSubmissionUtilService,'canSave').andReturn(true);
+        spyOn(FormSubmissionUtilService, 'canSave').andReturn(true);
 
         expect($scope.canSave()).toEqual(true);
         expect(FormSubmissionUtilService.canSave).toHaveBeenCalledWith(addForm);
@@ -75,33 +75,54 @@ describe('Company Controller Test', function () {
 
     });
 
-    it('Should Have A Company Object On The Scope On Init And Should Default To $scope.new == true',function(){
+    it('Should Have A Company Object On The Scope On Init And Should Default To $scope.new == true', function () {
 
-        $controller('CompanyController',{
-            $scope:$scope
+        $controller('CompanyController', {
+            $scope: $scope
         });
 
         expect($scope.company).toBeDefined();
         expect($scope.new).toEqual(true);
     });
 
-    it('Should Call Service Post On Submit When Creating A Company ',function(){
+    it('Should Call Service Post On Submit When Creating A Company ', function () {
 
-        $controller('CompanyController',{
-            $scope:$scope
+        $controller('CompanyController', {
+            $scope: $scope
         });
 
-        var companyToSave = {name:'Test Company Name To Be Called With Posted'};
-        var savedCompany = {name:'Test Company Name To Be Returned From After POST'};
+        var companyToSave = {name: 'Test Company Name To Be Called With Posted'};
+        var savedCompany = {name: 'Test Company Name To Be Returned From After POST'};
         $scope.company = companyToSave;
 
         $scope.new = true;
 
-        spyOn(CompanyService,'save').andReturn(savedCompany);
+        spyOn(CompanyService, 'save').andReturn(savedCompany);
         expect($scope.saveClick).toBeDefined();
         $scope.saveClick();
 
         expect(CompanyService.save).toHaveBeenCalledWith(companyToSave);
         expect($scope.company).toEqual(savedCompany);
+    });
+
+    it('Should Call Service get with given skip and limit', function () {
+        var size = 23;
+        $controller('CompanyController', {
+            $scope:$scope
+        });
+
+        var page = {size:size};
+
+        spyOn(CompanyService,'get').andReturn(page);
+
+        expect($scope.list).toBeDefined();
+        var limit = 3;
+        var skip = 0;
+        $scope.skip = skip;
+        $scope.limit = limit;
+        var params = {skip:skip,limit:limit};
+        $scope.list();
+        expect(CompanyService.get).toHaveBeenCalledWith(params);
+        expect($scope.page).toEqual(page);
     });
 });

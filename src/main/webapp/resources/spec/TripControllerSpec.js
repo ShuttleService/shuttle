@@ -94,20 +94,38 @@ describe('Testing The Trip Controller', function () {
     it('Should Calculate The Product Of price Per Km And The Distance And Set The Price On The ', function () {
 
         $controller('TripController', {
-            $scope:$scope
+            $scope: $scope
         });
 
         expect($scope.price).toBeDefined();
 
         $scope.trip = {};
         var pricePerKm = 11;
-        var distance   = 13;
+        var distance = 13;
 
         $scope.trip.distance = distance;
-        $scope.trip.pricePerKm      = pricePerKm;
+        $scope.trip.pricePerKm = pricePerKm;
 
         $scope.price();
 
         expect($scope.trip.price).toEqual(distance * pricePerKm);
+    });
+
+    it('Should Call List On The Service With The Given skip and limit and Save The Page On The Scope', function () {
+        var skip = 0;
+        var limit = 10;
+        $controller('TripController',{
+            $scope:$scope
+        });
+        var params = {skip:skip,limit:limit};
+        var page = {size:limit};
+        spyOn(TripService,'get').andReturn(page);
+        expect($scope.list).toBeDefined();
+
+        $scope.limit = limit;
+        $scope.skip = skip;
+        $scope.list();
+        expect(TripService.get).toHaveBeenCalledWith(params);
+        expect($scope.page).toBeDefined(page);
     });
 });

@@ -5,6 +5,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -24,7 +27,7 @@ public class UserRepositoryTest {
     @Autowired
     private UserRepository repository;
     @Autowired
-    private MongoTemplate template;
+    private MongoOperations template;
 
     @Before
     public void init() {
@@ -42,5 +45,15 @@ public class UserRepositoryTest {
         User actual = template.findOne(query, User.class);
         assertThat(actual.getFirstName(), is(firstName));
         template.remove(query,User.class);
+    }
+    @Test
+    public void shouldFindNNumberOfUsers(){
+        int skip = 0;
+        int limit = 2;
+        User user = new User();
+        template.save(user);
+        template.save(user);
+        Page<User> page = repository.findAll(new PageRequest(skip,limit));
+        assertThat(page.getSize(),is(limit));
     }
 }

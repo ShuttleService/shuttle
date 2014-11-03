@@ -6,6 +6,8 @@ import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -34,6 +36,16 @@ public class VehicleRepositoryTest {
         Vehicle found = operations.findOne(query,Vehicle.class);
         assertThat(found.getMake(),notNullValue());
         operations.remove(query,Vehicle.class);
+    }
+    @Test
+    public void shouldFindNNumberOfVehicle(){
+        int skip = 0;
+        int limit = 2;
+        Vehicle vehicle = new Vehicle();
+        operations.save(vehicle);
+        operations.save(vehicle);
+        Page<Vehicle> page = repository.findAll(new PageRequest(skip,limit));
+        assertThat(page.getSize(),is(limit));
     }
 
 }

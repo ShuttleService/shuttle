@@ -10,7 +10,7 @@ describe('Testing The Review Controller', function () {
 
     beforeEach(module('controllers'));
 
-    beforeEach(inject(function (_$controller_, _ReviewService_,$rootScope,_FormSubmissionUtilService_) {
+    beforeEach(inject(function (_$controller_, _ReviewService_, $rootScope, _FormSubmissionUtilService_) {
 
         $controller = _$controller_;
         ReviewService = _ReviewService_;
@@ -128,10 +128,28 @@ describe('Testing The Review Controller', function () {
 
         expect($scope.canSave).toBeDefined();
 
-        spyOn(FormSubmissionUtilService,'canSave').andReturn(false);
+        spyOn(FormSubmissionUtilService, 'canSave').andReturn(false);
 
         expect($scope.canSave()).toEqual(false);
         expect(FormSubmissionUtilService.canSave).toHaveBeenCalledWith($scope.addForm);
+    });
+
+    it('Should Call Get On The Service With The Given skip and limit And Put The Page On The Scope', function () {
+        $controller('ReviewController',{
+            $scope:$scope
+        });
+        var skip = 0;
+        var limit = 10;
+        var params = {skip:skip,limit:limit};
+        var page = {size:limit};
+        spyOn(ReviewService,'get').andReturn(page);
+
+        expect($scope.list).toBeDefined();
+        $scope.skip = skip;
+        $scope.limit = limit;
+        $scope.list();
+        expect(ReviewService.get).toHaveBeenCalledWith(params);
+        expect($scope.page).toEqual(page);
     });
 
 });

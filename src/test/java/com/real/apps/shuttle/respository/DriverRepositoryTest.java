@@ -6,6 +6,8 @@ import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -36,6 +38,18 @@ public class DriverRepositoryTest {
         assertThat(found,notNullValue());
         assertThat(found.getFirstName(),is(name));
         operations.remove(query,Driver.class);
+    }
+
+    @Test
+    public void shouldFindNNumberOfDrivers(){
+        int skip = 0;
+        int limit = 2;
+        Driver driver = new Driver();
+        operations.save(driver);
+        operations.save(driver);
+        Page<Driver> page = repository.findAll(new PageRequest(skip,limit));
+        assertThat(page.getSize(),is(limit));
+        operations.dropCollection("driver");
     }
 
 }

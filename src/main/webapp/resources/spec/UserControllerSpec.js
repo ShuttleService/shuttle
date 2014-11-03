@@ -9,7 +9,7 @@ describe('Testing The User Controller', function () {
 
     beforeEach(module('controllers'));
 
-    beforeEach(inject(function ($rootScope, _UserService_, $controller,_FormSubmissionUtilService_) {
+    beforeEach(inject(function ($rootScope, _UserService_, $controller, _FormSubmissionUtilService_) {
 
         $scope = $rootScope.$new();
         UserService = _UserService_;
@@ -43,19 +43,33 @@ describe('Testing The User Controller', function () {
 
     });
 
-    it('Should Have a user on the $scope at init',function(){
+    it('Should Have a user on the $scope at init', function () {
 
         expect($scope.user).toBeDefined();
     });
 
     it('Should Call The User FormSubmissionUtil saveClick with addForm', function () {
 
-        spyOn(FormSubmissionUtilService,'canSave').andReturn(true);
+        spyOn(FormSubmissionUtilService, 'canSave').andReturn(true);
         expect($scope.canSave).toBeDefined();
 
         var actual = $scope.canSave();
 
         expect(actual).toBeTruthy();
         expect(FormSubmissionUtilService.canSave).toHaveBeenCalledWith($scope.addForm);
+    });
+
+    it('Should Call The Service get With The Given Skip And Limit', function () {
+        var skip = 0;
+        var limit = 10;
+        var params = {skip:skip,limit:limit};
+        var page   = {size:limit};
+        spyOn(UserService,'get').andReturn(page);
+        $scope.skip = skip;
+        $scope.limit = limit;
+        expect($scope.list).toBeDefined();
+        $scope.list();
+        expect(UserService.get).toHaveBeenCalledWith(params);
+        expect($scope.page).toEqual(page);
     });
 });
