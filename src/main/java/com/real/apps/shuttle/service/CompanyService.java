@@ -2,6 +2,7 @@ package com.real.apps.shuttle.service;
 
 import com.real.apps.shuttle.model.Company;
 import org.bson.types.ObjectId;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
 public interface CompanyService {
     Company insert(Company company);
 
-    List<Company> list(int skip, int limit);
+    Page<Company> list(int skip, int limit);
 
     Company update(Company company);
 

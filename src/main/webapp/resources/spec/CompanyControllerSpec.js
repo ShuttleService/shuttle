@@ -7,18 +7,22 @@ describe('Company Controller Test', function () {
     var CompanyService;
     var $scope;
     var FormSubmissionUtilService;
+    var RESULT_SIZE;
 
     beforeEach(module('controllers'));
 
-    beforeEach(inject(function ($rootScope, _$controller_, _CompanyService_, _FormSubmissionUtilService_) {
+    beforeEach(inject(function ($rootScope, _$controller_, _CompanyService_, _FormSubmissionUtilService_,_RESULT_SIZE_) {
 
         $scope = $rootScope.$new();
         CompanyService = _CompanyService_;
         $controller = _$controller_;
         FormSubmissionUtilService = _FormSubmissionUtilService_;
+        RESULT_SIZE = _RESULT_SIZE_;
+
         expect($scope).toBeDefined();
         expect(CompanyService).toBeDefined();
         expect($controller).toBeDefined();
+        expect(RESULT_SIZE).toBeDefined();
     }));
 
     it('Should Return False When addForm is Dirty And Invalid', function () {
@@ -124,5 +128,13 @@ describe('Company Controller Test', function () {
         $scope.list();
         expect(CompanyService.get).toHaveBeenCalledWith(params);
         expect($scope.page).toEqual(page);
+    });
+
+    it('Should Set The limit To the Default Result Size, Set Limit  And skip on the scope',function(){
+        $controller('CompanyController',{
+            $scope:$scope
+        });
+        expect($scope.skip).toEqual(0);
+        expect($scope.limit).toEqual(RESULT_SIZE);
     });
 });

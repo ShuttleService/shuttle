@@ -2,8 +2,11 @@ package com.real.apps.shuttle.service;
 
 import com.real.apps.shuttle.model.Company;
 import com.real.apps.shuttle.respository.CompanyRepository;
+import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +18,7 @@ import java.util.List;
 public class CompanyServiceImpl implements CompanyService {
     @Autowired
     private CompanyRepository repository;
+    private Logger logger = Logger.getLogger(CompanyServiceImpl.class);
     @Override
     public Company insert(Company company) {
 
@@ -22,8 +26,9 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public List<Company> list(int skip, int limit) {
-        return null;
+    public Page<Company> list(int skip, int limit) {
+        logger.debug(String.format("Finding Companies {skip:%d,limit:%d}",skip,limit));
+        return repository.findAll(new PageRequest(skip,limit));
     }
 
     @Override

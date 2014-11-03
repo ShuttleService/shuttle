@@ -13,6 +13,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -67,20 +69,20 @@ public class CompanyControllerTest {
         Company company = new Company();
         company.setSlug(slug);
         final List<Company> list = Arrays.asList(company);
-
+        final Page<Company> page = new PageImpl<Company>(list);
         controller.setService(service);
         context.checking(new Expectations() {{
             oneOf(service).list(skip, limit);
-            will(returnValue(list));
+            will(returnValue(page));
         }});
 
         mockMvc.perform(get("/" + VIEW_PAGE + "/" + skip + "/" + limit)).andDo(print()).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$[0].slug").value(slug));
+                andExpect(jsonPath("$.content[0].slug").value(slug));
     }
 
     @Test
-    public void shouldCallServiceInsertAndRe7turnTheInsertedCompany() throws Exception {
+    public void shouldCallServiceInsertAndReturnTheInsertedCompany() throws Exception {
         final Company company = new Company();
         String slug = "Test Slug To Insert";
         company.setSlug(slug);
