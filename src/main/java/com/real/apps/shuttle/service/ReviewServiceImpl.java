@@ -4,6 +4,8 @@ import com.real.apps.shuttle.model.Review;
 import com.real.apps.shuttle.respository.ReviewRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,8 +19,8 @@ public class ReviewServiceImpl implements ReviewService {
     private ReviewRepository repository;
 
     @Override
-    public List<Review> list(int skip, int limit) {
-        return null;
+    public Page<Review> list(int skip, int limit) {
+        return repository.findAll(new PageRequest(skip,limit));
     }
 
     @Override

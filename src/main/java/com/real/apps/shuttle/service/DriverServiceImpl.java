@@ -4,6 +4,8 @@ import com.real.apps.shuttle.model.Driver;
 import com.real.apps.shuttle.respository.DriverRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,8 +18,8 @@ public class DriverServiceImpl implements DriverService {
     @Autowired
     private DriverRepository repository;
     @Override
-    public List<Driver> list(int skip, int limit) {
-        return null;
+    public Page<Driver> list(int skip, int limit) {
+        return repository.findAll( new PageRequest(skip,limit));
     }
 
     @Override

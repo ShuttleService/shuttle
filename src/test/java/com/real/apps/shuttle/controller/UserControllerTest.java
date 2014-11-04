@@ -14,6 +14,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -66,17 +68,18 @@ public class UserControllerTest {
         User user = new User();
         String firstName = "Test First Name To Be Return From Service List";
         user.setFirstName(firstName);
-        final List<User> list = Arrays.asList(user);
+        List<User> list = Arrays.asList(user);
+        final Page<User> page = new PageImpl<User>(list);
         final int skip = 12;
         final int limit = 34;
 
         context.checking(new Expectations() {{
             oneOf(service).list(skip, limit);
-            will(returnValue(list));
+            will(returnValue(page));
         }});
 
         controller.setService(service);
-        mockMvc.perform(get("/" + VIEW_PAGE + "/" + skip + "/" + limit)).andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$[0].firstName").value(firstName));
+        mockMvc.perform(get("/" + VIEW_PAGE + "/" + skip + "/" + limit)).andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$.content[0].firstName").value(firstName));
         context.assertIsSatisfied();
     }
 

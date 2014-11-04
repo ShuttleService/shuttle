@@ -12,6 +12,8 @@ public class Company {
     private String tradingAs;
     private String fullName;
     private String description;
+    private String registrationNumber;
+    private String vatNumber;
 
     public ObjectId getId() {
         return id;
@@ -53,9 +55,26 @@ public class Company {
         this.description = description;
     }
 
+    public String getVatNumber() {
+        return vatNumber;
+    }
+
+    public void setVatNumber(String vatNumber) {
+        this.vatNumber = vatNumber;
+    }
+
+    public String getRegistrationNumber() {
+        return registrationNumber;
+    }
+
+    public void setRegistrationNumber(String registrationNumber) {
+        this.registrationNumber = registrationNumber;
+    }
+
     @Override
     public String toString() {
-        return String.format("{id:%s,slug:%s,tradingAs:%s,fullName:%s,description:%s}", id, slug, tradingAs, fullName, description);
+        return String.format("{id:%s,slug:%s,tradingAs:%s,fullName:%s,description:%s,registrationNumber:%s,vatNumber:%s}", id, slug, tradingAs, fullName, description,registrationNumber,
+                vatNumber);
     }
 
     @Override

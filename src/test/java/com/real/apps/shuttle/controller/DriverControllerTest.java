@@ -16,6 +16,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -68,16 +70,17 @@ public class DriverControllerTest {
         final Driver driver = new Driver();
         final String firstName = "Test First Name";
         driver.setFirstName(firstName);
-        final List<Driver> drivers = Arrays.asList(driver);
+        List<Driver> drivers = Arrays.asList(driver);
+        final Page<Driver> page = new PageImpl<Driver>(drivers);
         controller.setService(service);
         final int skip = 1;
         final int limit = 2;
 
         context.checking(new Expectations() {{
             oneOf(service).list(skip, limit);
-            will(returnValue(drivers));
+            will(returnValue(page));
         }});
-        mockMvc.perform(get("/" + VIEW_PAGE + "/" + skip + "/" + limit)).andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$[0].firstName").value(firstName));
+        mockMvc.perform(get("/" + VIEW_PAGE + "/" + skip + "/" + limit)).andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$.content[0].firstName").value(firstName));
     }
 
     @Test

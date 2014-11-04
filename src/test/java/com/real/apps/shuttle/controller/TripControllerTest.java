@@ -15,6 +15,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -65,16 +67,16 @@ public class TripControllerTest {
         final String source = "Test Source To List";
         Trip trip = new Trip();
         trip.setSource(source);
-        final List<Trip> trips = Arrays.asList(trip);
-
+        List<Trip> trips = Arrays.asList(trip);
+        final Page<Trip> page = new PageImpl<Trip>(trips);
         context.checking(new Expectations() {{
             oneOf(service).list(skip, limit);
-            will(returnValue(trips));
+            will(returnValue(page));
         }});
 
         controller.setService(service);
 
-        mockMvc.perform(get("/" + VIEW_PAGE + "/" + skip + "/" + limit)).andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$[0].source").value(source));
+        mockMvc.perform(get("/" + VIEW_PAGE + "/" + skip + "/" + limit)).andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$.content[0].source").value(source));
     }
 
     @Test

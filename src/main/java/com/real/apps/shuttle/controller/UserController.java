@@ -4,10 +4,9 @@ import com.real.apps.shuttle.model.User;
 import com.real.apps.shuttle.service.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * Created by zorodzayi on 14/10/22.
@@ -27,15 +26,15 @@ public class UserController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/{skip}/{limit}")
     @ResponseBody
-    public List<User> list(@PathVariable("skip") int skip, @PathVariable("limit") int limit) {
-        logger.debug(String.format("Listing users {skip:%s,limit:%s}",skip,limit));
+    public Page<User> list(@PathVariable("skip") int skip, @PathVariable("limit") int limit) {
+        logger.debug(String.format("Listing users {skip:%s,limit:%s}", skip, limit));
         return service.list(skip, limit);
     }
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     public User post(@RequestBody User user) {
-        logger.debug("Posting User "+user);
+        logger.debug("Posting User " + user);
         return service.insert(user);
     }
 

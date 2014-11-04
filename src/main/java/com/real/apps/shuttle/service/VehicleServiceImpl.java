@@ -4,6 +4,8 @@ import com.real.apps.shuttle.model.Vehicle;
 import com.real.apps.shuttle.respository.VehicleRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,8 +19,8 @@ public class VehicleServiceImpl implements VehicleService
     @Autowired
     private VehicleRepository repository;
     @Override
-    public List<Vehicle> list(int skip, int limit) {
-        return null;
+    public Page<Vehicle> list(int skip, int limit) {
+        return repository.findAll(new PageRequest(skip,limit));
     }
 
     @Override

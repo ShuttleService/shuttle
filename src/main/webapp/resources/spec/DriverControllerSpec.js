@@ -7,20 +7,23 @@ describe('Testing The Driver Controller', function () {
     var DriverService;
     var $scope;
     var FormSubmissionUtilService;
+    var RESULT_SIZE;
 
     beforeEach(module('controllers'));
 
-    beforeEach(inject(function (_$controller_, _DriverService_, $rootScope, _FormSubmissionUtilService_) {
+    beforeEach(inject(function (_$controller_, _DriverService_, $rootScope, _FormSubmissionUtilService_, _RESULT_SIZE_) {
 
         $controller = _$controller_;
         DriverService = _DriverService_;
         $scope = $rootScope.$new();
         FormSubmissionUtilService = _FormSubmissionUtilService_;
+        RESULT_SIZE = _RESULT_SIZE_;
 
         expect($controller).toBeDefined();
         expect(DriverService).toBeDefined();
         expect($scope).toBeDefined();
         expect(FormSubmissionUtilService).toBeDefined();
+        expect(RESULT_SIZE).toBeDefined();
     }));
 
     it('Query Should Call Query On The Service Using Parameters On The Scope And Set The Resulting Drivers On The Scope', function () {
@@ -70,7 +73,7 @@ describe('Testing The Driver Controller', function () {
         expect(FormSubmissionUtilService.canSave).toHaveBeenCalledWith($scope.addForm);
     });
 
-    it('Should Call Service Save With $scope.drive when $scope.new is true ', function () {
+    it('Should Call Service Save With $scope.driver when $scope.new is true ', function () {
 
         $controller('DriverController', {
             $scope: $scope
@@ -86,20 +89,20 @@ describe('Testing The Driver Controller', function () {
         expect($scope.saveClick).toBeDefined();
         $scope.saveClick();
 
-        expect(DriverService.save).toHaveBeenCalledWith(driverToSave);
-        expect($scope.driver).toEqual(savedDriver);
+        expect(DriverService.save).toHaveBeenCalledWith(driverToSave, jasmine.any(Function));
+        expect($scope.recentlyAddedDriver).toEqual(savedDriver);
 
     });
 
-    it('Should Call get with the given skip and limit and set the returned page on the scope',function(){
-        $controller('DriverController',{
-            $scope:$scope
+    it('Should Call get with the given skip and limit and set the returned page on the scope', function () {
+        $controller('DriverController', {
+            $scope: $scope
         });
         var skip = 10;
         var limit = 100;
-        var page = {size:limit};
-        var params = {skip:skip,limit:limit};
-        spyOn(DriverService,'get').andReturn(page);
+        var page = {size: limit};
+        var params = {skip: skip, limit: limit};
+        spyOn(DriverService, 'get').andReturn(page);
         expect($scope.list).toBeDefined();
 
         $scope.skip = skip;
@@ -107,6 +110,15 @@ describe('Testing The Driver Controller', function () {
         $scope.list();
         expect(DriverService.get).toHaveBeenCalledWith(params);
         expect($scope.page).toEqual(page);
+    });
+
+    it('Should Set skip to 0 and limit to Default Result Size', function () {
+        $controller('DriverController', {
+            $scope:$scope
+        });
+
+        expect($scope.skip).toEqual(0);
+        expect($scope.limit).toEqual(RESULT_SIZE);
     });
 
 });

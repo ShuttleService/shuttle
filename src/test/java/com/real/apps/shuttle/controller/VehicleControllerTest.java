@@ -15,6 +15,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -68,15 +70,16 @@ public class VehicleControllerTest {
         String licenseNumber = "Test License Number To List";
         final Vehicle vehicle = new Vehicle();
         vehicle.setLicenseNumber(licenseNumber);
-        final List<Vehicle> vehicles = Arrays.asList(vehicle);
+        List<Vehicle> vehicles = Arrays.asList(vehicle);
+        final Page<Vehicle> page = new PageImpl<Vehicle>(vehicles);
         controller.setService(service);
 
         context.checking(new Expectations() {{
             oneOf(service).list(skip, limit);
-            will(returnValue(vehicles));
+            will(returnValue(page));
         }});
 
-        mockMvc.perform(get("/" + VIEW_PAGE + "/" + skip + "/" + limit)).andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$[0].licenseNumber").value(licenseNumber));
+        mockMvc.perform(get("/" + VIEW_PAGE + "/" + skip + "/" + limit)).andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$.content[0].licenseNumber").value(licenseNumber));
     }
 
     @Test

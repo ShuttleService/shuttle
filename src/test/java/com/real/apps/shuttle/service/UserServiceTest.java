@@ -10,8 +10,13 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.Arrays;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -41,5 +46,20 @@ public class UserServiceTest {
         impl.setRepository(repository);
         User inserted = impl.insert(user);
         assertThat(inserted, is(user));
+    }
+
+    @Test
+    public void shouldCallRepositoryListWithTheGivenSkipAndLimit(){
+        final int skip = 0;
+        final int limit = 10;
+        final Page<User> page = new PageImpl<User>(Arrays.asList(new User()));
+        context.checking(new Expectations(){{
+            oneOf(repository).findAll(new PageRequest(skip,limit));
+            will(returnValue(page));
+        }});
+
+        impl.setRepository(repository);
+        Page<User> actual = impl.list(skip,limit);
+        assertThat(actual.getContent().get(0),is(page.getContent().get(0)));
     }
 }

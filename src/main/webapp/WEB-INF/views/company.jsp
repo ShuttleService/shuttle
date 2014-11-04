@@ -50,24 +50,27 @@
         </div>
     </div>
     <div class="col-xs-12 text-center">
-        <table class="table-bordered">
+        <table class="table table-striped table-hover">
             <thead>
             <th>Id</th>
             <th>Slug</th>
             <th>Trading As</th>
             <th>Full Name</th>
             <th>Description</th>
+            <th>VAT Number</th>
+            <th>Registration Number</th>
             </thead>
             <tbody>
-            <tr ng-repeat="company in companies">
+            <tr ng-repeat="company in page.content">
                 <td>{{company.id}}</td>
                 <td>{{company.slug}}</td>
                 <td>{{company.tradingAs}}</td>
                 <td>{{company.fullName}}</td>
                 <td>{{company.description}}</td>
+                <td>{{company.vatNumber}}</td>
+                <td>{{company.registrationNumber}}</td>
             </tr>
             </tbody>
         </table>
-        {{page | json}}
     </div>
 </div>

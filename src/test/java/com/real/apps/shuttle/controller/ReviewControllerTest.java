@@ -16,6 +16,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -69,15 +71,16 @@ public class ReviewControllerTest {
         review.setReviews(new String[]{text});
 
         logger.debug(String.format("Object Id {toSting:%s,toMongoString:%s} ", id.toString(), id.toStringMongod()));
-        final List<Review> reviews = Arrays.asList(review);
+        List<Review> reviews = Arrays.asList(review);
+        final Page<Review> page = new PageImpl<Review>(reviews);
         controller.setService(service);
 
         context.checking(new Expectations() {{
             oneOf(service).list(skip, limit);
-            will(returnValue(reviews));
+            will(returnValue(page));
         }});
 
-        mockMvc.perform(get(String.format("/%s/%d/%d", ReviewController.VIEW_PAGE, skip, limit))).andDo(print()).andExpect(jsonPath("$[0].reviews[0]").value(text));
+        mockMvc.perform(get(String.format("/%s/%d/%d", ReviewController.VIEW_PAGE, skip, limit))).andDo(print()).andExpect(jsonPath("$.content[0].reviews[0]").value(text));
     }
 
     @Test

@@ -4,6 +4,8 @@ import com.real.apps.shuttle.model.Trip;
 import com.real.apps.shuttle.respository.TripRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,8 +19,8 @@ public class TripServiceImpl implements TripService {
     private TripRepository repository;
 
     @Override
-    public List<Trip> list(int skip, int limit) {
-        return null;
+    public Page<Trip> list(int skip, int limit) {
+        return repository.findAll(new PageRequest(skip,limit));
     }
 
     @Override

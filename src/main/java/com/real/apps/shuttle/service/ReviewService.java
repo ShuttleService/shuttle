@@ -2,14 +2,13 @@ package com.real.apps.shuttle.service;
 
 import com.real.apps.shuttle.model.Review;
 import org.bson.types.ObjectId;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 /**
  * Created by zorodzayi on 14/10/11.
  */
 public interface ReviewService {
-    List<Review> list(int skip, int limit);
+    Page<Review> list(int skip, int limit);
 
     Review insert(Review review);
 

@@ -52,6 +52,5 @@ public class CompanyRepositoryTest {
         operations.save(company);
         Page<Company> page = repository.findAll(new PageRequest(skip, limit));
         assertThat(page.getSize(), is(limit));
-        operations.dropCollection("company");
     }
 }

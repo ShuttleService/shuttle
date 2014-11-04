@@ -105,8 +105,8 @@ describe('Company Controller Test', function () {
         expect($scope.saveClick).toBeDefined();
         $scope.saveClick();
 
-        expect(CompanyService.save).toHaveBeenCalledWith(companyToSave);
-        expect($scope.company).toEqual(savedCompany);
+        expect(CompanyService.save).toHaveBeenCalledWith(companyToSave,jasmine.any(Function));
+        expect($scope.recentlyAddedCompany).toEqual(savedCompany);
     });
 
     it('Should Call Service get with given skip and limit', function () {

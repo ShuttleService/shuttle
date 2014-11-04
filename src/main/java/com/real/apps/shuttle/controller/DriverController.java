@@ -6,6 +6,7 @@ import com.real.apps.shuttle.service.DriverService;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +31,7 @@ public class DriverController {
 
     @RequestMapping(method = RequestMethod.GET,value = "/{skip}/{limit}" )
     @ResponseBody
-    public List<Driver> list(@PathVariable("skip") int skip,@PathVariable("limit") int limit){
+    public Page<Driver> list(@PathVariable("skip") int skip,@PathVariable("limit") int limit){
         logger.debug(String.format("Getting List With {skip%d,limit%d}",skip,limit));
         return service.list(skip,limit);
     }

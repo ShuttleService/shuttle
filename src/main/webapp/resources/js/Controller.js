@@ -4,9 +4,12 @@
 
 angular.module('controllers', ['services']).
 
-    controller('DriverController', function ($scope, $log, DriverService, FormSubmissionUtilService) {
+    controller('DriverController', function ($scope, $log, DriverService, FormSubmissionUtilService,RESULT_SIZE) {
         $scope.new = true;
         $scope.driver = {};
+        $scope.skip = 0;
+        $scope.limit = RESULT_SIZE;
+
         $scope.query = function () {
 
             $scope.drivers = DriverService.query({skip: $scope.skip, limit: $scope.limit});
@@ -21,7 +24,9 @@ angular.module('controllers', ['services']).
 
             if ($scope.new === true) {
 
-                $scope.driver = DriverService.save($scope.driver);
+                $scope.recentlyAddedDriver = DriverService.save($scope.driver,function(data){
+                    $scope.list();
+                });
             }
         };
 
@@ -31,6 +36,8 @@ angular.module('controllers', ['services']).
             $scope.page = DriverService.get(params);
             $log.debug('Got the page ' + $scope.page);
         };
+
+        $scope.list();
     }).
 
     controller('TripController', function ($scope, TripService, FormSubmissionUtilService, $log) {
@@ -126,8 +133,9 @@ angular.module('controllers', ['services']).
             console.log('Clicked Save Button');
 
             if ($scope.new === true) {
-                $scope.company = CompanyService.save($scope.company,function(data){
-                    $scope.page = CompanyService.get({skip:0,limit:RESULT_SIZE});
+                $scope.recentlyAddedCompany = CompanyService.save($scope.company,function(data){
+                    $log.debug('Added The Company '+$scope.recentlyAddedCompany.tradingAs+'. Listing All The Companies.');
+                    $scope.list();
                 });
             }
         };
