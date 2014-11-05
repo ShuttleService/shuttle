@@ -85,13 +85,13 @@ describe('Testing The Driver Controller', function () {
 
         $scope.new = true;
         spyOn(DriverService, 'save').andReturn(savedDriver);
-
+        spyOn($scope,'list');
         expect($scope.saveClick).toBeDefined();
         $scope.saveClick();
 
         expect(DriverService.save).toHaveBeenCalledWith(driverToSave, jasmine.any(Function));
         expect($scope.recentlyAddedDriver).toEqual(savedDriver);
-
+        expect($scope.list).toHaveBeenCalled();
     });
 
     it('Should Call get with the given skip and limit and set the returned page on the scope', function () {

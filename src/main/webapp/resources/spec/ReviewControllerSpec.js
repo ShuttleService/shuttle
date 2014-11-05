@@ -7,20 +7,23 @@ describe('Testing The Review Controller', function () {
     var ReviewService;
     var $scope;
     var FormSubmissionUtilService;
+    var RESULT_SIZE;
 
     beforeEach(module('controllers'));
 
-    beforeEach(inject(function (_$controller_, _ReviewService_, $rootScope, _FormSubmissionUtilService_) {
+    beforeEach(inject(function (_$controller_, _ReviewService_, $rootScope, _FormSubmissionUtilService_,_RESULT_SIZE_) {
 
         $controller = _$controller_;
         ReviewService = _ReviewService_;
         $scope = $rootScope.$new();
         FormSubmissionUtilService = _FormSubmissionUtilService_;
+        RESULT_SIZE = _RESULT_SIZE_;
 
         expect($controller).toBeDefined();
         expect(ReviewService).toBeDefined();
         expect($scope).toBeDefined();
         expect(FormSubmissionUtilService).toBeDefined();
+        expect(RESULT_SIZE).toBeDefined();
     }));
 
     it('Should Call The ReviewService Query With The Params On The Scope And Set The Resulting Reviews On The Scope', function () {
@@ -71,7 +74,7 @@ describe('Testing The Review Controller', function () {
 
         $scope.saveClick();
 
-        expect(ReviewService.save).toHaveBeenCalledWith(reviewToSave);
+        expect(ReviewService.save).toHaveBeenCalledWith(reviewToSave,jasmine.any(Function));
 
         expect($scope.review).toEqual(savedReview);
     });
@@ -94,7 +97,7 @@ describe('Testing The Review Controller', function () {
         spyOn(ReviewService, 'save');
         $scope.saveClick();
 
-        expect(ReviewService.save).toHaveBeenCalledWith(expectedReviewToBeCreated);
+        expect(ReviewService.save).toHaveBeenCalledWith(expectedReviewToBeCreated,jasmine.any(Function));
 
     });
 
@@ -113,10 +116,12 @@ describe('Testing The Review Controller', function () {
         $scope.review.text = reviewTextToAdd;
 
         spyOn(ReviewService, 'save');
+        spyOn($scope,'list');
 
         $scope.saveClick();
 
-        expect(ReviewService.save).toHaveBeenCalledWith(reviewToPost);
+        expect(ReviewService.save).toHaveBeenCalledWith(reviewToPost,jasmine.any(Function));
+        expect($scope.list).toHaveBeenCalled();
 
     });
 
@@ -150,6 +155,12 @@ describe('Testing The Review Controller', function () {
         $scope.list();
         expect(ReviewService.get).toHaveBeenCalledWith(params);
         expect($scope.page).toEqual(page);
+    });
+
+    it('Should Set Skip And Limit On Init',function(){
+        $controller('ReviewController',{$scope:$scope});
+        expect($scope.skip).toEqual(0);
+        expect($scope.limit).toEqual(RESULT_SIZE);
     });
 
 });

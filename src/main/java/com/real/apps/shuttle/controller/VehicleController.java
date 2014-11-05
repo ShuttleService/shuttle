@@ -28,7 +28,7 @@ public class VehicleController {
 
     @RequestMapping(value = "/{skip}/{limit}")
     @ResponseBody
-    public Page<Vehicle> list(@PathVariable("skip") int skip, @PathVariable("limit") int limit) {
+    public Page<Vehicle> page(@PathVariable("skip") int skip, @PathVariable("limit") int limit) {
         logger.debug(String.format("Reciving a list request for {skip:%d,limit:%d}", skip, limit));
         return service.list(skip, limit);
     }

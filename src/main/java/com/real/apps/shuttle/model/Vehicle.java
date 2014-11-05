@@ -12,7 +12,7 @@ public class Vehicle {
     private String model;
     private int year;
     private int seats;
-    private int type;
+    private  String type;
 
     public ObjectId getId() {
         return id;
@@ -67,11 +67,11 @@ public class Vehicle {
         this.seats = seats;
     }
 
-    public int getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(String type) {
         this.type = type;
     }
 

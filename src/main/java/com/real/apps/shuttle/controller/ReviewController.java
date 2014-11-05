@@ -35,7 +35,7 @@ public class ReviewController {
      }
     @RequestMapping("/{skip}/{limit}")
     @ResponseBody
-    public Page<Review> list(@PathVariable("skip")int skip,@PathVariable("limit") int limit){
+    public Page<Review> page(@PathVariable("skip")int skip,@PathVariable("limit") int limit){
         return service.list(skip,limit);
     }
 

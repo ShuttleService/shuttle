@@ -32,7 +32,7 @@ public class DriverController {
     @RequestMapping(method = RequestMethod.GET,value = "/{skip}/{limit}" )
     @ResponseBody
     public Page<Driver> list(@PathVariable("skip") int skip,@PathVariable("limit") int limit){
-        logger.debug(String.format("Getting List With {skip%d,limit%d}",skip,limit));
+        logger.debug(String.format("Getting List With {skip:%d,limit:%d}",skip,limit));
         return service.list(skip,limit);
     }
 

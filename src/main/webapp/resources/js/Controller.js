@@ -4,7 +4,7 @@
 
 angular.module('controllers', ['services']).
 
-    controller('DriverController', function ($scope, $log, DriverService, FormSubmissionUtilService,RESULT_SIZE) {
+    controller('DriverController', function ($scope, $log, DriverService, FormSubmissionUtilService, RESULT_SIZE) {
         $scope.new = true;
         $scope.driver = {};
         $scope.skip = 0;
@@ -24,7 +24,7 @@ angular.module('controllers', ['services']).
 
             if ($scope.new === true) {
 
-                $scope.recentlyAddedDriver = DriverService.save($scope.driver,function(data){
+                $scope.recentlyAddedDriver = DriverService.save($scope.driver, function (data) {
                     $scope.list();
                 });
             }
@@ -40,9 +40,12 @@ angular.module('controllers', ['services']).
         $scope.list();
     }).
 
-    controller('TripController', function ($scope, TripService, FormSubmissionUtilService, $log) {
+    controller('TripController', function ($scope, TripService, FormSubmissionUtilService, $log, RESULT_SIZE) {
         $scope.trip = {};
         $scope.new = true;
+        $scope.skip = 0;
+        $scope.limit = RESULT_SIZE;
+
         $scope.query = function () {
             $scope.trips = TripService.query({skip: $scope.skip, limit: $scope.limit});
         };
@@ -56,7 +59,9 @@ angular.module('controllers', ['services']).
             console.log('Clicked The Save Button');
             if ($scope.new === true) {
                 console.log('About To Post Since This Is A New Trip');
-                $scope.trip = TripService.save($scope.trip);
+                $scope.trip = TripService.save($scope.trip, function (data) {
+                    $scope.list();
+                });
             }
         };
 
@@ -69,13 +74,18 @@ angular.module('controllers', ['services']).
             var params = {skip: $scope.skip, limit: $scope.limit};
             $log.debug('Calling Get With ' + params);
             $scope.page = TripService.get(params);
-        }
+        };
+
+        $scope.list();
     }).
 
-    controller('ReviewController', function ($scope, ReviewService, FormSubmissionUtilService, $log) {
+    controller('ReviewController', function ($scope, $log, ReviewService, FormSubmissionUtilService, RESULT_SIZE) {
 
         $scope.review = {};
         $scope.new = true;
+        $scope.skip = 0;
+        $scope.limit = RESULT_SIZE;
+
         $scope.query = function () {
 
             $scope.reviews = ReviewService.query({skip: $scope.skip, limit: $scope.limit});
@@ -98,20 +108,24 @@ angular.module('controllers', ['services']).
 
             if ($scope.new === true) {
                 console.log('This is a new Review. Adding It');
-                $scope.review = ReviewService.save($scope.review);
+                $scope.review = ReviewService.save($scope.review, function (data) {
+                    $scope.list();
+                });
             }
             console.log('Set The Review To ' + $scope.review);
+
         };
 
         $scope.list = function () {
             var params = {skip: $scope.skip, limit: $scope.limit};
             $log.debug('Listing The Reviews {Params:' + params + '}');
-            var page = ReviewService.get(params);
             $scope.page = ReviewService.get(params);
         };
+
+        $scope.list();
     }).
 
-    controller('CompanyController', function ($scope, $log, CompanyService, FormSubmissionUtilService,RESULT_SIZE) {
+    controller('CompanyController', function ($scope, $log, CompanyService, FormSubmissionUtilService, RESULT_SIZE) {
 
         $scope.company = {};
         $scope.new = true;
@@ -133,8 +147,8 @@ angular.module('controllers', ['services']).
             console.log('Clicked Save Button');
 
             if ($scope.new === true) {
-                $scope.recentlyAddedCompany = CompanyService.save($scope.company,function(data){
-                    $log.debug('Added The Company '+$scope.recentlyAddedCompany.tradingAs+'. Listing All The Companies.');
+                $scope.recentlyAddedCompany = CompanyService.save($scope.company, function (data) {
+                    $log.debug('Added The Company ' + $scope.recentlyAddedCompany.tradingAs + '. Listing All The Companies.');
                     $scope.list();
                 });
             }
@@ -142,7 +156,7 @@ angular.module('controllers', ['services']).
 
         $scope.list = function () {
             var params = {skip: $scope.skip, limit: $scope.limit};
-            $log.debug('Calling list with {skip:' + params.skip+',limit:'+params.limit+'}');
+            $log.debug('Calling list with {skip:' + params.skip + ',limit:' + params.limit + '}');
             $scope.page = CompanyService.get(params);
             $log.debug('Got Back {page:' + $scope.page + '}');
         };
@@ -175,5 +189,26 @@ angular.module('controllers', ['services']).
         }
     }).
 
-    constant('RESULT_SIZE',100);
+    controller('VehicleController', function ($scope,$log,VehicleService,RESULT_SIZE) {
+        $scope.skip = 0;
+        $scope.limit = RESULT_SIZE;
+        $scope.vehicle = {};
+
+        $scope.list = function () {
+            var params = {skip: $scope.skip, limit: $scope.limit};
+            $log.debug('Calling page with the params '+params);
+            $scope.page = VehicleService.get(params);
+        };
+
+        $scope.saveClick = function(){
+            $log.debug('Posting The Vehicle '+$scope.vehicle);
+            VehicleService.save($scope.vehicle,function(data){
+               $scope.list();
+            });
+        };
+
+        $scope.list();
+    }).
+
+    constant('RESULT_SIZE', 100);
 

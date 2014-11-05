@@ -30,7 +30,7 @@ public class TripController {
 
     @RequestMapping(value = "/{skip}/{limit}")
     @ResponseBody
-    public Page<Trip> list(@PathVariable("skip") int skip, @PathVariable("limit") int limit) {
+    public Page<Trip> page(@PathVariable("skip") int skip, @PathVariable("limit") int limit) {
 
         logger.debug(String.format("Receiving request for list of trips {skip:%d,limit:%d}", skip, limit));
         return service.list(skip, limit);

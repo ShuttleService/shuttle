@@ -7,20 +7,23 @@ describe('Testing The Trip Controller', function () {
     var TripService;
     var $controller;
     var FormSubmissionUtilService;
+    var RESULT_SIZE;
 
     beforeEach(module('controllers'));
 
-    beforeEach(inject(function (_$rootScope_, _$controller_, _TripService_, _FormSubmissionUtilService_) {
+    beforeEach(inject(function (_$rootScope_, _$controller_, _TripService_, _FormSubmissionUtilService_,_RESULT_SIZE_) {
 
         $scope = _$rootScope_.$new();
         TripService = _TripService_;
         $controller = _$controller_;
         FormSubmissionUtilService = _FormSubmissionUtilService_;
+        RESULT_SIZE = _RESULT_SIZE_;
 
         expect($scope).toBeDefined();
         expect(TripService).toBeDefined();
         expect($controller).toBeDefined();
         expect(FormSubmissionUtilService).toBeDefined();
+        expect(RESULT_SIZE).toBeDefined();
     }));
 
     it('Should Call The Query On Trip Service With Params On The Scope And Set The Result List Of Trips On The Scope', function () {
@@ -82,13 +85,14 @@ describe('Testing The Trip Controller', function () {
         $scope.trip = trip;
 
         spyOn(TripService, 'save').andReturn(savedTrip);
-
+        spyOn($scope,'list');
         expect($scope.saveClick).toBeDefined();
 
         $scope.saveClick();
 
-        expect(TripService.save).toHaveBeenCalledWith(trip);
+        expect(TripService.save).toHaveBeenCalledWith(trip,jasmine.any(Function));
         expect($scope.trip).toEqual(savedTrip);
+        expect($scope.list).toHaveBeenCalled();
     });
 
     it('Should Calculate The Product Of price Per Km And The Distance And Set The Price On The ', function () {
@@ -114,12 +118,12 @@ describe('Testing The Trip Controller', function () {
     it('Should Call List On The Service With The Given skip and limit and Save The Page On The Scope', function () {
         var skip = 0;
         var limit = 10;
-        $controller('TripController',{
-            $scope:$scope
+        $controller('TripController', {
+            $scope: $scope
         });
-        var params = {skip:skip,limit:limit};
-        var page = {size:limit};
-        spyOn(TripService,'get').andReturn(page);
+        var params = {skip: skip, limit: limit};
+        var page = {size: limit};
+        spyOn(TripService, 'get').andReturn(page);
         expect($scope.list).toBeDefined();
 
         $scope.limit = limit;
@@ -127,5 +131,12 @@ describe('Testing The Trip Controller', function () {
         $scope.list();
         expect(TripService.get).toHaveBeenCalledWith(params);
         expect($scope.page).toBeDefined(page);
+    });
+
+    it('Should Set Skip And Limit On The $scope At Startup', function () {
+        $controller('TripController', {$scope: $scope});
+
+        expect($scope.skip).toEqual(0);
+        expect($scope.limit).toEqual(RESULT_SIZE);
     });
 });
