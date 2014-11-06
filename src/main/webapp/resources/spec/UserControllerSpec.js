@@ -6,19 +6,21 @@ describe('Testing The User Controller', function () {
     var $scope;
     var UserService;
     var FormSubmissionUtilService;
+    var RESULT_SIZE;
 
     beforeEach(module('controllers'));
 
-    beforeEach(inject(function ($rootScope, _UserService_, $controller, _FormSubmissionUtilService_) {
+    beforeEach(inject(function ($rootScope,$controller,_UserService_,_FormSubmissionUtilService_,_RESULT_SIZE_) {
 
         $scope = $rootScope.$new();
         UserService = _UserService_;
         FormSubmissionUtilService = _FormSubmissionUtilService_;
+        RESULT_SIZE = _RESULT_SIZE_;
 
         expect($scope).toBeDefined();
         expect(UserService).toBeDefined();
         expect(FormSubmissionUtilService).toBeDefined();
-
+        expect(RESULT_SIZE).toBeDefined();
         var controller = $controller('UserController', {
             $scope: $scope
         });
@@ -71,5 +73,10 @@ describe('Testing The User Controller', function () {
         $scope.list();
         expect(UserService.get).toHaveBeenCalledWith(params);
         expect($scope.page).toEqual(page);
+    });
+
+    it('Should Set Skip And Limit On The Scope On Init',function(){
+        expect($scope.skip).toEqual(0);
+        expect($scope.limit).toEqual(RESULT_SIZE);
     });
 });

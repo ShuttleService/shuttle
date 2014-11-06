@@ -33,6 +33,7 @@
                         <li><a class="active" href="<spring:url value='trip'/>">Trips</a></li>
                         <li><a href="<spring:url value='driver'/> ">Drivers</a></li>
                         <li><a href="<spring:url value='vehicle' />">Vehicles</a></li>
+                        <li><a href="<spring:url value='user' />">Users</a> </li>
                         <li><a href="<spring:url value="review"/>">Reviews</a></li>
                         <li class="dropdown">
                             <a data-toggle="dropdown" class="dropdown-toggle" data-target="#" href="#">Admin<b class="caret"></b> </a>

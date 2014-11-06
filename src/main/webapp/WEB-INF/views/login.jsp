@@ -42,6 +42,12 @@
             <div class="modal-body">
                 <form class="form-horizontal well col-xs-12" name="addForm">
                     <div class="form-group col-xs-6">
+                        <input type="firstName" class="form-control" placeholder="First Name" ng-minlength="4" ng-model="user.firstName">
+                    </div>
+                    <div class="form-group col-xs-6">
+                        <input type="surname" class="form-control" placeholder="Surname" ng-minlength="4" ng-model="user.surname">
+                    </div>
+                    <div class="form-group col-xs-6">
                         <input type="email" class="form-control" placeholder="Email" name="email" ng-minlength="4" ng-model="user.email"  ng-required>
                     </div>
                     <div class="form-group col-xs-6">

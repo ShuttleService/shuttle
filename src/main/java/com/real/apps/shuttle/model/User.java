@@ -12,6 +12,7 @@ public class User {
     private ObjectId id;
     private String userName;
     private String password;
+    private String surname;
     private String firstName;
     private String email;
     private String cellNumber;
@@ -118,11 +119,19 @@ public class User {
         this.postalCode = postalCode;
     }
 
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
     @Override
     public String toString() {
 
-        return String.format("{id:%s,userName:%s,password%s,firstName:%s,email:%s,cellNumber:%s,dateOfBirth:%s,streetAddress:%s,surburb:%s,town:%s,province:%s,postalCode:%s}",
-                id, userName, password, firstName, email, cellNumber, dateOfBirth, streetAddress, suburb, town, province, postalCode);
+        return String.format("{id:%s,userName:%s,password%s,firstName:%s,surname:%s,email:%s,cellNumber:%s,dateOfBirth:%s,streetAddress:%s,surburb:%s,town:%s,province:%s,postalCode:%s}",
+                id, userName, password, firstName,surname, email, cellNumber, dateOfBirth, streetAddress, suburb, town, province, postalCode);
     }
     @Override
     public boolean equals(Object object){

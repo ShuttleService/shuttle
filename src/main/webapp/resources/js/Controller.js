@@ -165,8 +165,9 @@ angular.module('controllers', ['services']).
 
     }).
 
-    controller('UserController', function ($scope, UserService, FormSubmissionUtilService, $log) {
-
+    controller('UserController', function ($scope,$log, UserService, FormSubmissionUtilService,RESULT_SIZE) {
+        $scope.skip = 0;
+        $scope.limit = RESULT_SIZE;
         $scope.user = {};
         $scope.new = true;
 
@@ -186,7 +187,9 @@ angular.module('controllers', ['services']).
             var params = {skip: $scope.skip, limit: $scope.limit};
             $log.debug('Calling Get With The Params ' + params);
             $scope.page = UserService.get(params);
-        }
+        };
+
+        $scope.list();
     }).
 
     controller('VehicleController', function ($scope,$log,VehicleService,RESULT_SIZE) {
