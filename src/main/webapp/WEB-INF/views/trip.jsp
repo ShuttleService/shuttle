@@ -11,34 +11,42 @@
                 <div class="modal-body">
                     <form class="form-horizontal well col-xs-12" name="addForm">
                         <div class="form-group col-xs-6">
+                            <label class="control-label">Client Name</label>
                             <input class="form-control" type="text" placeholder="Client Name" ng-minlength="1"
                                    name="clientName" ng-model="trip.clientName" ng-required>
                         </div>
                         <div class="form-group col-xs-6">
+                            <label class="control-label">Source</label>
                             <input type="text" class="form-control" placeholder="Source" ng-minlength="1" name="source"
                                    ng-model="trip.source" ng-required>
                         </div>
                         <div class="form-group col-xs-6">
+                            <label class="control-label">Destination</label>
                             <input type="text" class="form-control" placeholder="Destination" ng-minlength="1"
                                    name="destination" ng-model="trip.destination" ng-required>
                         </div>
                         <div class="form-group col-xs-6">
+                            <label class="control-label">Distance</label>
                             <input type="number" class="form-control col-xs-4" placeholder="Distance" minlength="1"
                                    name="distance" ng-model="trip.distance" ng-change="price()" ng-required>
                         </div>
                         <div class="form-group col-xs-6">
+                            <label class="control-label">Price Per Km</label>
                             <input type="number" class="form-control col-xs-4" placeholder="Price Per Km" minlength="1"
                                    name="pricePerKm" ng-model="trip.pricePerKm" ng-change="price()" ng-required>
                         </div>
                         <div class="form-group col-xs-6">
+                            <label class="control-label">Price</label>
                             <input type="number" class="form-control" placeholder="Price" minlength="1" name="price"
                                    ng-model="trip.price" ng-required readonly>
                         </div>
                         <div class="form-group col-xs-6">
+                            <label class="control-label">Vehicle</label>
                             <input type="text" class="form-control" placeholder="Vehicle" minlength="1" name="vehicle"
                                    ng-model="trip.vehicle" ng-required>
                         </div>
                         <div class="form-group col-xs-6">
+                            <label class="control-label">Driver</label>
                             <input type="text" placeholder="Driver" class="form-control" minlength="1" name="driver"
                                    ng-model="trip.driver" ng-required>
                         </div>

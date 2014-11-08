@@ -11,30 +11,37 @@
                 <div class="modal-body">
                     <form class="form-horizontal well col-xs-12" name="addForm">
                         <div class="form-group col-xs-6">
+                            <label class="control-label">Company Full Name</label>
                             <input type="text" class="form-control" ng-minlength="2" name="fullName"
                                    placeholder="Company Full Name" ng-model="company.fullName" ng-required>
                         </div>
                         <div class="form-group col-xs-6">
+                            <label class="control-label">Trading As</label>
                             <input type="text" class="form-control" ng-minlength="2" name="tradingAs"
                                    placeholder="Trading As" ng-model="company.tradingAs" ng-required>
                         </div>
                         <div class="form-group col-xs-6">
+                            <label class="control-label">Slug</label>
                             <input type="text" class="form-control" ng-minlength="2" name="slug" placeholder="Slug"
                                    ng-required ng-model="company.slug">
                         </div>
                         <div class="form-group col-xs-6">
+                            <label class="control-label">Registration Number</label>
                             <input type="number" class="form-control" ng-minlength="1" name="registrationNumber"
                                    placeholder="Registration Number" ng-model="company.registrationNumber" ng-required>
                         </div>
                         <div class="form-group col-xs-6">
+                            <label class="control-label">VAT Number</label>
                             <input type="number" class="form-control" ng-minlength="1" name="vatNumber"
                                    placeholder="VAT Number" ng-model="company.vatNumber" ng-required>
                         </div>
                         <div class="form-group col-xs-6">
+                            <label class="control-label">Logo</label>
                             <input type="text" class="form-control" name="logo" placeholder="Logo"
                                    ng-model="company.logo">
                         </div>
                         <div class="form-group col-xs-12">
+                            <label class="control-label">Description</label>
                             <textarea class="col-xs-12" ng-minlength="2" data-ng-model="company.description"
                                       placeholder="Description" ng-required></textarea>
                         </div>

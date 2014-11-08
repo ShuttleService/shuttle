@@ -184,9 +184,11 @@ angular.module('controllers', ['services']).
     }).
 
     controller('UserController', function ($scope, $log, UserService, FormSubmissionUtilService, RESULT_SIZE) {
-        $scope.skip = 0;
-        $scope.limit = RESULT_SIZE;
+        $scope.range = {};
+        $scope.range.skip = 0;
+        $scope.range.limit = RESULT_SIZE;
         $scope.user = {};
+        $scope.formHolder = {};
         $scope.prestineUser = angular.copy($scope.user);
         $scope.confirmPasswordPrestine = angular.copy($scope.confirmPassword);
         $scope.new = true;
@@ -200,20 +202,20 @@ angular.module('controllers', ['services']).
         };
 
         $scope.canSave = function () {
-            return FormSubmissionUtilService.canSave($scope.addForm);
+            return FormSubmissionUtilService.canSave($scope.formHolder.addForm);
         };
 
         $scope.list = function () {
-            var params = {skip: $scope.skip, limit: $scope.limit};
-            $log.debug('Calling Get With The Params ' + params);
+            var params = {skip: $scope.range.skip, limit: $scope.range.limit};
+            $log.debug('Calling Get With The Params {skip:' + params.skip + ', limit:' + params.limit + '}');
             $scope.page = UserService.get(params);
         };
 
-        $scope.reset = function(){
+        $scope.reset = function () {
 
             $log.debug('Reverting The User To It\'s Prestine State');
             $scope.user = angular.copy($scope.prestineUser);
-            $scope.confirmPassword = angular.copy($scope.confirmPasswordPrestine);
+            $scope.formHolder.confirmPassword = angular.copy($scope.confirmPasswordPrestine);
         };
 
 
@@ -239,7 +241,7 @@ angular.module('controllers', ['services']).
             });
         };
 
-        $scope.reset = function(){
+        $scope.reset = function () {
             $log.debug('Reverting The Vehicle To It\'s Prestine State');
             $scope.vehicle = angular.copy($scope.prestineVehicle);
         };

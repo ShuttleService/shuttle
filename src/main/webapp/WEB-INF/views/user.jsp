@@ -6,7 +6,7 @@
         <th>Password</th>
         <th>First Name</th>
         <th>Email</th>
-        <th>Cell Number</th>
+        <th>Cellphone Number</th>
         <th>Date Of Birth</th>
         <th>Street Address</th>
         <th>Surburb</th>

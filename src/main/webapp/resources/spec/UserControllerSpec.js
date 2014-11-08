@@ -63,12 +63,13 @@ describe('Testing The User Controller', function () {
 
     it('Should Call The Service get With The Given Skip And Limit', function () {
         var skip = 0;
-        var limit = 10;
+        var limit = 100;
         var params = {skip: skip, limit: limit};
         var page = {size: limit};
         spyOn(UserService, 'get').andReturn(page);
-        $scope.skip = skip;
-        $scope.limit = limit;
+        $scope.range = {};
+        $scope.range.skip = skip;
+        $scope.range.limit = limit;
         expect($scope.list).toBeDefined();
         $scope.list();
         expect(UserService.get).toHaveBeenCalledWith(params);
@@ -76,8 +77,8 @@ describe('Testing The User Controller', function () {
     });
 
     it('Should Set Skip And Limit On The Scope On Init', function () {
-        expect($scope.skip).toEqual(0);
-        expect($scope.limit).toEqual(RESULT_SIZE);
+        expect($scope.range.skip).toEqual(0);
+        expect($scope.range.limit).toEqual(RESULT_SIZE);
     });
 
     it('Should Revert The User To It\'s Prestine State', function () {
@@ -86,9 +87,9 @@ describe('Testing The User Controller', function () {
 
         expect($scope.reset).toBeDefined();
         $scope.user = {name:'Test User To Be Reverted'};
-        $scope.confirmPassword = 'Test Confirm Password To Be Reverted';
+        $scope.formHolder.confirmPassword = 'Test Confirm Password To Be Reverted';
         $scope.reset();
         expect($scope.user).toEqual(prestine);
-        expect($scope.confirmPassword).toEqual(confirmPassword);
+        expect($scope.formHolder.confirmPassword).toEqual(confirmPassword);
     });
 });

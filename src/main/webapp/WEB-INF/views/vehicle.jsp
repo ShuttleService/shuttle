@@ -11,21 +11,27 @@
                 <div class="modal-body">
                     <form class="form-horizontal well col-xs-12">
                         <div class="form-group col-xs-6">
+                            <label class="control-label">Make</label>
                             <input type="text" class="form-control" placeholder="Make" ng-model="vehicle.make">
                         </div>
                         <div class="form-group col-xs-6">
+                            <label class="control-label">Model</label>
                             <input type="text" class="form-control" placeholder="Model" ng-model="vehicle.model">
                         </div>
                         <div class="form-group col-xs-6">
+                            <label class="control-label">Year Model</label>
                             <input type="number" class="form-control" placeholder="Year Model" ng-model="vehicle.year">
                         </div>
                         <div class="form-group col-xs-6">
+                            <label class="control-label">Type</label>
                             <input type="text" class="form-control" placeholder="Type" ng-model="vehicle.type">
                         </div>
                         <div class="form-group col-xs-6">
+                            <label class="control-label">Capacity</label>
                             <input type="number" class="form-control" placeholder="Capacity" ng-model="vehicle.seats">
                         </div>
                         <div class="form-group col-xs-6">
+                            <label class="control-label">Number Plate</label>
                             <input type="text" class="form-control" placeholder="Number Plate" ng-model="vehicle.licenseNumber">
                         </div>
                     </form>

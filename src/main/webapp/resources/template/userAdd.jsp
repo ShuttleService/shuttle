@@ -6,59 +6,73 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <ng-form class="form-horizontal well col-xs-12" name="addForm">
+                <ng-form class="form-horizontal well col-xs-12" name="formHolder.addForm">
+
                     <div class="form-group col-xs-6">
+                        <label class="control-label">First Name</label>
                         <input type="text" class="form-control" placeholder="First Name" ng-minlength="4"
                                ng-model="user.firstName" ng-required>
                     </div>
                     <div class="form-group col-xs-6">
+                        <label class="control-label">Surname</label>
                         <input type="text" class="form-control" placeholder="Surname" ng-minlength="4"
                                ng-model="user.surname" ng-required>
                     </div>
                     <div class="form-group col-xs-6">
+                        <label class="control-label">Email</label>
                         <input type="email" class="form-control" placeholder="Email" name="email" ng-minlength="4"
                                ng-model="user.email" ng-required>
                     </div>
                     <div class="form-group col-xs-6">
+                        <label class="control-label">User Name</label>
                         <input type="text" placeholder="User Name" class="form-control" name="userName"
-                               ng-minlength="6" ng-model="user.userName" ng-required>
+                               ng-minlength="4" ng-model="user.userName" ng-required>
                     </div>
-                    <div class="well well-lg text-center" ng-show="user.password !== confirmPassword">
-                        Passwords Do Not Match.
-                    </div>
+
+                    <label class="label label-danger col-xs-11" ng-show="user.password !== formHolder.confirmPassword">Password
+                        And Confirm Password Must Match.</label>
+
                     <div class="form-group col-xs-6">
+                        <label class="control-label">Password</label>
                         <input type="password" class="form-control" placeholder="Password" ng-minlength="6"
                                name="password" ng-model="user.password" ng-required>
                     </div>
                     <div class="form-group col-xs-6">
-                        <input type="password" placeholder="Confirm Password" class="form-control" ng-minlength="6"
-                               name="confirmPassword" ng-model="confirmPassword" ng-required>
+                        <label class="control-label">Confirm Password</label>
+                        <input type="password" placeholder="Confirm Password" class="form-control" ng-minlength="1"
+                               name="confirmPassword" ng-model="formHolder.confirmPassword" ng-required>
                     </div>
                     <div class="form-group col-xs-6">
+                        <label class="control-label">Cell Number</label>
                         <input type="tel" class="form-control" placeholder="Cell Number" ng-minlength="10"
                                name="cellNumber" ng-model="user.cellNumber" ng-required>
                     </div>
                     <div class="form-group col-xs-6">
+                        <label class="control-label">Date Of Birth</label>
                         <input type="date" class="form-control" placeholder="Date Of Birth" ng-minlength="10"
                                name="dateOfBirth" ng-model="user.dateOfBirth" ng-required>
                     </div>
-                    <div class="form-group col-xs-11">
-                        <textarea class="form-control" placeholder="Street Address" ng-minlength="2"
-                                  name="streetAddress" ng-model="user.streetAddress" ng-required></textarea>
+                    <div class="form-group col-xs-11 text-center">
+                        <label class="control-label">Street Address</label>
+                        <input type="text" class="form-control" placeholder="Street Address" ng-minlength="2" name="streetAddress" ng-model="user.streetAddress" ng-required>
                     </div>
                     <div class="form-group col-xs-6">
+                        <label class="control-label">Surburb</label>
                         <input type="text" class="form-control" placeholder="Surburb" ng-minlength="2"
                                name="surburb" ng-model="user.surburb" ng-required>
                     </div>
                     <div class="form-group col-xs-6">
+                        <label class="control-label">City/Town</label>
                         <input type="text" class="form-control" placeholder="City/Town" ng-minlength="2" name="town"
                                ng-model="user.town" ng-required>
                     </div>
                     <div class="form-group col-xs-6">
+                        <label class="control-label">Province/State</label>
                         <input type="text" class="form-control " placeholder="Province" ng-minlength="2"
                                name="province" ng-model="user.province" ng-required>
                     </div>
                     <div class="form-group col-xs-6">
+                        <label class="control-label">Postal Code</label>
                         <input type="number" class="form-control" placeholder="Postal Code" ng-minlength="4"
                                name="postalCode" ng-model="user.postalCode" ng-required>
                     </div>

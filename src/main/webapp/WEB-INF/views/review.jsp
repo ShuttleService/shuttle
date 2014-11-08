@@ -11,10 +11,12 @@
                 <div class="modal-body">
                     <form class="form-horizontal well" name="addForm">
                         <div class="form-group">
-                            <input class="form-control" name="id" type="text" placeholder="Object Id" ng-minlength="1"
+                            <label class="control-label">Reviewed</label>
+                            <input class="form-control" name="id" type="text" placeholder="Reviewed" ng-minlength="1"
                                    ng-model="review.id" ng-required>
                         </div>
                         <div class="form-group">
+                            <label class="control-label">Review Text</label>
                             <textarea class="form-control" name="text" placeholder="Review Text" ng-minlength="1"
                                       ng-model="review.text" ng-required>
                             </textarea>
