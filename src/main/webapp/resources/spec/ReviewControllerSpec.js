@@ -163,4 +163,15 @@ describe('Testing The Review Controller', function () {
         expect($scope.limit).toEqual(RESULT_SIZE);
     });
 
+    it("Should Revert The Review To It's Prestine state",function(){
+        $controller('ReviewController',{
+            $scope:$scope
+        });
+        var prestine = $scope.review;
+        $scope.review = {reviews:'Test Reviews To Be Reverted'};
+        expect($scope.reset).toBeDefined();
+        $scope.reset();
+        expect($scope.review).toEqual(prestine);
+    });
+
 });

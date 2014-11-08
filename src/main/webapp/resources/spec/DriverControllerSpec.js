@@ -121,4 +121,17 @@ describe('Testing The Driver Controller', function () {
         expect($scope.limit).toEqual(RESULT_SIZE);
     });
 
+    it('Should Revert The Driver To The Prestine One',function(){
+        $controller('DriverController',{
+            $scope:$scope
+        });
+
+        var prestine = $scope.driver;
+
+        expect($scope.reset).toBeDefined();
+        $scope.driver = {name:'Test Driver To Be Reverted'};
+        $scope.reset();
+        expect($scope.driver).toEqual(prestine);
+    });
+
 });

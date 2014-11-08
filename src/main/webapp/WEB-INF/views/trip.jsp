@@ -45,7 +45,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="reset" class="btn btn-default">Reset</button>
+                    <button type="reset" class="btn btn-default" ng-click="reset();">Reset</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" ng-disabled="!canSave()" ng-click="saveClick();">
                         Save
@@ -56,7 +56,6 @@
     </div>
     <table class="table table-striped table-hover">
         <thead>
-        <th>Id</th>
         <th>Source</th>
         <th>Client Name</th>
         <th>Destination</th>
@@ -67,7 +66,6 @@
         </thead>
         <tbody>
         <tr ng-repeat="trip in page.content">
-            <td>{{trip.id}}</td>
             <td>{{trip.source}}</td>
             <td>{{trip.clientName}}</td>
             <td>{{trip.destination}}</td>

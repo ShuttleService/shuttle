@@ -57,5 +57,12 @@ describe('Vehicle Controller Test', function () {
         expect($scope.list).toHaveBeenCalled();
     });
 
+    it('Should Revert The Vehicle Back To It\'s Prestine State',function(){
+        var prestine = $scope.vehicle;
+        $scope.vehicle = {name:'Vehicle Name To Be Reverted'};
+        expect($scope.reset).toBeDefined();
+        $scope.reset();
+        expect($scope.vehicle).toEqual(prestine);
+    });
 
 });

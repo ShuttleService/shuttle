@@ -41,7 +41,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="reset" class="btn btn-default">Reset</button>
+                    <button type="reset" class="btn btn-default" ng-click="reset()">Reset</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" ng-disabled="!canSave()" ng-click="saveClick()">Save
                     </button>
@@ -53,23 +53,21 @@
     <div>
         <table class="table table-hover table-striped">
             <thead>
-            <th>Id</th>
             <th>First Name</th>
             <th>Surname</th>
             <th>Email Address</th>
             <th>Driver's License Number</th>
             <th>Driver's License Class</th>
-            <th>Company ID</th>
+            <th>Company</th>
             </thead>
             <tbody>
             <tr ng-repeat="driver in page.content">
-                <td>{{driver.id}}</td>
                 <td>{{driver.firstName}}</td>
                 <td>{{driver.surname}}</td>
                 <td>{{driver.email}}</td>
                 <td>{{driver.driversLicenseNumber}}</td>
                 <td>{{driver.driversLicenseClass}}</td>
-                <td>{{driver.companyId}}</td>
+                <td>{{driver.company.name}}</td>
             </tr>
             </tbody>
         </table>

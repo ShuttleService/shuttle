@@ -7,16 +7,15 @@ angular.module('controllers', ['services']).
     controller('DriverController', function ($scope, $log, DriverService, FormSubmissionUtilService, RESULT_SIZE) {
         $scope.new = true;
         $scope.driver = {};
+        $scope.prestineDriver = angular.copy($scope.driver);
         $scope.skip = 0;
         $scope.limit = RESULT_SIZE;
 
         $scope.query = function () {
-
             $scope.drivers = DriverService.query({skip: $scope.skip, limit: $scope.limit});
         };
 
         $scope.canSave = function () {
-
             return FormSubmissionUtilService.canSave($scope.addForm);
         };
 
@@ -37,11 +36,17 @@ angular.module('controllers', ['services']).
             $log.debug('Got the page ' + $scope.page);
         };
 
+        $scope.reset = function () {
+            $log.debug("Reverting The Driver To It's Prestine State");
+            $scope.driver = angular.copy($scope.prestineDriver);
+        };
+
         $scope.list();
     }).
 
     controller('TripController', function ($scope, TripService, FormSubmissionUtilService, $log, RESULT_SIZE) {
         $scope.trip = {};
+        $scope.prestineTrip = angular.copy($scope.trip);
         $scope.new = true;
         $scope.skip = 0;
         $scope.limit = RESULT_SIZE;
@@ -76,12 +81,18 @@ angular.module('controllers', ['services']).
             $scope.page = TripService.get(params);
         };
 
+        $scope.reset = function () {
+            $log.debug('Reverting The Trip To Its Prestine State');
+            $scope.trip = angular.copy($scope.prestineTrip);
+        };
+
         $scope.list();
     }).
 
     controller('ReviewController', function ($scope, $log, ReviewService, FormSubmissionUtilService, RESULT_SIZE) {
 
         $scope.review = {};
+        $scope.prestineReview = angular.copy($scope.review);
         $scope.new = true;
         $scope.skip = 0;
         $scope.limit = RESULT_SIZE;
@@ -113,7 +124,6 @@ angular.module('controllers', ['services']).
                 });
             }
             console.log('Set The Review To ' + $scope.review);
-
         };
 
         $scope.list = function () {
@@ -122,23 +132,27 @@ angular.module('controllers', ['services']).
             $scope.page = ReviewService.get(params);
         };
 
+        $scope.reset = function () {
+            $log.debug('Reverting The Review To The Prestine State');
+            $scope.review = angular.copy($scope.prestineReview);
+        };
+
         $scope.list();
     }).
 
     controller('CompanyController', function ($scope, $log, CompanyService, FormSubmissionUtilService, RESULT_SIZE) {
 
         $scope.company = {};
+        $scope.prestineCompany = angular.copy($scope.company);
         $scope.new = true;
         $scope.skip = 0;
         $scope.limit = RESULT_SIZE;
 
         $scope.get = function () {
-
             $scope.company = CompanyService.get({id: $scope.id});
         };
 
         $scope.canSave = function () {
-
             return FormSubmissionUtilService.canSave($scope.addForm);
         };
 
@@ -161,14 +175,20 @@ angular.module('controllers', ['services']).
             $log.debug('Got Back {page:' + $scope.page + '}');
         };
 
-        $scope.list();
+        $scope.reset = function () {
+            $log.debug('Attempting To Reset The Company Back To Its Prestine Form ' + $scope.prestineCompany);
+            $scope.company = angular.copy($scope.prestineCompany);
+        };
 
+        $scope.list();
     }).
 
-    controller('UserController', function ($scope,$log, UserService, FormSubmissionUtilService,RESULT_SIZE) {
+    controller('UserController', function ($scope, $log, UserService, FormSubmissionUtilService, RESULT_SIZE) {
         $scope.skip = 0;
         $scope.limit = RESULT_SIZE;
         $scope.user = {};
+        $scope.prestineUser = angular.copy($scope.user);
+        $scope.confirmPasswordPrestine = angular.copy($scope.confirmPassword);
         $scope.new = true;
 
         $scope.saveClick = function () {
@@ -176,10 +196,10 @@ angular.module('controllers', ['services']).
 
             $scope.user = UserService.save($scope.user);
             $log.info('Submitted To The Rest Service');
+            $scope.list();
         };
 
         $scope.canSave = function () {
-
             return FormSubmissionUtilService.canSave($scope.addForm);
         };
 
@@ -189,25 +209,39 @@ angular.module('controllers', ['services']).
             $scope.page = UserService.get(params);
         };
 
+        $scope.reset = function(){
+
+            $log.debug('Reverting The User To It\'s Prestine State');
+            $scope.user = angular.copy($scope.prestineUser);
+            $scope.confirmPassword = angular.copy($scope.confirmPasswordPrestine);
+        };
+
+
         $scope.list();
     }).
 
-    controller('VehicleController', function ($scope,$log,VehicleService,RESULT_SIZE) {
+    controller('VehicleController', function ($scope, $log, VehicleService, RESULT_SIZE) {
         $scope.skip = 0;
         $scope.limit = RESULT_SIZE;
         $scope.vehicle = {};
+        $scope.prestineVehicle = angular.copy($scope.vehicle);
 
         $scope.list = function () {
             var params = {skip: $scope.skip, limit: $scope.limit};
-            $log.debug('Calling page with the params '+params);
+            $log.debug('Calling page with the params ' + params);
             $scope.page = VehicleService.get(params);
         };
 
-        $scope.saveClick = function(){
-            $log.debug('Posting The Vehicle '+$scope.vehicle);
-            VehicleService.save($scope.vehicle,function(data){
-               $scope.list();
+        $scope.saveClick = function () {
+            $log.debug('Posting The Vehicle ' + $scope.vehicle);
+            VehicleService.save($scope.vehicle, function (data) {
+                $scope.list();
             });
+        };
+
+        $scope.reset = function(){
+            $log.debug('Reverting The Vehicle To It\'s Prestine State');
+            $scope.vehicle = angular.copy($scope.prestineVehicle);
         };
 
         $scope.list();

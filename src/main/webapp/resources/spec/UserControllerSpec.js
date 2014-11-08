@@ -10,7 +10,7 @@ describe('Testing The User Controller', function () {
 
     beforeEach(module('controllers'));
 
-    beforeEach(inject(function ($rootScope,$controller,_UserService_,_FormSubmissionUtilService_,_RESULT_SIZE_) {
+    beforeEach(inject(function ($rootScope, $controller, _UserService_, _FormSubmissionUtilService_, _RESULT_SIZE_) {
 
         $scope = $rootScope.$new();
         UserService = _UserService_;
@@ -64,9 +64,9 @@ describe('Testing The User Controller', function () {
     it('Should Call The Service get With The Given Skip And Limit', function () {
         var skip = 0;
         var limit = 10;
-        var params = {skip:skip,limit:limit};
-        var page   = {size:limit};
-        spyOn(UserService,'get').andReturn(page);
+        var params = {skip: skip, limit: limit};
+        var page = {size: limit};
+        spyOn(UserService, 'get').andReturn(page);
         $scope.skip = skip;
         $scope.limit = limit;
         expect($scope.list).toBeDefined();
@@ -75,8 +75,20 @@ describe('Testing The User Controller', function () {
         expect($scope.page).toEqual(page);
     });
 
-    it('Should Set Skip And Limit On The Scope On Init',function(){
+    it('Should Set Skip And Limit On The Scope On Init', function () {
         expect($scope.skip).toEqual(0);
         expect($scope.limit).toEqual(RESULT_SIZE);
+    });
+
+    it('Should Revert The User To It\'s Prestine State', function () {
+        var confirmPassword = $scope.confirmPassword;
+        var prestine = $scope.user;
+
+        expect($scope.reset).toBeDefined();
+        $scope.user = {name:'Test User To Be Reverted'};
+        $scope.confirmPassword = 'Test Confirm Password To Be Reverted';
+        $scope.reset();
+        expect($scope.user).toEqual(prestine);
+        expect($scope.confirmPassword).toEqual(confirmPassword);
     });
 });

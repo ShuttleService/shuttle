@@ -137,4 +137,17 @@ describe('Company Controller Test', function () {
         expect($scope.skip).toEqual(0);
         expect($scope.limit).toEqual(RESULT_SIZE);
     });
+
+    it('Should Reset The Company On The $scope To The Original One',function(){
+        $controller('CompanyController',{
+            $scope:$scope
+        });
+
+        var prestineCompany = $scope.company;
+        $scope.company = {name:'Test Company Name Dirty'};
+        expect($scope.reset).toBeDefined();
+        $scope.reset();
+        expect($scope.company).toEqual(prestineCompany);
+    });
+
 });

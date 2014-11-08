@@ -139,4 +139,16 @@ describe('Testing The Trip Controller', function () {
         expect($scope.skip).toEqual(0);
         expect($scope.limit).toEqual(RESULT_SIZE);
     });
+
+    it('Should Revert The Trip To The Prestine State',function(){
+        $controller('TripController',{
+            $scope:$scope
+        });
+
+        var prestine = $scope.trip;
+        $scope.trip = {name:'Test Trip To Be Reverted'};
+        expect($scope.trip).toBeDefined();
+        $scope.reset();
+        expect($scope.trip).toEqual(prestine);
+    });
 });

@@ -22,7 +22,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="reset" class="btn btn-default">Reset</button>
+                    <button type="reset" class="btn btn-default" ng-click="reset();">Reset</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" ng-disabled="!canSave()" ng-click="saveClick()">Save
                     </button>
@@ -32,12 +32,12 @@
     </div>
     <table class="table table-striped table-hover">
         <thead>
-        <th>Id</th>
+        <th>For</th>
         <th>Reviews</th>
         </thead>
         <tbody>
         <tr ng-repeat="review in page.content">
-            <td>{{review.id}}</td>
+            <td>{{review.name}}</td>
             <td>{{review.reviews}}</td>
         </tr>
         </tbody>

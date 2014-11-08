@@ -11,7 +11,7 @@
                 <div class="modal-body">
                     <form class="form-horizontal well col-xs-12" name="addForm">
                         <div class="form-group col-xs-6">
-                            <input type="text" class="form-control" ng-minlength="2" name="name"
+                            <input type="text" class="form-control" ng-minlength="2" name="fullName"
                                    placeholder="Company Full Name" ng-model="company.fullName" ng-required>
                         </div>
                         <div class="form-group col-xs-6">
@@ -23,11 +23,11 @@
                                    ng-required ng-model="company.slug">
                         </div>
                         <div class="form-group col-xs-6">
-                            <input type="number" class="form-control" ng-minlength="10" name="registrationNumber"
+                            <input type="number" class="form-control" ng-minlength="1" name="registrationNumber"
                                    placeholder="Registration Number" ng-model="company.registrationNumber" ng-required>
                         </div>
                         <div class="form-group col-xs-6">
-                            <input type="number" class="form-control" ng-minlength="10" name="vatNumber"
+                            <input type="number" class="form-control" ng-minlength="1" name="vatNumber"
                                    placeholder="VAT Number" ng-model="company.vatNumber" ng-required>
                         </div>
                         <div class="form-group col-xs-6">
@@ -41,7 +41,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="reset" class="btn btn-default">Reset</button>
+                    <button type="reset" class="btn btn-default" ng-click="reset()">Reset</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" ng-disabled="!canSave()" ng-click="saveClick()">Save
                     </button>
@@ -52,7 +52,6 @@
     <div class="col-xs-12 text-center">
         <table class="table table-striped table-hover">
             <thead>
-            <th>Id</th>
             <th>Slug</th>
             <th>Trading As</th>
             <th>Full Name</th>
@@ -62,7 +61,6 @@
             </thead>
             <tbody>
             <tr ng-repeat="company in page.content">
-                <td>{{company.id}}</td>
                 <td>{{company.slug}}</td>
                 <td>{{company.tradingAs}}</td>
                 <td>{{company.fullName}}</td>
