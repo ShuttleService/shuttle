@@ -10,23 +10,23 @@
 
                     <div class="form-group col-xs-6">
                         <label class="control-label">First Name</label>
-                        <input type="text" class="form-control" placeholder="First Name" ng-minlength="4"
-                               ng-model="user.firstName" ng-required>
+                        <input type="text" class="form-control" placeholder="First Name" ng-minlength="1"
+                               ng-model="user.firstName" required>
                     </div>
                     <div class="form-group col-xs-6">
                         <label class="control-label">Surname</label>
-                        <input type="text" class="form-control" placeholder="Surname" ng-minlength="4"
-                               ng-model="user.surname" ng-required>
+                        <input type="text" class="form-control" placeholder="Surname" ng-minlength="1"
+                               ng-model="user.surname" required>
                     </div>
                     <div class="form-group col-xs-6">
                         <label class="control-label">Email</label>
-                        <input type="email" class="form-control" placeholder="Email" name="email" ng-minlength="4"
-                               ng-model="user.email" ng-required>
+                        <input type="email" class="form-control" placeholder="Email" name="email" ng-minlength="6"
+                               ng-model="user.email" required>
                     </div>
                     <div class="form-group col-xs-6">
                         <label class="control-label">User Name</label>
                         <input type="text" placeholder="User Name" class="form-control" name="userName"
-                               ng-minlength="4" ng-model="user.userName" ng-required>
+                               ng-minlength="6" ng-model="user.email" required readonly>
                     </div>
 
                     <label class="label label-danger col-xs-11" ng-show="user.password !== formHolder.confirmPassword">Password
@@ -64,17 +64,17 @@
                     <div class="form-group col-xs-6">
                         <label class="control-label">City/Town</label>
                         <input type="text" class="form-control" placeholder="City/Town" ng-minlength="2" name="town"
-                               ng-model="user.town" ng-required>
+                               ng-model="user.town" required>
                     </div>
                     <div class="form-group col-xs-6">
                         <label class="control-label">Province/State</label>
-                        <input type="text" class="form-control " placeholder="Province" ng-minlength="2"
-                               name="province" ng-model="user.province" ng-required>
+                        <input type="text" class="form-control " placeholder="Province/State" ng-minlength="2"
+                               name="province" ng-model="user.province" required>
                     </div>
                     <div class="form-group col-xs-6">
                         <label class="control-label">Postal Code</label>
-                        <input type="number" class="form-control" placeholder="Postal Code" ng-minlength="4"
-                               name="postalCode" ng-model="user.postalCode" ng-required>
+                        <input type="number" class="form-control" placeholder="Postal Code" ng-minlength="2"
+                               name="postalCode" ng-model="user.postalCode" required>
                     </div>
                 </ng-form>
             </div>

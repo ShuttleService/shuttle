@@ -25,12 +25,12 @@ angular.module('services', ['ngResource']).
         return $resource(CONTEXT_ROOT + '/company/:_id/:skip/:limit', {_id: '@_id', skip: '@skip', limit: '@limit'}, {put: {method: 'put'}});
     }).
 
-    factory('FormSubmissionUtilService', function () {
+    factory('FormSubmissionUtilService', function ($log) {
 
         return {
 
             canSave: function (form) {
-                console.log('Testing Validity For Form : '+form);
+                $log.debug('Testing Validity For Form : '+form+'{pristine:'+form.$pristine+',dirty:'+form.$dirty+',valid:'+form.$valid+',invalid:'+form.$invalid+'}');
                 return form.$valid === true && form.$dirty === true;
             }
         }

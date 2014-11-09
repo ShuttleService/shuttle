@@ -13,12 +13,12 @@
                         <div class="form-group">
                             <label class="control-label">Reviewed</label>
                             <input class="form-control" name="id" type="text" placeholder="Reviewed" ng-minlength="1"
-                                   ng-model="review.id" ng-required>
+                                   ng-model="review.id" required>
                         </div>
                         <div class="form-group">
                             <label class="control-label">Review Text</label>
-                            <textarea class="form-control" name="text" placeholder="Review Text" ng-minlength="1"
-                                      ng-model="review.text" ng-required>
+                            <textarea class="form-control" name="text" placeholder="Review Text" ng-minlength="5"
+                                      ng-model="review.text" required>
                             </textarea>
                         </div>
                     </form>

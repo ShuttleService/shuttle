@@ -222,7 +222,7 @@ angular.module('controllers', ['services']).
         $scope.list();
     }).
 
-    controller('VehicleController', function ($scope, $log, VehicleService, RESULT_SIZE) {
+    controller('VehicleController', function ($scope, $log,FormSubmissionUtilService ,VehicleService, RESULT_SIZE) {
         $scope.skip = 0;
         $scope.limit = RESULT_SIZE;
         $scope.vehicle = {};
@@ -232,6 +232,12 @@ angular.module('controllers', ['services']).
             var params = {skip: $scope.skip, limit: $scope.limit};
             $log.debug('Calling page with the params ' + params);
             $scope.page = VehicleService.get(params);
+        };
+
+        $scope.canSave = function(){
+
+            $log.debug('Checking The Validity Of the Vehicle add Form');
+            return FormSubmissionUtilService.canSave($scope.addForm);
         };
 
         $scope.saveClick = function () {

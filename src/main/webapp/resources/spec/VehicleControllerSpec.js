@@ -3,17 +3,20 @@ describe('Vehicle Controller Test', function () {
     var $scope;
     var VehicleService;
     var RESULT_SIZE;
+    var FormSubmissionUtilService;
 
     beforeEach(module('controllers'));
 
-    beforeEach(inject(function ($rootScope, _VehicleService_, $controller, _RESULT_SIZE_) {
+    beforeEach(inject(function ($rootScope,$controller,_VehicleService_,_FormSubmissionUtilService_,_RESULT_SIZE_) {
         $scope = $rootScope.$new();
         VehicleService = _VehicleService_;
         RESULT_SIZE = _RESULT_SIZE_;
+        FormSubmissionUtilService = _FormSubmissionUtilService_;
 
         expect($scope).toBeDefined();
         expect(VehicleService).toBeDefined();
         expect(RESULT_SIZE).toBeDefined();
+        expect(FormSubmissionUtilService).toBeDefined();
         var controller = $controller('VehicleController', {$scope: $scope});
         expect(controller).toBeDefined();
     }));
@@ -63,6 +66,18 @@ describe('Vehicle Controller Test', function () {
         expect($scope.reset).toBeDefined();
         $scope.reset();
         expect($scope.vehicle).toEqual(prestine);
+    });
+
+    it('Should Call The FormSubmissionUtilService Can Save With The Form',function(){
+
+        $scope.addForm = {$valid:true};
+        spyOn(FormSubmissionUtilService,'canSave').andReturn(true);
+        expect($scope.canSave).toBeDefined();
+
+        var actual = $scope.canSave();
+        expect(FormSubmissionUtilService.canSave).toHaveBeenCalledWith($scope.addForm);
+        expect(actual).toBeTruthy();
+
     });
 
 });

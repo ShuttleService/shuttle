@@ -14,6 +14,8 @@ public class Trip {
     private int price;
     private String vehicle;
     private String driver;
+    private int distance;
+    private String clientCellNumber;
 
     public String getClientName() {
         return clientName;
@@ -79,10 +81,27 @@ public class Trip {
         this.id = id;
     }
 
+    public int getDistance() {
+        return distance;
+    }
+
+    public void setDistance(int distance) {
+        this.distance = distance;
+    }
+
+    public String getClientCellNumber() {
+        return clientCellNumber;
+    }
+
+    public void setClientCellNumber(String clientCellNumber) {
+        this.clientCellNumber = clientCellNumber;
+    }
+
     @Override
     public String toString() {
 
-        return String.format("{source:%s,id:%s,clientName:%s,destination:%s,pricePerKm:%d,price:%d,vehicle:%s,driver:%s}", source, id, clientName, destination, pricePerKm, price, vehicle, driver);
+        return String.format("{source:%s,id:%s,clientName:%s,destination:%s,pricePerKm:%d,price:%d,vehicle:%s,driver:%s,distance:%d,clientCellNumber:%s}",source, id, clientName, destination,
+                pricePerKm, price, vehicle, driver,distance,clientCellNumber);
     }
     @Override
     public boolean equals(Object object){

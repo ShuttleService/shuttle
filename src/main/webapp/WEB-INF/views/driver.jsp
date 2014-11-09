@@ -13,36 +13,36 @@
                         <div class="form-group col-xs-6">
                             <label class="control-label">First Name</label>
                             <input type="text" placeholder="First Name" minlength="2" ng-model="driver.firstName"
-                                   name="firstName" class="form-control" ng-required>
+                                   name="firstName" class="form-control" required>
                         </div>
                         <div class="form-group col-xs-6">
                             <label class="control-label">Surname</label>
                             <input type="text" placeholder="Surname" ng-model="driver.surname" name="surname"
                                    minlength="2"
-                                   class="form-control" ng-required>
+                                   class="form-control" required>
                         </div>
                         <div class="form-group col-xs-6">
                             <label class="control-label">Email Address</label>
-                            <input type="email" class="form-control" placeholder="Email Address" minlength="2"
-                                   ng-model="driver.email" name="email" ng-required>
+                            <input type="email" class="form-control" placeholder="Email Address" minlength="6"
+                                   ng-model="driver.email" name="email" required>
                         </div>
                         <div class="form-group col-xs-6">
                             <label class="control-label">Cellphone Number</label>
-                            <input type="tel" class="form-control" placeholder="Cellphone Number" ng-minlength="2"
-                                   name="cellNumber" ng-model="driver.cellPhone" ng-required>
+                            <input type="number" class="form-control" placeholder="Cellphone Number" ng-minlength="9"
+                                   name="cellNumber" ng-model="driver.cellPhone" required>
                         </div>
                         <div class="form-group col-xs-6">
                             <label class="control-label">Driver's License Class</label>
-                            <input type="text" class="form-control" minlength="1" maxlength="2"
+                            <input type="text" class="form-control" minlength="1" maxlength="3"
                                    name="driversLicenseClass"
                                    ng-model="driver.driversLicenseClass"
-                                   placeholder="Drivers License Class" ng-required>
+                                   placeholder="Drivers License Class" required>
                         </div>
                         <div class="form-group col-xs-6">
-                            <label class="control-label">Driver's License Class</label>
-                            <input type="number" class="form-control" minlength="2" name="driversLicenseNumber"
+                            <label class="control-label">Driver's License Number</label>
+                            <input type="text" class="form-control" minlength="4" name="driversLicenseNumber"
                                    ng-model="driver.driversLicenseNumber" placeholder="Drivers License Number"
-                                   ng-required>
+                                   required>
                         </div>
                     </form>
                 </div>

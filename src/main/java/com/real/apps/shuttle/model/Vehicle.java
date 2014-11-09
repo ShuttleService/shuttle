@@ -30,11 +30,6 @@ public class Vehicle {
         this.licenseNumber = licenseNumber;
     }
 
-    @Override
-    public String toString() {
-        return String.format("{licenseNumber:%s}", licenseNumber);
-    }
-
     public String getMake() {
         return make;
     }
@@ -74,6 +69,13 @@ public class Vehicle {
     public void setType(String type) {
         this.type = type;
     }
+
+
+    @Override
+    public String toString() {
+        return String.format("{id:%s,Make:%s,Model%s,YearModel:%d,Type:%s,Seats:%d,licenseNumber:%s}",id,make,model,year,type,seats,licenseNumber);
+    }
+
 
     @Override
     public boolean equals(Object object) {
