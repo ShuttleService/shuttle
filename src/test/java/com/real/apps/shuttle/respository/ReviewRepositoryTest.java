@@ -50,5 +50,6 @@ public class ReviewRepositoryTest {
         operations.save(review);
         Page<Review> page = repository.findAll(new PageRequest(skip, limit));
         assertThat(page.getSize(), is(limit));
+        operations.dropCollection("review");
     }
 }

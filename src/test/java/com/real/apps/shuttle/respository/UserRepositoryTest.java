@@ -55,5 +55,6 @@ public class UserRepositoryTest {
         template.save(user);
         Page<User> page = repository.findAll(new PageRequest(skip,limit));
         assertThat(page.getSize(),is(limit));
+        template.dropCollection("user");
     }
 }

@@ -49,6 +49,7 @@ public class TripRepositoryTest {
         template.save(trip);
         Page<Trip> page = repository.findAll(new PageRequest(skip,limit));
         assertThat(page.getSize(),is(limit));
+        template.dropCollection("trip");
     }
 
 }

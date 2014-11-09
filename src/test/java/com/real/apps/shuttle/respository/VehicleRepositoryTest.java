@@ -46,6 +46,7 @@ public class VehicleRepositoryTest {
         operations.save(vehicle);
         Page<Vehicle> page = repository.findAll(new PageRequest(skip,limit));
         assertThat(page.getSize(),is(limit));
+        operations.dropCollection("vehicle");
     }
 
 }
