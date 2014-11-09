@@ -1,8 +1,6 @@
 package com.real.apps.shuttle.controller;
 
 import com.real.apps.shuttle.config.MvcConfiguration;
-import com.real.apps.shuttle.respository.RepositoryConfig;
-import com.real.apps.shuttle.service.ServiceConfig;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

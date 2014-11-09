@@ -1,4 +1,4 @@
-package com.real.apps.shuttle.respository;
+package com.real.apps.shuttle.repository;
 
 import com.real.apps.shuttle.model.Vehicle;
 import org.bson.types.ObjectId;

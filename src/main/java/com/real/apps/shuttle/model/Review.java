@@ -1,11 +1,15 @@
 package com.real.apps.shuttle.model;
 
 import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * Created by zorodzayi on 14/10/11.
  */
+@Document
 public class Review {
+    @Id
     private ObjectId id;
     private String[] reviews;
 

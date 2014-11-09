@@ -1,7 +1,7 @@
 package com.real.apps.shuttle.service;
 
 import com.real.apps.shuttle.model.User;
-import com.real.apps.shuttle.respository.UserRepository;
+import com.real.apps.shuttle.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

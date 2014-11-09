@@ -2,9 +2,7 @@ package com.real.apps.shuttle.controller;
 
 import com.real.apps.shuttle.config.MvcConfiguration;
 import com.real.apps.shuttle.model.User;
-import com.real.apps.shuttle.respository.RepositoryConfig;
 import com.real.apps.shuttle.service.LoginService;
-import com.real.apps.shuttle.service.ServiceConfig;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnitRuleMockery;

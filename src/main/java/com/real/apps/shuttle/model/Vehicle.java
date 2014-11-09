@@ -1,14 +1,20 @@
 package com.real.apps.shuttle.model;
 
 import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * Created by zorodzayi on 14/10/10.
  */
+@Document
 public class Vehicle {
     private ObjectId id;
+    @Indexed(unique = true)
     private String licenseNumber;
+    @Indexed
     private String make;
+    @Indexed
     private String model;
     private int year;
     private int seats;

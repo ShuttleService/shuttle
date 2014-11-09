@@ -1,8 +1,8 @@
 package com.real.apps.shuttle.service;
 
 import com.real.apps.shuttle.model.Review;
-import com.real.apps.shuttle.respository.RepositoryConfig;
-import com.real.apps.shuttle.respository.ReviewRepository;
+import com.real.apps.shuttle.repository.RepositoryConfig;
+import com.real.apps.shuttle.repository.ReviewRepository;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnitRuleMockery;

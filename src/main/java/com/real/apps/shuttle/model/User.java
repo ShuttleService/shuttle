@@ -1,6 +1,8 @@
 package com.real.apps.shuttle.model;
 
 import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.jws.soap.SOAPBinding;
 import java.util.Date;
@@ -8,13 +10,19 @@ import java.util.Date;
 /**
  * Created by zorodzayi on 14/10/04.
  */
+@Document
 public class User {
     private ObjectId id;
+    @Indexed(unique = true)
     private String userName;
     private String password;
+    @Indexed
     private String surname;
+    @Indexed
     private String firstName;
+    @Indexed(unique = true)
     private String email;
+    @Indexed
     private String cellNumber;
     private String dateOfBirth;
     private String streetAddress;

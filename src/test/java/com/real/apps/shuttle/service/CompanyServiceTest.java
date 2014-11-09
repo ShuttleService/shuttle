@@ -1,8 +1,8 @@
 package com.real.apps.shuttle.service;
 
 import com.real.apps.shuttle.model.Company;
-import com.real.apps.shuttle.respository.CompanyRepository;
-import com.real.apps.shuttle.respository.RepositoryConfig;
+import com.real.apps.shuttle.repository.CompanyRepository;
+import com.real.apps.shuttle.repository.RepositoryConfig;
 import org.bson.types.ObjectId;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;

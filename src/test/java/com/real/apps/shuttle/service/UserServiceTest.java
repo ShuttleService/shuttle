@@ -1,8 +1,8 @@
 package com.real.apps.shuttle.service;
 
 import com.real.apps.shuttle.model.User;
-import com.real.apps.shuttle.respository.RepositoryConfig;
-import com.real.apps.shuttle.respository.UserRepository;
+import com.real.apps.shuttle.repository.RepositoryConfig;
+import com.real.apps.shuttle.repository.UserRepository;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnitRuleMockery;

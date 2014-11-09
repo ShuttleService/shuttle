@@ -3,7 +3,7 @@ package com.real.apps.shuttle.controller;
 import com.google.gson.Gson;
 import com.real.apps.shuttle.config.MvcConfiguration;
 import com.real.apps.shuttle.model.Trip;
-import com.real.apps.shuttle.respository.RepositoryConfig;
+import com.real.apps.shuttle.repository.RepositoryConfig;
 import com.real.apps.shuttle.service.ServiceConfig;
 import com.real.apps.shuttle.service.TripService;
 import org.bson.types.ObjectId;

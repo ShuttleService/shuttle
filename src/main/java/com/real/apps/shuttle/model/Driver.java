@@ -1,17 +1,24 @@
 package com.real.apps.shuttle.model;
 
 import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * Created by zorodzayi on 14/10/10.
  */
+@Document
 public class Driver {
     private ObjectId id;
+    @Indexed
     private String firstName;
+    @Indexed
     private String surname;
+    @Indexed(unique = true)
     private String email;
     private String driversLicenseNumber;
     private String driversLicenseClass;
+    @Indexed
     private ObjectId companyId;
 
     public String getFirstName() {

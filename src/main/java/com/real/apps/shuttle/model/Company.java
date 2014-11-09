@@ -1,18 +1,27 @@
 package com.real.apps.shuttle.model;
 
 import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * Created by zorodzayi on 14/10/16.
  */
-
+@Document
 public class Company {
+    @Id
     private ObjectId id;
+    @Indexed(unique = true)
     private String slug;
+    @Indexed(unique = true)
     private String tradingAs;
+    @Indexed(unique = true)
     private String fullName;
     private String description;
+    @Indexed(unique = true)
     private String registrationNumber;
+    @Indexed(unique = true)
     private String vatNumber;
 
     public ObjectId getId() {

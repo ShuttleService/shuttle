@@ -1,20 +1,26 @@
 package com.real.apps.shuttle.model;
 
 import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * Created by zorodzayi on 14/10/10.
  */
+@Document
 public class Trip {
     private ObjectId id;
     private String source;
+    @Indexed
     private String clientName;
+    @Indexed
     private String destination;
     private int pricePerKm;
     private int price;
     private String vehicle;
     private String driver;
     private int distance;
+    @Indexed
     private String clientCellNumber;
 
     public String getClientName() {
