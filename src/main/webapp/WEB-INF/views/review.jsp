@@ -34,8 +34,10 @@
     </div>
     <table class="table table-striped table-hover">
         <thead>
-        <th>For</th>
-        <th>Reviews</th>
+        <tr>
+            <th>For</th>
+            <th>Reviews</th>
+        </tr>
         </thead>
         <tbody>
         <tr ng-repeat="review in page.content">

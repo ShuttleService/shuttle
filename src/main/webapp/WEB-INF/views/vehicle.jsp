@@ -12,27 +12,32 @@
                     <form class="form-horizontal well col-xs-12" name="addForm">
                         <div class="form-group col-xs-6">
                             <label class="control-label">Make</label>
-                            <input type="text" class="form-control" placeholder="Make" name="make" ng-model="vehicle.make"
+                            <input type="text" class="form-control" placeholder="Make" name="make"
+                                   ng-model="vehicle.make"
                                    ng-minlength="1" required>
                         </div>
                         <div class="form-group col-xs-6">
                             <label class="control-label">Model</label>
-                            <input type="text" class="form-control" placeholder="Model" ng-model="vehicle.model" name="model"
+                            <input type="text" class="form-control" placeholder="Model" ng-model="vehicle.model"
+                                   name="model"
                                    ng-minlength="1" required>
                         </div>
                         <div class="form-group col-xs-6">
                             <label class="control-label">Year Model</label>
-                            <input type="number" class="form-control" placeholder="Year Model" ng-model="vehicle.year" name="year"
+                            <input type="number" class="form-control" placeholder="Year Model" ng-model="vehicle.year"
+                                   name="year"
                                    ng-minlength="4" required>
                         </div>
                         <div class="form-group col-xs-6">
                             <label class="control-label">Type</label>
-                            <input type="text" class="form-control" placeholder="Type" ng-model="vehicle.type" name="type"
+                            <input type="text" class="form-control" placeholder="Type" ng-model="vehicle.type"
+                                   name="type"
                                    ng-minlength="1" required>
                         </div>
                         <div class="form-group col-xs-6">
                             <label class="control-label">Capacity</label>
-                            <input type="number" class="form-control" placeholder="Capacity" ng-model="vehicle.seats" name="seats"
+                            <input type="number" class="form-control" placeholder="Capacity" ng-model="vehicle.seats"
+                                   name="seats"
                                    ng-minlength="1" required>
                         </div>
                         <div class="form-group col-xs-6">
@@ -54,12 +59,14 @@
     </div>
     <table class="table table-striped table-hover">
         <thead>
-        <th>Make</th>
-        <th>Model</th>
-        <th>Type</th>
-        <th>Year</th>
-        <th>Seats</th>
-        <th>License Number</th>
+        <tr>
+            <th>Make</th>
+            <th>Model</th>
+            <th>Type</th>
+            <th>Year</th>
+            <th>Seats</th>
+            <th>License Number</th>
+        </tr>
         </thead>
         <tbody>
         <tr ng-repeat="vehicle in page.content">

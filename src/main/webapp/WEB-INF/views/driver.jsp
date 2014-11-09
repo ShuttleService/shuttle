@@ -59,12 +59,14 @@
     <div>
         <table class="table table-hover table-striped">
             <thead>
-            <th>First Name</th>
-            <th>Surname</th>
-            <th>Email Address</th>
-            <th>Driver's License Number</th>
-            <th>Driver's License Class</th>
-            <th>Company</th>
+            <tr>
+                <th>First Name</th>
+                <th>Surname</th>
+                <th>Email Address</th>
+                <th>Driver's License Number</th>
+                <th>Driver's License Class</th>
+                <th>Company</th>
+            </tr>
             </thead>
             <tbody>
             <tr ng-repeat="driver in page.content">

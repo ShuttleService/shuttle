@@ -59,12 +59,14 @@
     <div class="col-xs-12 text-center">
         <table class="table table-striped table-hover">
             <thead>
-            <th>Slug</th>
-            <th>Trading As</th>
-            <th>Full Name</th>
-            <th>Description</th>
-            <th>VAT Number</th>
-            <th>Registration Number</th>
+            <tr>
+                <th>Slug</th>
+                <th>Trading As</th>
+                <th>Full Name</th>
+                <th>Description</th>
+                <th>VAT Number</th>
+                <th>Registration Number</th>
+            </tr>
             </thead>
             <tbody>
             <tr ng-repeat="company in page.content">

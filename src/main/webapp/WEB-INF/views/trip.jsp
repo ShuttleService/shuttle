@@ -17,7 +17,9 @@
                         </div>
                         <div class="form-group col-xs-6">
                             <label class="control-label">Client Cellphone Number</label>
-                            <input type="number" name="clientCellNumber" class="form-control" ng-model="trip.clientCellNumber" placeholder="Client Cell Number" ng-minlength="9" required>
+                            <input type="number" name="clientCellNumber" class="form-control"
+                                   ng-model="trip.clientCellNumber" placeholder="Client Cell Number" ng-minlength="9"
+                                   required>
                         </div>
                         <div class="form-group col-xs-6">
                             <label class="control-label">Source</label>
@@ -68,15 +70,17 @@
     </div>
     <table class="table table-striped table-hover">
         <thead>
-        <th>Client Name</th>
-        <th>Cell Number</th>
-        <th>Source</th>
-        <th>Destination</th>
-        <th>Distance</th>
-        <th>Price Per Km</th>
-        <th>Total Price</th>
-        <th>Vehicle</th>
-        <th>Driver</th>
+        <tr>
+            <th>Client Name</th>
+            <th>Cell Number</th>
+            <th>Source</th>
+            <th>Destination</th>
+            <th>Distance</th>
+            <th>Price Per Km</th>
+            <th>Total Price</th>
+            <th>Vehicle</th>
+            <th>Driver</th>
+        </tr>
         </thead>
         <tbody>
         <tr ng-repeat="trip in page.content">
