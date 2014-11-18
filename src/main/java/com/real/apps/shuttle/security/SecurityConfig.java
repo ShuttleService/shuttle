@@ -3,6 +3,8 @@ package com.real.apps.shuttle.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
@@ -12,10 +14,12 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
  */
 @Configuration
 @EnableWebMvcSecurity
+@EnableGlobalMethodSecurity
+@EnableGlobalAuthentication
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
     @Autowired
     public void  configureGlobal(AuthenticationManagerBuilder builder) throws Exception {
-            builder.inMemoryAuthentication().withUser("zoro").password("zoro").authorities("none");
+            builder.inMemoryAuthentication().withUser("zoro").password("zoro").roles("admin");
     }
 
     @Override
