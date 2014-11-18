@@ -14,18 +14,18 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
  */
 @Configuration
 @EnableWebMvcSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true,jsr250Enabled = true,prePostEnabled = true)
+@EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 @EnableGlobalAuthentication
-public class SecurityConfig extends WebSecurityConfigurerAdapter{
-    @Autowired
-    public void  configureGlobal(AuthenticationManagerBuilder builder) throws Exception {
-            builder.inMemoryAuthentication().withUser("zoro").password("zoro").roles("admin");
-    }
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+  @Autowired
+  public void configureGlobal(AuthenticationManagerBuilder builder) throws Exception {
+    builder.inMemoryAuthentication().withUser("zoro").password("zoro").roles("admin");
+  }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().anyRequest().authenticated().and().
-                formLogin().loginPage("/login").permitAll();
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http.authorizeRequests().anyRequest().authenticated().and().
+      formLogin().loginPage("/login").permitAll();
 
-    }
+  }
 }
