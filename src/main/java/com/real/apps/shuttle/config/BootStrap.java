@@ -1,5 +1,6 @@
 package com.real.apps.shuttle.config;
 
+import com.real.apps.shuttle.security.SecurityConfig;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 /**
@@ -9,7 +10,7 @@ public class BootStrap extends AbstractAnnotationConfigDispatcherServletInitiali
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class<?>[]{};
+        return new Class<?>[]{SecurityConfig.class};
     }
 
     @Override
