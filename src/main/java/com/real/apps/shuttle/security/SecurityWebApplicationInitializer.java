@@ -5,6 +5,6 @@ import org.springframework.security.web.context.AbstractSecurityWebApplicationIn
 /**
  * Created by zorodzayi on 14/11/11.
  */
-public class SecurityWebApplicationInitializer extends AbstractSecurityWebApplicationInitializer {
+public class SecurityWebApplicationInitializer /*extends AbstractSecurityWebApplicationInitializer */{
 
 }
