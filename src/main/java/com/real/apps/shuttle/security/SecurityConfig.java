@@ -12,10 +12,10 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
 /**
  * Created by zorodzayi on 14/11/11.
  */
-/*@Configuration
+@Configuration
 @EnableWebMvcSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
-@EnableGlobalAuthentication*/
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
+@EnableGlobalAuthentication
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Autowired
   public void configureGlobal(AuthenticationManagerBuilder builder) throws Exception {
@@ -24,7 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http.authorizeRequests().anyRequest().authenticated().and().
+    http.authorizeRequests().anyRequest().permitAll().and().
       formLogin().loginPage("/login").permitAll();
 
   }
