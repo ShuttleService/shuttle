@@ -27,12 +27,12 @@
                         </div>
                         <div class="form-group col-xs-6">
                             <label class="control-label">Registration Number</label>
-                            <input type="number" class="form-control" ng-minlength="1" name="registrationNumber"
+                            <input type="text" class="form-control" ng-minlength="1" name="registrationNumber"
                                    placeholder="Registration Number" ng-model="company.registrationNumber" required>
                         </div>
                         <div class="form-group col-xs-6">
                             <label class="control-label">VAT Number</label>
-                            <input type="number" class="form-control" ng-minlength="1" name="vatNumber"
+                            <input type="text" class="form-control" ng-minlength="1" name="vatNumber"
                                    placeholder="VAT Number" ng-model="company.vatNumber" required>
                         </div>
                         <div class="form-group col-xs-6">
