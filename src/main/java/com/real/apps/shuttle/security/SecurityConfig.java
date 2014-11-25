@@ -17,8 +17,9 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @EnableGlobalAuthentication
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+  @Override
   @Autowired
-  public void configureGlobal(AuthenticationManagerBuilder builder) throws Exception {
+  public void configure(AuthenticationManagerBuilder builder) throws Exception {
     builder.inMemoryAuthentication().withUser("zoro").password("zoro").roles("admin");
   }
 
