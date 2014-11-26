@@ -17,16 +17,27 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @EnableGlobalAuthentication
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-  @Override
-  @Autowired
-  public void configure(AuthenticationManagerBuilder builder) throws Exception {
-    builder.inMemoryAuthentication().withUser("zoro").password("zoro").roles("admin");
-  }
+    @Override
+    @Autowired
+    public void configure(AuthenticationManagerBuilder builder) throws Exception {
+        builder.inMemoryAuthentication().withUser("root").password("admin").roles("admin");
+    }
 
-  @Override
-  protected void configure(HttpSecurity http) throws Exception {
-    http.authorizeRequests().anyRequest().permitAll().and().
-      formLogin().loginPage("/login").permitAll();
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests().antMatchers("/resources/**").permitAll()
+                .anyRequest().hasRole("admin")
+                .and()
+                .anonymous().principal("anonymous").authorities("ROLE_ANONYMOUS")
+                .and()
+                .rememberMe()
+                .and()
+                .csrf().disable()
+                //.and()
+                .formLogin().loginPage("/login").permitAll()
+                .defaultSuccessUrl("/trip")
+                .and()
+                .logout();
 
-  }
+    }
 }

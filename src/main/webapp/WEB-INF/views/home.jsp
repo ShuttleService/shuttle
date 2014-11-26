@@ -41,7 +41,9 @@
                                 <li><a href="<spring:url value='/company'/>">Companies</a></li>
                             </ul>
                         </li>
+                        <li><a href="<spring:url value="logout"/>">Logout</a></li>
                     </ul>
+
                 </div>
             </div>
 

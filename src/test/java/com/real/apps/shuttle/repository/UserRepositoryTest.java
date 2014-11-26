@@ -37,13 +37,14 @@ public class UserRepositoryTest {
     public void testSave() {
         String firstName = "Test First Name For User To Be Saved";
         User user = new User();
+        user.setUserName("Test User Name");
         user.setFirstName(firstName);
         user = repository.save(user);
         assertThat(user,notNullValue());
         Query query = new Query(Criteria.where("firstName").is(firstName));
         User actual = template.findOne(query, User.class);
         assertThat(actual.getFirstName(), is(firstName));
-        template.remove(query,User.class);
+        template.dropCollection("user");
     }
     @Test
     public void shouldFindNNumberOfUsers(){
@@ -51,6 +52,8 @@ public class UserRepositoryTest {
         int limit = 2;
         User user = new User();
         template.save(user);
+        user.setUserName("Test User Name Different From The First");
+        user.setEmail("Test Email Different From The First");
         template.save(user);
         Page<User> page = repository.findAll(new PageRequest(skip,limit));
         assertThat(page.getSize(),is(limit));

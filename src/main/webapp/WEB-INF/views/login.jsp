@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html ng-app="controllers" ng-controller="UserController">
@@ -22,7 +22,7 @@
             <span class="col-xs-5"></span>
             <c:if test="${param.error != null}">
               <p class="well has-error danger">
-                <strong class="str">Access Denied.</strong>
+                <strong class="str">Access Denied. ${SPRING_SECURITY_LAST_EXCEPTION}.</strong>
               </p>
             </c:if>
           <c:if test="${param.logout != null}">
@@ -30,18 +30,17 @@
               You Are Now Logged Out.
             </p>
           </c:if>
-            <form:form cssClass="form-signin col-xs-2" commandName="login">
+            <form class="form-signin col-xs-2" method="POST" action="<c:url value="/login"/>">
                 <div class="form-group">
-                   <form:input path="userName" id="userName" cssClass="form-control" placeholder="User Name"/>
+                   <input path="userName" id="userName" name="username" class="form-control" placeholder="User Name"/>
                 </div>
                 <div class="form-group">
-                    <form:input path="password" type="password" cssClass="form-control" id="password" placeholder="Password"/>
+                    <input path="password" type="password" name="password" class="form-control" id="password" placeholder="Password"/>
                 </div>
-               <input type="hidden" name="${_csrf_parameterName}" value="${_csrf_token}">
-                <form:button type="submit" class="btn btn-primary">Login</form:button>
-                <form:button type="button" class="btn btn-default" data-target="#add"
-                             data-toggle="modal">Sign Up</form:button>
-            </form:form>
+                <input type="hidden" name="${_csrf_parameterName}" value="${_csrf_token}">
+                <input type="submit" class="btn btn-primary" value="Login">
+                <button class="btn btn-default" data-target="#add" data-toggle="modal">Sign Up</button>
+            </form>
             <span class="col-xs-5"></span>
         </div>
     </div>

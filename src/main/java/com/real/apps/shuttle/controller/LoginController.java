@@ -21,12 +21,12 @@ public class LoginController {
     private LoginService service;
     private Logger logger = Logger.getLogger(LoginController.class);
 
-    @RequestMapping(method = RequestMethod.GET, value = {"/","/"+VIEW_NAME})
+    @RequestMapping(method = RequestMethod.GET, value = {"/"+VIEW_NAME})
     public String render() {
         return VIEW_NAME;
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = {"/","/"+VIEW_NAME})
+    @RequestMapping(method = RequestMethod.POST, value = {"/"+VIEW_NAME})
     public String login(User login, Model model) {
         logger.debug("Showing Login Controller ");
         User user = service.login(login);
