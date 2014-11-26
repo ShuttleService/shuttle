@@ -14,7 +14,7 @@ public class HomeController {
 
     private Logger logger = Logger.getLogger(HomeController.class);
     private final String VIEW_PAGE = "home";
-    @RequestMapping(value = "/"+VIEW_PAGE)
+    @RequestMapping(value ={ "/","/"+VIEW_PAGE})
     public ModelAndView test(HttpServletResponse response) throws IOException {
         logger.debug("Showing The Home Page");
         return new ModelAndView("home");

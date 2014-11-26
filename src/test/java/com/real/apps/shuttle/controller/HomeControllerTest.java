@@ -2,6 +2,7 @@ package com.real.apps.shuttle.controller;
 
 import com.real.apps.shuttle.config.MvcConfiguration;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import static org.junit.Assert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 /**
  * Created by zorodzayi on 14/10/04.
@@ -31,7 +33,7 @@ public class HomeControllerTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
     private MockMvc mockMvc;
-
+    final String HOME = "home";
     @Before
     public void init(){
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
@@ -39,8 +41,13 @@ public class HomeControllerTest {
 
     @Test
     public void shouldRenderHomePage() throws Exception {
-        final String HOME = "home";
         MvcResult result = mockMvc.perform(get("/"+HOME)).andDo(print()).andExpect(status().isOk()).andReturn();
         assertThat(result.getModelAndView().getViewName(),is(HOME));
+    }
+
+    @Test
+
+    public void rootShouldRenderHomePage() throws Exception {
+        mockMvc.perform(get("/")).andDo(print()).andExpect(status().isOk()).andExpect(view().name(HOME));
     }
 }

@@ -7,6 +7,7 @@ import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,11 +59,6 @@ public class LoginControllerTest {
     }
 
     @Test
-    public void rootShouldRenderLoginPage() throws Exception {
-        mockMvc.perform(get("/")).andDo(print()).andExpect(status().isOk()).andExpect(view().name(LOGIN));
-    }
-
-    @Test
     public void shouldPopulateLoginCommandObject() throws Exception {
         MvcResult result = mockMvc.perform(get("/" + LOGIN)).andDo(print()).andExpect(model().attributeExists(LOGIN)).andReturn();
         assertThat(result.getModelAndView().getModel().get(LOGIN),instanceOf(User.class));
@@ -82,7 +78,7 @@ public class LoginControllerTest {
 
         MvcResult result = mockMvc.perform(post("/" + LOGIN)).andDo(print()).andReturn();
         assertPost(result,user);
-        result = mockMvc.perform(post("/")).andDo(print()).andReturn();
+        result = mockMvc.perform(post("/"+LOGIN)).andDo(print()).andReturn();
         assertPost(result,user);
         context.assertIsSatisfied();
     }

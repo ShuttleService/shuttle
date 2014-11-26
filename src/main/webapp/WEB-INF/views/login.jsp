@@ -39,8 +39,9 @@
                 </div>
                 <input type="hidden" name="${_csrf_parameterName}" value="${_csrf_token}">
                 <input type="submit" class="btn btn-primary" value="Login">
-                <button class="btn btn-default" data-target="#add" data-toggle="modal">Sign Up</button>
+                <button class="btn btn-default" data-target="#add" data-toggle="modal" onclick="event.preventDefault()">Sign Up</button>
             </form>
+
             <span class="col-xs-5"></span>
         </div>
     </div>
