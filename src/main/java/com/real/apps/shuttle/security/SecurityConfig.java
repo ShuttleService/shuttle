@@ -1,5 +1,6 @@
 package com.real.apps.shuttle.security;
 
+import com.real.apps.shuttle.service.ShuttleUserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -12,15 +13,18 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
 /**
  * Created by zorodzayi on 14/11/11.
  */
-@Configuration
+@Configuration()
 @EnableWebMvcSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @EnableGlobalAuthentication
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Autowired
+    private ShuttleUserDetailsServiceImpl userDetailsService;
     @Override
     @Autowired
     public void configure(AuthenticationManagerBuilder builder) throws Exception {
         builder.inMemoryAuthentication().withUser("root").password("admin").roles("admin");
+        builder.userDetailsService(userDetailsService);
     }
 
     @Override

@@ -19,10 +19,10 @@
     <div class="row">
 
         <div class="col-xs-12">
-            <span class="col-xs-5"></span>
+
             <c:if test="${param.error != null}">
               <p class="well has-error danger">
-                <strong class="str">Access Denied. ${SPRING_SECURITY_LAST_EXCEPTION}.</strong>
+                <strong class="str">Access Denied</strong>
               </p>
             </c:if>
           <c:if test="${param.logout != null}">
@@ -30,6 +30,7 @@
               You Are Now Logged Out.
             </p>
           </c:if>
+          <span class="col-xs-5"></span>
             <form class="form-signin col-xs-2" method="POST" action="<c:url value="/login"/>">
                 <div class="form-group">
                    <input path="userName" id="userName" name="username" class="form-control" placeholder="User Name"/>

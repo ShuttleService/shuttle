@@ -3,18 +3,21 @@ package com.real.apps.shuttle.model;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.jws.soap.SOAPBinding;
+import java.util.Collection;
 import java.util.Date;
 
 /**
  * Created by zorodzayi on 14/10/04.
  */
 @Document
-public class User {
+public class User implements UserDetails{
     private ObjectId id;
     @Indexed(unique = true)
-    private String userName;
+    private String username;
     private String password;
     @Indexed
     private String surname;
@@ -30,8 +33,36 @@ public class User {
     private String town;
     private String province;
     private String postalCode;
+    private Boolean accountNonExpired = true;
+    private Boolean accountNonLocked = true;
+    private Boolean credentialsNonExpired = true;
+    private Boolean enabled = true;
+    private Collection authorities;
 
-    public ObjectId getId() {
+
+  public void setAccountNonExpired(Boolean accountNonExpired) {
+    this.accountNonExpired = accountNonExpired;
+  }
+
+
+  public void setAccountNonLocked(Boolean accountNonLocked) {
+    this.accountNonLocked = accountNonLocked;
+  }
+
+  public void setCredentialsNonExpired(Boolean credentialsNonExpired) {
+    this.credentialsNonExpired = credentialsNonExpired;
+  }
+  
+
+  public void setEnabled(Boolean enabled) {
+    this.enabled = enabled;
+  }
+
+  public void setAuthorities(Collection authorities) {
+    this.authorities = authorities;
+  }
+
+  public ObjectId getId() {
         return id;
     }
 
@@ -39,15 +70,41 @@ public class User {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
-    }
+  @Override
+  public String getUsername() {
+    return username;
+  }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
+  @Override
+  public boolean isAccountNonExpired() {
+    return accountNonExpired;
+  }
 
-    public String getPassword() {
+  @Override
+  public boolean isAccountNonLocked() {
+    return accountNonLocked;
+  }
+
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return credentialsNonExpired;
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return enabled;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return authorities;
+  }
+  @Override
+  public String getPassword() {
         return password;
     }
 
@@ -138,8 +195,9 @@ public class User {
     @Override
     public String toString() {
 
-        return String.format("{id:%s,userName:%s,password%s,firstName:%s,surname:%s,email:%s,cellNumber:%s,dateOfBirth:%s,streetAddress:%s,surburb:%s,town:%s,province:%s,postalCode:%s}",
-                id, userName, password, firstName,surname, email, cellNumber, dateOfBirth, streetAddress, suburb, town, province, postalCode);
+        return String.format("{id:%s,username:%s,password%s,firstName:%s,surname:%s,email:%s,cellNumber:%s,dateOfBirth:%s,streetAddress:%s,surburb:%s,town:%s,province:%s,postalCode:%s," +
+            " accountNonExpired:%b,accountNonLocked:%b,credentialsNonExpired:%b,enabled:%b,authorities:%s}",id, username, password, firstName,surname, email, cellNumber, dateOfBirth,
+          streetAddress, suburb, town, province, postalCode,accountNonExpired,accountNonLocked,credentialsNonExpired,email,authorities);
     }
     @Override
     public boolean equals(Object object){

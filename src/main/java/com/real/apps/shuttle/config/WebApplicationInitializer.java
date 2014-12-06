@@ -1,6 +1,8 @@
 package com.real.apps.shuttle.config;
 
+import com.real.apps.shuttle.repository.RepositoryConfig;
 import com.real.apps.shuttle.security.SecurityConfig;
+import com.real.apps.shuttle.service.ServiceConfig;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 /**
@@ -10,7 +12,7 @@ public class WebApplicationInitializer extends AbstractAnnotationConfigDispatche
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class<?>[]{SecurityConfig.class};
+        return new Class<?>[]{SecurityConfig.class, ServiceConfig.class, RepositoryConfig.class};
     }
 
     @Override

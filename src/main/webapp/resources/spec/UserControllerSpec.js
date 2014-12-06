@@ -92,4 +92,12 @@ describe('Testing The User Controller', function () {
         expect($scope.user).toEqual(prestine);
         expect($scope.formHolder.confirmPassword).toEqual(confirmPassword);
     });
+
+    it('saveClick Should Set The username To Be The Same As Email ',function(){
+
+      var email = "Test Email To Be Copied To The User Name";
+      $scope.user.email = email;
+      $scope.saveClick();
+      expect($scope.user.username).toEqual(email);
+    });
 });

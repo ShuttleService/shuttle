@@ -195,7 +195,7 @@ angular.module('controllers', ['services']).
 
         $scope.saveClick = function () {
             console.log('Clicked Submit Button');
-
+            $scope.user.username = $scope.user.email;
             $scope.user = UserService.save($scope.user);
             $log.info('Submitted To The Rest Service');
             $scope.list();
@@ -217,7 +217,6 @@ angular.module('controllers', ['services']).
             $scope.user = angular.copy($scope.prestineUser);
             $scope.formHolder.confirmPassword = angular.copy($scope.confirmPasswordPrestine);
         };
-
 
         $scope.list();
     }).
