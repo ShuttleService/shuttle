@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -33,6 +34,8 @@ public class UserServiceTest {
     public JUnitRuleMockery context = new JUnitRuleMockery();
     @Mock
     private UserRepository repository;
+    @Mock
+    private PasswordEncoder encoder;
 
     @Test
     public void shouldCallSaveOnRepository() {
@@ -49,6 +52,27 @@ public class UserServiceTest {
     }
 
     @Test
+    public void shouldEncryptThePasswordBeforeSaving(){
+      final User user = new User();
+      final String plainPassword = "Test Plain Password To Be Encrypted";
+      final String encryptedPassword = "Test Encrypted Password To Be Saved";
+      user.setPassword(plainPassword);
+
+      context.checking(new Expectations(){{
+        oneOf(encoder).encode(plainPassword);
+        will(returnValue(encryptedPassword));
+        oneOf(repository).save(user);
+        will(returnValue(user));
+      }});
+
+      impl.setRepository(repository);
+      impl.setPasswordEncoder(encoder);
+
+      User actual = impl.insert(user);
+      assertThat(actual.getPassword(),is(encryptedPassword));
+    }
+
+    @Test
     public void shouldCallRepositoryListWithTheGivenSkipAndLimit(){
         final int skip = 0;
         final int limit = 10;
@@ -62,4 +86,5 @@ public class UserServiceTest {
         Page<User> actual = impl.list(skip,limit);
         assertThat(actual.getContent().get(0),is(page.getContent().get(0)));
     }
+
 }

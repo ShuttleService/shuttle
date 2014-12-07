@@ -5,6 +5,7 @@ import com.real.apps.shuttle.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository repository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public Page<User> list(int skip, int limit) {
@@ -22,10 +25,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User insert(User user) {
-        return repository.save(user);
+      user.setPassword(passwordEncoder.encode(user.getPassword()));
+      return repository.save(user);
     }
 
     public void setRepository(UserRepository repository) {
         this.repository = repository;
     }
+
+  public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+    this.passwordEncoder = passwordEncoder;
+  }
 }

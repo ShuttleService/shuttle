@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * Created by zorodzayi on 14/11/11.
@@ -20,16 +21,19 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private ShuttleUserDetailsServiceImpl userDetailsService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Override
     @Autowired
     public void configure(AuthenticationManagerBuilder builder) throws Exception {
-        builder.inMemoryAuthentication().withUser("root").password("admin").roles("admin");
-        builder.userDetailsService(userDetailsService);
+        builder.inMemoryAuthentication().withUser("root").password("$2a$10$SvGiqPDqZPop1iCYrEbhme6hcyuERpzARj2LdREeJ0gggwd4Z35Ve").roles("admin").and().passwordEncoder(passwordEncoder);
+        builder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/resources/**").permitAll()
+        http
+          .authorizeRequests().antMatchers("/resources/**").permitAll()
                 .anyRequest().hasRole("admin")
                 .and()
                 .anonymous().principal("anonymous").authorities("ROLE_ANONYMOUS")
