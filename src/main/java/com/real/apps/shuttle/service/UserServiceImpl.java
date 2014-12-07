@@ -13,25 +13,27 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UserServiceImpl implements UserService {
-    @Autowired
-    private UserRepository repository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+  @Autowired
+  private UserRepository repository;
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
-    @Override
-    public Page<User> list(int skip, int limit) {
-        return repository.findAll(new PageRequest(skip, limit));
-    }
+  @Override
+  public Page<User> list(int skip, int limit) {
+    return repository.findAll(new PageRequest(skip, limit));
+  }
 
-    @Override
-    public User insert(User user) {
+  @Override
+  public User insert(User user) {
+    if (user.getPassword() != null) {
       user.setPassword(passwordEncoder.encode(user.getPassword()));
-      return repository.save(user);
     }
+    return repository.save(user);
+  }
 
-    public void setRepository(UserRepository repository) {
-        this.repository = repository;
-    }
+  public void setRepository(UserRepository repository) {
+    this.repository = repository;
+  }
 
   public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
     this.passwordEncoder = passwordEncoder;

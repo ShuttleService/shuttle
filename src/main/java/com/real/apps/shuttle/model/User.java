@@ -5,10 +5,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import javax.jws.soap.SOAPBinding;
 import java.util.Collection;
-import java.util.Date;
 
 /**
  * Created by zorodzayi on 14/10/04.
@@ -55,7 +52,7 @@ public class User implements UserDetails {
   public void setCredentialsNonExpired(Boolean credentialsNonExpired) {
     this.credentialsNonExpired = credentialsNonExpired;
   }
-  
+
   public void setEnabled(Boolean enabled) {
     this.enabled = enabled;
   }
