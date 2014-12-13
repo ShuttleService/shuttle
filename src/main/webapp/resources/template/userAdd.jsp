@@ -42,6 +42,10 @@
                         <input type="password" placeholder="Confirm Password" class="form-control" ng-minlength="1"
                                name="confirmPassword" ng-model="formHolder.confirmPassword" ng-required>
                     </div>
+                  <div class="form-group col-xs-6">
+                    <label class="control-label">Company</label>
+                    <select placeholder="company" class="form-control" name="company" ng-model="user.company" ng-options="company.fullName for company in companies"></select>
+                  </div>
                     <div class="form-group col-xs-6">
                         <label class="control-label">Cell Number</label>
                         <input type="tel" class="form-control" placeholder="Cell Number" ng-minlength="10"
@@ -52,7 +56,7 @@
                         <input type="date" class="form-control" placeholder="Date Of Birth" ng-minlength="10"
                                name="dateOfBirth" ng-model="user.dateOfBirth" ng-required>
                     </div>
-                    <div class="form-group col-xs-11 text-center">
+                    <div class="form-group col-xs-6 text-center">
                         <label class="control-label">Street Address</label>
                         <input type="text" class="form-control" placeholder="Street Address" ng-minlength="2" name="streetAddress" ng-model="user.streetAddress" ng-required>
                     </div>
