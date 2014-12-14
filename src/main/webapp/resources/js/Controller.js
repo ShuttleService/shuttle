@@ -205,8 +205,16 @@ angular.module('controllers', ['services']).
     $scope.saveClick = function () {
       console.log('Clicked Submit Button');
       $scope.user.username = $scope.user.email;
-      $scope.user.companyName = $scope.company.name;
-      $scope.user.companyId = $scope.company.id;
+
+      if($scope.user.company !== undefined && $scope.user.company !== null) {
+        var companyName = $scope.user.company.tradingAs;
+        var companyId = $scope.user.company.id;
+        $log.debug('Setting Company Name to '+companyName+' Company Id To '+companyId);
+        $scope.user.companyName = companyName;
+        $scope.user.companyId = companyId;
+      }else{
+        $log.debug("Did not set the Company Name Or Company Id As There Is No company on the scope");
+      }
 
       UserService.save($scope.user,function(data){
         $log.info('Submitted To The Rest Service');

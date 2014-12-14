@@ -22,8 +22,8 @@
                         </div>
                         <div class="form-group col-xs-6">
                             <label class="control-label">Slug</label>
-                            <input type="text" class="form-control" ng-minlength="2" name="slug" placeholder="Slug"
-                                   ng-required ng-model="company.slug" required>
+                            <input type="text" class="form-control" ng-minlength="1" name="slug" placeholder="Slug"
+                                    ng-model="company.slug" required>
                         </div>
                         <div class="form-group col-xs-6">
                             <label class="control-label">Registration Number</label>

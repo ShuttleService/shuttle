@@ -119,11 +119,20 @@ describe('Testing The User Controller', function () {
 
   it("saveClick Should Set The user.companyName and user.companyId from the values on the selected Company",function(){
 
-    var company = {name:'Test Company Name To Be Set On The User.CompanyName',id:'Test Company Id To Be Set On The User.CompanyId'};
-    $scope.company = company;
+    var company = {tradingAs:'Test Company Trading Name To Be Set On The User.CompanyName',id:'Test Company Id To Be Set On The User.CompanyId'};
+    $scope.user.company = company;
     $scope.saveClick();
     expect($scope.user.companyId).toEqual(company.id);
-    expect($scope.user.companyName).toEqual(company.name);
+    expect($scope.user.companyName).toEqual(company.tradingAs);
+
+  });
+
+
+  it("saveClick Should Still work if there is no company set and user.companyId",function(){
+
+    $scope.saveClick();
+    expect($scope.user.companyId).toBeUndefined();
+    expect($scope.user.companyName).toBeUndefined();
 
   });
 
@@ -131,7 +140,7 @@ describe('Testing The User Controller', function () {
     var companyName = 'Test Company Name To Be Set On The user.companyName';
     var companyId = 'Test Company Id To Be Set On user.companyId';
 
-    $scope.company = {name: companyName,id: companyId};
+    $scope.user.company = {tradingAs: companyName,id: companyId};
     $scope.saveClick();
     expect($scope.user.companyName).toEqual(companyName);
     expect($scope.user.companyId).toEqual(companyId);

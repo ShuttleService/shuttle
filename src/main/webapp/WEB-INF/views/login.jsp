@@ -7,6 +7,7 @@
     <script src="resources/vendor/jquery-2.1.1.min.js"></script>
     <script src="resources/vendor/bootstrap-3.2.0/dist/js/bootstrap.js"></script>
     <link href="resources/vendor/bootstrap-3.2.0/dist/css/bootstrap.css" type="text/css" rel="stylesheet">
+    <link href="resources/style.css" type="text/css" rel="stylesheet">
     <script src="resources/vendor/angular-1.3.0-rc.4/angular.js"></script>
     <script src="resources/vendor/angular-1.3.0-rc.4/angular-resource.js"></script>
     <script src="resources/js/Service.js"></script>

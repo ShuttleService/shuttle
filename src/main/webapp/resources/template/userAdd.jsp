@@ -35,44 +35,44 @@
                     <div class="form-group col-xs-6">
                         <label class="control-label">Password</label>
                         <input type="password" class="form-control" placeholder="Password" ng-minlength="6"
-                               name="password" ng-model="user.password" ng-required>
+                               name="password" ng-model="user.password" required>
                     </div>
                     <div class="form-group col-xs-6">
                         <label class="control-label">Confirm Password</label>
-                        <input type="password" placeholder="Confirm Password" class="form-control" ng-minlength="1"
-                               name="confirmPassword" ng-model="formHolder.confirmPassword" ng-required>
+                        <input type="password" placeholder="Confirm Password" class="form-control" ng-minlength="6"
+                               name="confirmPassword" ng-model="formHolder.confirmPassword" required>
                     </div>
                   <div class="form-group col-xs-6">
                     <label class="control-label">Company</label>
-                    <select placeholder="company" class="form-control" name="company" ng-model="user.company" ng-options="company.fullName for company in companies"></select>
+                    <select class="form-control" name="company" ng-model="user.company" ng-options="company.tradingAs for company in companies"></select>
                   </div>
                     <div class="form-group col-xs-6">
                         <label class="control-label">Cell Number</label>
                         <input type="tel" class="form-control" placeholder="Cell Number" ng-minlength="10"
-                               name="cellNumber" ng-model="user.cellNumber" ng-required>
+                               name="cellNumber" ng-model="user.cellNumber" required>
                     </div>
                     <div class="form-group col-xs-6">
                         <label class="control-label">Date Of Birth</label>
-                        <input type="date" class="form-control" placeholder="Date Of Birth" ng-minlength="10"
-                               name="dateOfBirth" ng-model="user.dateOfBirth" ng-required>
+                        <input type="date" class="form-control" placeholder="yyyy-mm-dd" ng-minlength="10"
+                               name="dateOfBirth" ng-model="user.dateOfBirth" required>
                     </div>
                     <div class="form-group col-xs-6 text-center">
                         <label class="control-label">Street Address</label>
-                        <input type="text" class="form-control" placeholder="Street Address" ng-minlength="2" name="streetAddress" ng-model="user.streetAddress" ng-required>
+                        <input type="text" class="form-control" placeholder="Street Address" ng-minlength="2" name="streetAddress" ng-model="user.streetAddress" required>
                     </div>
                     <div class="form-group col-xs-6">
-                        <label class="control-label">Surburb</label>
-                        <input type="text" class="form-control" placeholder="Surburb" ng-minlength="2"
-                               name="surburb" ng-model="user.surburb" ng-required>
+                        <label class="control-label">Suburb</label>
+                        <input type="text" class="form-control" placeholder="Suburb" ng-minlength="1"
+                               name="suburb" ng-model="user.suburb" required>
                     </div>
                     <div class="form-group col-xs-6">
                         <label class="control-label">City/Town</label>
-                        <input type="text" class="form-control" placeholder="City/Town" ng-minlength="2" name="town"
+                        <input type="text" class="form-control" placeholder="City/Town" ng-minlength="1" name="town"
                                ng-model="user.town" required>
                     </div>
                     <div class="form-group col-xs-6">
                         <label class="control-label">Province/State</label>
-                        <input type="text" class="form-control " placeholder="Province/State" ng-minlength="2"
+                        <input type="text" class="form-control" placeholder="Province/State" ng-minlength="1"
                                name="province" ng-model="user.province" required>
                     </div>
                     <div class="form-group col-xs-6">

@@ -12,6 +12,7 @@
     <script src="resources/js/Service.js"></script>
     <script src="resources/js/Controller.js"></script>
     <link href="resources/vendor/bootstrap-3.2.0/dist/css/bootstrap.css" type="text/css" rel="stylesheet">
+    <link href="resources/style.css" type="text/css" rel="stylesheet">
     <title><tiles:getAsString name="title"/></title>
 </head>
 <body>

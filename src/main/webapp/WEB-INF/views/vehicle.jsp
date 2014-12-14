@@ -37,13 +37,11 @@
                         <div class="form-group col-xs-6">
                             <label class="control-label">Capacity</label>
                             <input type="number" class="form-control" placeholder="Capacity" ng-model="vehicle.seats"
-                                   name="seats"
-                                   ng-minlength="1" required>
+                                   name="seats" ng-minlength="1" required>
                         </div>
                         <div class="form-group col-xs-6">
                             <label class="control-label">License Number</label>
-                            <input type="text" class="form-control" placeholder="License Number" name="licenseNumber"
-                                   ng-model="vehicle.licenseNumber" ng-minlength="4" required>
+                            <input type="text" class="form-control" placeholder="License Number" ng-model="vehicle.licenseNumber" ng-minlength="1" name="licenseNumber" required>
                         </div>
                     </form>
                 </div>
