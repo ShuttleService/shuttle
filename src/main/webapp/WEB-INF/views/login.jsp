@@ -32,12 +32,12 @@
             </p>
           </c:if>
           <span class="col-xs-5"></span>
-            <form class="form-signin col-xs-2" method="POST" action="<c:url value="/login"/>">
+            <form class="form-signin col-xs-2" method="POST" name="login" action="<c:url value="/login"/>">
                 <div class="form-group">
-                   <input path="userName" id="userName" name="username" class="form-control" placeholder="User Name"/>
+                   <input path="userName" id="userName" name="username" class="form-control" placeholder="User Name" required/>
                 </div>
                 <div class="form-group">
-                    <input path="password" type="password" name="password" class="form-control" id="password" placeholder="Password"/>
+                    <input path="password" type="password" name="password" class="form-control" id="password" placeholder="Password" required/>
                 </div>
                 <input type="hidden" name="${_csrf_parameterName}" value="${_csrf_token}">
                 <input type="submit" class="btn btn-primary" value="Login">

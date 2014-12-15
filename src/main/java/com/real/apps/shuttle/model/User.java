@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import java.util.Collection;
 
 /**
@@ -39,7 +40,6 @@ public class User implements UserDetails {
   private Boolean credentialsNonExpired = true;
   private Boolean enabled = true;
   private Collection<? extends GrantedAuthority> authorities;
-
 
   public void setAccountNonExpired(Boolean accountNonExpired) {
     this.accountNonExpired = accountNonExpired;

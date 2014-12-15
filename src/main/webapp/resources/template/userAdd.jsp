@@ -44,7 +44,7 @@
                     </div>
                   <div class="form-group col-xs-6">
                     <label class="control-label">Company</label>
-                    <select class="form-control" name="company" ng-model="user.company" ng-options="company.tradingAs for company in companies"></select>
+                    <select class="form-control" name="company" ng-model="user.company" ng-options="company.tradingAs for company in sharedState.companyPage.content"></select>
                   </div>
                     <div class="form-group col-xs-6">
                         <label class="control-label">Cell Number</label>

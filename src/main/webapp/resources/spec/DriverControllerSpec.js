@@ -8,23 +8,38 @@ describe('Testing The Driver Controller', function () {
     var $scope;
     var FormSubmissionUtilService;
     var RESULT_SIZE;
+    var CompanyService;
 
     beforeEach(module('controllers'));
 
-    beforeEach(inject(function (_$controller_, _DriverService_, $rootScope, _FormSubmissionUtilService_, _RESULT_SIZE_) {
+    beforeEach(inject(function (_$controller_, _DriverService_,_CompanyService_, $rootScope, _FormSubmissionUtilService_, _RESULT_SIZE_) {
 
         $controller = _$controller_;
         DriverService = _DriverService_;
+        CompanyService = _CompanyService_;
         $scope = $rootScope.$new();
         FormSubmissionUtilService = _FormSubmissionUtilService_;
         RESULT_SIZE = _RESULT_SIZE_;
 
         expect($controller).toBeDefined();
         expect(DriverService).toBeDefined();
+        expect(CompanyService).toBeDefined();
         expect($scope).toBeDefined();
         expect(FormSubmissionUtilService).toBeDefined();
         expect(RESULT_SIZE).toBeDefined();
     }));
+
+    it('init Should Call Company Service get and set a list of companies on the scope ', function () {
+        var companies = [1,2,3,4,5,6];
+        var page = {content:companies};
+        spyOn('CompanyService','query').andReturn(page);
+        expect($scope.init).toBeDefined();
+
+        $scope.init();
+
+        expect(CompanyService.get).toHaveBeenCalledWith({skip:0,limit:RESULT_SIZE});
+        expect($scope.companies).toEqual(companies);
+    });
 
     it('Query Should Call Query On The Service Using Parameters On The Scope And Set The Resulting Drivers On The Scope', function () {
 
@@ -80,12 +95,15 @@ describe('Testing The Driver Controller', function () {
         });
 
         var driverToSave = {name: 'Test Driver Name To Be Posted', id: 'Test Driver Id To Be Posted'};
-        var savedDriver = {name: 'Test Driver Name To Be Returned After We Posted', id: 'Test Driver Id To Returned After We Posted'};
+        var savedDriver = {
+            name: 'Test Driver Name To Be Returned After We Posted',
+            id: 'Test Driver Id To Returned After We Posted'
+        };
         $scope.driver = driverToSave;
 
         $scope.new = true;
         spyOn(DriverService, 'save').andReturn(savedDriver);
-        spyOn($scope,'list');
+        spyOn($scope, 'list');
         expect($scope.saveClick).toBeDefined();
         $scope.saveClick();
 
@@ -114,22 +132,22 @@ describe('Testing The Driver Controller', function () {
 
     it('Should Set skip to 0 and limit to Default Result Size', function () {
         $controller('DriverController', {
-            $scope:$scope
+            $scope: $scope
         });
 
         expect($scope.skip).toEqual(0);
         expect($scope.limit).toEqual(RESULT_SIZE);
     });
 
-    it('Should Revert The Driver To The Prestine One',function(){
-        $controller('DriverController',{
-            $scope:$scope
+    it('Should Revert The Driver To The Prestine One', function () {
+        $controller('DriverController', {
+            $scope: $scope
         });
 
         var prestine = $scope.driver;
 
         expect($scope.reset).toBeDefined();
-        $scope.driver = {name:'Test Driver To Be Reverted'};
+        $scope.driver = {name: 'Test Driver To Be Reverted'};
         $scope.reset();
         expect($scope.driver).toEqual(prestine);
     });

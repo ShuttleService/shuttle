@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
-<html ng-app="controllers">
+<html ng-app="controllers" ng-controller="SharedController">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
