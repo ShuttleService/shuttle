@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * Created by zorodzayi on 14/10/11.
  */
 @Document
-public class Review {
+public class Review extends CompanyModel{
     @Id
     private ObjectId id;
     private String[] reviews;
@@ -42,7 +42,7 @@ public class Review {
                 reviews.append(",").append(review);
             }
         }
-        return String.format("{id:%s,reviews:[%s]}", id, reviews);
+        return String.format("{id:%s,companyId:%s,companyName:%s,reviews:[%s]}", id,companyId,companyName,reviews);
     }
     @Override
     public boolean equals(Object object){

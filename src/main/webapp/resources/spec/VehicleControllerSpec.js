@@ -48,6 +48,14 @@ describe('Vehicle Controller Test', function () {
         expect($scope.page).toEqual(page);
     });
 
+    it('Should Assign The vehicle.companyName To The $scope.company name And vehicle.companyId To $scope.company.id',function(){
+        var company = {id:'Test Company Id To Be Set On The vehicle.companyId',tradingAs:'Test Company Name To Be Set On vehicle.companyName'};
+        $scope.company = company;
+        $scope.saveClick();
+        expect($scope.vehicle.companyId).toEqual(company.id);
+        expect($scope.vehicle.companyName).toEqual(company.tradingAs);
+    });
+
     it('Should Call VehicleService Save With The Vehicle On The Scope And Call Page AfterWards', function () {
 
         expect($scope.saveClick).toBeDefined();

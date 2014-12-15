@@ -29,16 +29,16 @@ describe('Testing The Driver Controller', function () {
         expect(RESULT_SIZE).toBeDefined();
     }));
 
-    it('init Should Call Company Service get and set a list of companies on the scope ', function () {
-        var companies = [1,2,3,4,5,6];
-        var page = {content:companies};
-        spyOn('CompanyService','query').andReturn(page);
-        expect($scope.init).toBeDefined();
+    it('saveClick Should Set The CompanyId And The CompanyName The Company Object On The Scope',function(){
+        var company = {id:'Test Company Id To Be Set On Driver.companyId',tradingAs:'Test Company Trading As To Be Set On The Driver.companyName'};
+        $scope.company = company;
 
-        $scope.init();
-
-        expect(CompanyService.get).toHaveBeenCalledWith({skip:0,limit:RESULT_SIZE});
-        expect($scope.companies).toEqual(companies);
+        $controller('DriverController',{
+            $scope:$scope
+        });
+        $scope.saveClick();
+        expect($scope.driver.companyId).toEqual(company.id);
+        expect($scope.driver.companyName).toEqual(company.tradingAs);
     });
 
     it('Query Should Call Query On The Service Using Parameters On The Scope And Set The Resulting Drivers On The Scope', function () {

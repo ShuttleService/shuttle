@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * Created by zorodzayi on 14/10/10.
  */
 @Document
-public class Vehicle {
+public class Vehicle extends CompanyModel{
     private ObjectId id;
     @Indexed(unique = true)
     private String licenseNumber;
@@ -79,7 +79,8 @@ public class Vehicle {
 
     @Override
     public String toString() {
-        return String.format("{id:%s,Make:%s,Model%s,YearModel:%d,Type:%s,Seats:%d,licenseNumber:%s}",id,make,model,year,type,seats,licenseNumber);
+        return String.format("{id:%s,Make:%s,Model%s,YearModel:%d,Type:%s,Seats:%d,licenseNumber:%s,companyId:%s,companyName:%s}",id,make,model,year,type,seats,licenseNumber,companyId
+                ,companyName);
     }
 
 

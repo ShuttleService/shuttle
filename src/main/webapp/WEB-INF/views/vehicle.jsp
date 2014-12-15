@@ -43,6 +43,10 @@
                             <label class="control-label">License Number</label>
                             <input type="text" class="form-control" placeholder="License Number" ng-model="vehicle.licenseNumber" ng-minlength="1" name="licenseNumber" required>
                         </div>
+                        <div class="form-group col-xs-6">
+                            <label class="control-label">Company</label>
+                            <select class="form-control" ng-model="company" name="company" ng-options="company.tradingAs for company in sharedState.companyPage.content" required></select>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -64,6 +68,7 @@
             <th>Year</th>
             <th>Seats</th>
             <th>License Number</th>
+            <th>Company</th>
         </tr>
         </thead>
         <tbody>
@@ -74,6 +79,7 @@
             <td>{{vehicle.year}}</td>
             <td>{{vehicle.seats}}</td>
             <td>{{vehicle.licenseNumber}}</td>
+            <td>{{vehicle.companyName}}</td>
         </tr>
         </tbody>
     </table>

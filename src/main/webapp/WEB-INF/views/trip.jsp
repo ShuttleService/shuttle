@@ -56,6 +56,10 @@
                             <input type="text" placeholder="Driver" class="form-control" minlength="1" name="driver"
                                    ng-model="trip.driver" required>
                         </div>
+                        <div class="form-group col-xs-6">
+                            <label class="control-label">Company</label>
+                            <select class="form-control" name="company" ng-model="company" ng-options="company.tradingAs for company in sharedState.companyPage.content" required></select>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -80,6 +84,7 @@
             <th>Total Price</th>
             <th>Vehicle</th>
             <th>Driver</th>
+            <th>Company</th>
         </tr>
         </thead>
         <tbody>
@@ -93,6 +98,7 @@
             <td>{{trip.price | currency}}</td>
             <td>{{trip.vehicle}}</td>
             <td>{{trip.driver}}</td>
+            <td>{{trip.companyName}}</td>
         </tr>
         </tbody>
     </table>

@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * Created by zorodzayi on 14/10/10.
  */
 @Document
-public class Trip {
+public class Trip extends CompanyModel {
     private ObjectId id;
     private String source;
     @Indexed

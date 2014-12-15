@@ -12,7 +12,7 @@ import java.util.Collection;
  * Created by zorodzayi on 14/10/04.
  */
 @Document
-public class User implements UserDetails {
+public class User  extends CompanyModel implements UserDetails{
   private ObjectId id;
   @Indexed(unique = true)
   private String username;
@@ -26,9 +26,6 @@ public class User implements UserDetails {
   @Indexed
   private String cellNumber;
   @Indexed
-  private String companyName;
-  @Indexed
-  private ObjectId companyId;
   private String dateOfBirth;
   private String streetAddress;
   private String suburb;
@@ -130,22 +127,6 @@ public class User implements UserDetails {
 
   public void setCellNumber(String cellNumber) {
     this.cellNumber = cellNumber;
-  }
-
-  public String getCompanyName() {
-    return companyName;
-  }
-
-  public void setCompanyName(String companyName) {
-    this.companyName = companyName;
-  }
-
-  public ObjectId getCompanyId() {
-    return companyId;
-  }
-
-  public void setCompanyId(ObjectId companyId) {
-    this.companyId = companyId;
   }
 
   public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {

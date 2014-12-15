@@ -72,6 +72,19 @@ describe('Testing The Trip Controller', function () {
         expect(FormSubmissionUtilService.canSave).toHaveBeenCalledWith($scope.addForm);
     });
 
+    it('saveClick Should Set The Company Id And Company Name To The Values On The $scope.company',function(){
+        var company = {id:'Test Company Id To Be Assigned The trip.companyId',tradingAs:'Test Company Name To Be Assigned To trip.companyName'};
+        $scope.company = company;
+
+        $controller('TripController',{
+            $scope:$scope
+        });
+
+        $scope.saveClick();
+
+        expect($scope.trip.companyId).toEqual(company.id);
+        expect($scope.trip.companyName).toEqual(company.tradingAs);
+    });
     it('Should Call TripService Save When $scope.new is true', function () {
 
         $controller('TripController', {

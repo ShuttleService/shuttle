@@ -29,6 +29,8 @@ angular.module('controllers', ['services']).
         };
 
         $scope.saveClick = function () {
+            $scope.driver.companyId = $scope.company.id;
+            $scope.driver.companyName = $scope.company.tradingAs;
 
             if ($scope.new === true) {
 
@@ -65,15 +67,21 @@ angular.module('controllers', ['services']).
         };
 
         $scope.canSave = function () {
-
             return FormSubmissionUtilService.canSave($scope.addForm);
         };
 
         $scope.saveClick = function () {
-            console.log('Clicked The Save Button');
+            console.log('Attempting To Save The Trip');
+            var companyId = $scope.company.id;
+            var companyName = $scope.company.tradingAs;
+
+            $log.debug('Setting The Trip Company Id To '+companyId+' Company Name To '+companyName);
+            $scope.trip.companyId = companyId;
+            $scope.trip.companyName = companyName;
+
             if ($scope.new === true) {
                 console.log('About To Post Since This Is A New Trip');
-                $scope.trip = TripService.save($scope.trip, function (data) {
+                $scope.savedTrip = TripService.save($scope.trip, function (data) {
                     $scope.list();
                 });
             }
@@ -202,15 +210,6 @@ angular.module('controllers', ['services']).
         $scope.confirmPasswordPrestine = angular.copy($scope.confirmPassword);
         $scope.new = true;
 
-       /* $scope.init = function () {
-            $log.debug('Getting A List Of Companies inside UserController. Calling Company.query');
-            CompanyService.get({skip: 0, limit: RESULT_SIZE}, function (data) {
-                $scope.companies = data.content;
-            });
-        };
-
-        $scope.init();*/
-
         $scope.saveClick = function () {
             console.log('Clicked Submit Button');
             $scope.user.username = $scope.user.email;
@@ -273,6 +272,12 @@ angular.module('controllers', ['services']).
 
         $scope.saveClick = function () {
             $log.debug('Posting The Vehicle ' + $scope.vehicle);
+            var companyName = $scope.company.tradingAs;
+            var companyId   = $scope.company.id;
+            $log.debug('Setting The Vehicle Company Name To '+companyName+' And The Company Id To '+companyId);
+            $scope.vehicle.companyId = companyId;
+            $scope.vehicle.companyName = companyName;
+
             VehicleService.save($scope.vehicle, function (data) {
                 $scope.list();
             });

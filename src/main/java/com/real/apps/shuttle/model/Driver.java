@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * Created by zorodzayi on 14/10/10.
  */
 @Document
-public class Driver {
+public class Driver extends CompanyModel{
     private ObjectId id;
     @Indexed
     private String firstName;
@@ -18,8 +18,7 @@ public class Driver {
     private String email;
     private String driversLicenseNumber;
     private String driversLicenseClass;
-    @Indexed
-    private ObjectId companyId;
+
 
     public String getFirstName() {
         return firstName;
@@ -60,7 +59,6 @@ public class Driver {
     public void setDriversLicenseNumber(String driversLicenseNumber) {
         this.driversLicenseNumber = driversLicenseNumber;
     }
-
     public String getDriversLicenseClass() {
         return driversLicenseClass;
     }
@@ -69,19 +67,12 @@ public class Driver {
         this.driversLicenseClass = driversLicenseClass;
     }
 
-    public ObjectId getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(ObjectId companyId) {
-        this.companyId = companyId;
-    }
 
     @Override
     public String toString() {
 
-        return String.format("{id:%s,firstName:%s,surname:%s,email:%s,driversLicenseNumber:%s,driversLicenseClass:%s,companyId:%s}",id,firstName,
-                surname,email,driversLicenseNumber,driversLicenseClass,companyId);
+        return String.format("{id:%s,firstName:%s,surname:%s,email:%s,driversLicenseNumber:%s,driversLicenseClass:%s,companyId:%s,CompanyName:%s}",id,firstName,
+                surname,email,driversLicenseNumber,driversLicenseClass,companyId,companyName);
     }
     @Override
     public boolean equals(Object object){

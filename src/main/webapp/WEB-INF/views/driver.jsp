@@ -32,6 +32,11 @@
                                    name="cellNumber" ng-model="driver.cellPhone" required>
                         </div>
                         <div class="form-group col-xs-6">
+                            <label class="control-label">Company</label>
+                            <select class="form-control" placeholder="Company" name="company" ng-model="company"
+                                    ng-options="company.tradingAs for company in sharedState.companyPage.content" required></select>
+                        </div>
+                        <div class="form-group col-xs-6">
                             <label class="control-label">Driver's License Class</label>
                             <input type="text" class="form-control" minlength="1" maxlength="3"
                                    name="driversLicenseClass"
@@ -75,7 +80,7 @@
                 <td>{{driver.email}}</td>
                 <td>{{driver.driversLicenseNumber}}</td>
                 <td>{{driver.driversLicenseClass}}</td>
-                <td>{{driver.company.name}}</td>
+                <td>{{driver.companyName}}</td>
             </tr>
             </tbody>
         </table>
