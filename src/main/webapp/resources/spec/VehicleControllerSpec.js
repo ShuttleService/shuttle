@@ -30,6 +30,10 @@ describe('Vehicle Controller Test', function () {
         expect($scope.vehicle).toBeDefined();
     });
 
+    it('Should Initialize The Controller With A List Of Vehicle Types',function(){
+        expect($scope.vehicleTypes.length >= 10).toEqual(true);
+    });
+
     it('Should Call The Service Get With The Given Skip And Limit And Set The Returned Page On The Scope', function () {
 
         var skip = 0;

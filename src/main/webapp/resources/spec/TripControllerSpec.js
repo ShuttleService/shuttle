@@ -85,6 +85,36 @@ describe('Testing The Trip Controller', function () {
         expect($scope.trip.companyId).toEqual(company.id);
         expect($scope.trip.companyName).toEqual(company.tradingAs);
     });
+
+    it('saveClick Should Set The Driver Id And Driver Name To The Values On $scope.driver',function(){
+        var driver = {id:'Test Driver Id To Be Assigned The trip.driverId',firstName:'Test Driver Name To Be Assigned To The trip.driverName',surname:
+            'Test Driver Surname To Be Assigned To The trip.driver.name '};
+        $scope.driver = driver;
+
+        $controller('TripController',{
+            $scope:$scope
+        });
+
+        $scope.saveClick();
+        expect($scope.trip.driverId).toEqual(driver.id);
+        expect($scope.trip.driverName).toEqual(driver.firstName+' '+driver.surname);
+    });
+
+    it('saveClick Should Set The Vehicle Id And Vehicle Name To Values on $scope.vehicle',function(){
+        var vehicle = {id:'Test Vehicle Id To Be Assigned To trip.vehicleId',make:'Test Vehicle Make To Be Assigned To trip.vehicleMake',model:'Test Vehicle Model To Be Assigned To Vehicle Name',
+            licenseNumber:'Test Vehicle License Number To Be Assigned to trip.vehicleLicenseNumber'};
+        $scope.vehicle = vehicle;
+
+        $controller('TripController',{
+            $scope:$scope
+        });
+
+        $scope.saveClick();
+        expect($scope.trip.vehicleId).toEqual(vehicle.id);
+        expect($scope.trip.vehicleName).toEqual(vehicle.make+' '+vehicle.model+' '+vehicle.licenseNumber);
+
+    });
+
     it('Should Call TripService Save When $scope.new is true', function () {
 
         $controller('TripController', {

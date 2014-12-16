@@ -48,17 +48,23 @@
                         </div>
                         <div class="form-group col-xs-6">
                             <label class="control-label">Vehicle</label>
-                            <input type="text" class="form-control" placeholder="Vehicle" minlength="4" name="vehicle"
-                                   ng-model="trip.vehicle" required>
+                            <select class="form-control" placeholder="Vehicle" name="vehicle"
+                                    ng-model="vehicle"
+                                    ng-options="vehicle.make+' '+vehicle.model+' '+vehicle.licenseNumber for vehicle in sharedState.vehiclePage.content "
+                                    required></select>
                         </div>
                         <div class="form-group col-xs-6">
                             <label class="control-label">Driver</label>
-                            <input type="text" placeholder="Driver" class="form-control" minlength="1" name="driver"
-                                   ng-model="trip.driver" required>
+                            <select class="form-control" name="driver" ng-model="driver"
+                                    ng-options="driver.firstName+' '+driver.surname for driver in sharedState.driverPage.content"
+                                    required>
+                            </select>
                         </div>
                         <div class="form-group col-xs-6">
                             <label class="control-label">Company</label>
-                            <select class="form-control" name="company" ng-model="company" ng-options="company.tradingAs for company in sharedState.companyPage.content" required></select>
+                            <select class="form-control" name="company" ng-model="company"
+                                    ng-options="company.tradingAs for company in sharedState.companyPage.content"
+                                    required></select>
                         </div>
                     </form>
                 </div>
@@ -96,8 +102,8 @@
             <td>{{trip.distance}}</td>
             <td>{{trip.pricePerKm | currency}}</td>
             <td>{{trip.price | currency}}</td>
-            <td>{{trip.vehicle}}</td>
-            <td>{{trip.driver}}</td>
+            <td>{{trip.vehicleName}}</td>
+            <td>{{trip.driverName}}</td>
             <td>{{trip.companyName}}</td>
         </tr>
         </tbody>

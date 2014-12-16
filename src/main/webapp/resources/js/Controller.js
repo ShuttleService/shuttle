@@ -3,12 +3,29 @@
  */
 
 angular.module('controllers', ['services']).
-    controller('SharedController', function ($rootScope,$scope, $log,CompanyService,RESULT_SIZE) {
+    controller('SharedController', function ($rootScope,$scope, $log,CompanyService,DriverService,VehicleService,RESULT_SIZE) {
         $rootScope.sharedState = {};
+        var params = {skip:0,limit:RESULT_SIZE};
+
+        $scope.findCompanies = function(){
+            $log.debug('Calling Company Service Get To Get A CompanyPage To Set On The $rootScope Shared State');
+            $rootScope.sharedState.companyPage = CompanyService.get(params);
+        };
+
+        $scope.findVehicles = function(){
+            $log.debug('Calling Vehicle Service Get To Get A VehiclePage To Set On The $rootScope Shared State');
+            $rootScope.sharedState.vehiclePage = VehicleService.get(params);
+        };
+
+        $scope.findDrivers = function(){
+            $log.debug('Calling Driver Service Get To Get A DriverPage To Set On The $rootScope Shared State');
+            $rootScope.sharedState.driverPage = DriverService.get(params)
+        };
 
         $scope.init = function(){
-            $log.debug('Calling Company Service Get To Get A List Of Companies To Set On The $rootScope');
-            $rootScope.sharedState.companyPage = CompanyService.get({skip:0,limit:RESULT_SIZE});
+            $scope.findCompanies();
+            $scope.findVehicles();
+            $scope.findDrivers();
         };
 
         $scope.init();
@@ -72,13 +89,27 @@ angular.module('controllers', ['services']).
 
         $scope.saveClick = function () {
             console.log('Attempting To Save The Trip');
-            var companyId = $scope.company.id;
-            var companyName = $scope.company.tradingAs;
-
-            $log.debug('Setting The Trip Company Id To '+companyId+' Company Name To '+companyName);
-            $scope.trip.companyId = companyId;
-            $scope.trip.companyName = companyName;
-
+            if($scope.company !== undefined) {
+                var companyId = $scope.company.id;
+                var companyName = $scope.company.tradingAs;
+                $log.debug('Setting The Trip Company Id To ' + companyId + ' Company Name To ' + companyName);
+                $scope.trip.companyId = companyId;
+                $scope.trip.companyName = companyName;
+            }
+            if($scope.driver !== undefined) {
+                var driverId = $scope.driver.id;
+                var driverName = $scope.driver.firstName+' '+$scope.driver.surname;
+                $log.debug('Setting The Driver Id To ' + driverId + ' And Driver Name To ' + driverName);
+                $scope.trip.driverId = driverId;
+                $scope.trip.driverName = driverName;
+            }
+            if($scope.vehicle !== undefined) {
+                var vehicleName = $scope.vehicle.make + ' ' + $scope.vehicle.model +' '+ $scope.vehicle.licenseNumber;
+                var vehicleId = $scope.vehicle.id;
+                $log.debug('Setting The VehicleName To ' + vehicleName + ' Vehicle License Number To ' + vehicleId);
+                $scope.trip.vehicleName = vehicleName;
+                $scope.trip.vehicleId = vehicleId;
+            }
             if ($scope.new === true) {
                 console.log('About To Post Since This Is A New Trip');
                 $scope.savedTrip = TripService.save($scope.trip, function (data) {
@@ -254,6 +285,7 @@ angular.module('controllers', ['services']).
 
     controller('VehicleController', function ($scope, $log, FormSubmissionUtilService, VehicleService, RESULT_SIZE) {
         $scope.skip = 0;
+        $scope.vehicleTypes = ['Bakkie','Bus','Hatch Back','Lorry','Mini Bus','Sedan','Station Wagon','SUV','Truck','Van'];
         $scope.limit = RESULT_SIZE;
         $scope.vehicle = {};
         $scope.prestineVehicle = angular.copy($scope.vehicle);

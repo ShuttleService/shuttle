@@ -17,8 +17,10 @@ public class Trip extends CompanyModel {
     private String destination;
     private int pricePerKm;
     private int price;
-    private String vehicle;
-    private String driver;
+    private String vehicleName;
+    private String driverName;
+    private ObjectId vehicleId;
+    private ObjectId driverId;
     private int distance;
     @Indexed
     private String clientCellNumber;
@@ -55,22 +57,6 @@ public class Trip extends CompanyModel {
         this.price = price;
     }
 
-    public String getVehicle() {
-        return vehicle;
-    }
-
-    public void setVehicle(String vehicle) {
-        this.vehicle = vehicle;
-    }
-
-    public String getDriver() {
-        return driver;
-    }
-
-    public void setDriver(String driver) {
-        this.driver = driver;
-    }
-
     public String getSource() {
         return source;
     }
@@ -103,11 +89,43 @@ public class Trip extends CompanyModel {
         this.clientCellNumber = clientCellNumber;
     }
 
+    public String getVehicleName() {
+        return vehicleName;
+    }
+
+    public void setVehicleName(String vehicleName) {
+        this.vehicleName = vehicleName;
+    }
+
+    public String getDriverName() {
+        return driverName;
+    }
+
+    public void setDriverName(String driverName) {
+        this.driverName = driverName;
+    }
+
+    public ObjectId getVehicleId() {
+        return vehicleId;
+    }
+
+    public void setVehicleId(ObjectId vehicleId) {
+        this.vehicleId = vehicleId;
+    }
+
+    public ObjectId getDriverId() {
+        return driverId;
+    }
+
+    public void setDriverId(ObjectId driverId) {
+        this.driverId = driverId;
+    }
+
     @Override
     public String toString() {
 
-        return String.format("{source:%s,id:%s,clientName:%s,destination:%s,pricePerKm:%d,price:%d,vehicle:%s,driver:%s,distance:%d,clientCellNumber:%s}",source, id, clientName, destination,
-                pricePerKm, price, vehicle, driver,distance,clientCellNumber);
+        return String.format("{source:%s,id:%s,clientName:%s,destination:%s,pricePerKm:%d,price:%d,vehicleName:%s,vehicleId:%s,driverName:%s,driverId:%s,distance:%d,clientCellNumber:%s}",source, id, clientName, destination
+                ,pricePerKm, price, vehicleName,vehicleId,driverName,driverId,distance,clientCellNumber);
     }
     @Override
     public boolean equals(Object object){
