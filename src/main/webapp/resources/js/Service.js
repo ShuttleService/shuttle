@@ -43,4 +43,9 @@ angular.module('services', ['ngResource']).
 
     .factory('VehicleService',function($resource,CONTEXT_ROOT){
         return $resource(CONTEXT_ROOT+'/vehicle/:_id/:skip/:limit',{_id:'@_id',skip:'@skip',limit:'@limit'});
+    }).
+
+    factory('AgentService',function($resource,CONTEXT_ROOT,$log){
+        $log.debug('Performing Some Agent Service Staff');
+        return $resource(CONTEXT_ROOT+'/agent/:_id/:skip/:limit',{_id:'@_id',skip:'@skip',limit:'@limit'});
     });

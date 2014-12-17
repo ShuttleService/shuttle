@@ -39,6 +39,7 @@
                         <li class="dropdown">
                             <a data-toggle="dropdown" class="dropdown-toggle" data-target="#" href="#">Admin<b class="caret"></b> </a>
                             <ul class="dropdown-menu">
+                                <li><a href="<spring:url value='/agent'/>">Agents</a></li>
                                 <li><a href="<spring:url value='/company'/>">Companies</a></li>
                             </ul>
                         </li>

@@ -23,6 +23,7 @@ public class Company {
     private String registrationNumber;
     @Indexed(unique = true)
     private String vatNumber;
+    private String logo;
 
     public ObjectId getId() {
         return id;
@@ -78,6 +79,14 @@ public class Company {
 
     public void setRegistrationNumber(String registrationNumber) {
         this.registrationNumber = registrationNumber;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
     }
 
     @Override

@@ -47,7 +47,7 @@ describe('The Company Service Test', function () {
 
     });
 
-    it('Should Call Query On The Service And Return A List Of Companies', function () {
+    it('Should Call Get On The Service And Return A List Of Companies', function () {
 
         var company = {name: 'Test Company Name To Be Gotten In A List', id: 'Test Company Id To Be Gotten In A List'};
         var companyArray = [company];

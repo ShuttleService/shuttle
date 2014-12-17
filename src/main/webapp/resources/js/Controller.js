@@ -323,5 +323,31 @@ angular.module('controllers', ['services']).
         $scope.list();
     }).
 
+    controller('AgentController',function($scope,AgentService,FormSubmissionUtilService,RESULT_SIZE,$log){
+
+        $scope.agent = {};
+        $scope.skip = 0;
+        $scope.limit = RESULT_SIZE;
+
+        $scope.list = function(){
+            $scope.page = AgentService.get({skip:$scope.skip,limit:$scope.limit});
+        };
+
+        $scope.canSave = function(){
+            return FormSubmissionUtilService.canSave($scope.addForm);
+        };
+
+        $scope.saveClick = function(){
+            $log.debug('Attempting To Save An Agent. Please Wait...');
+            $scope.recentlySaved = AgentService.save($scope.agent,function(data){
+                $log.debug('Successfully saved The Agent And Got Back '+data);
+                $scope.list();
+            });
+        };
+
+        $scope.list();
+
+    }).
+
     constant('RESULT_SIZE', 100);
 
