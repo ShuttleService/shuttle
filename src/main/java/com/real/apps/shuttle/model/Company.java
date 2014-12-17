@@ -24,6 +24,10 @@ public class Company {
     @Indexed(unique = true)
     private String vatNumber;
     private String logo;
+    @Indexed
+    private String agentName;
+    @Indexed
+    private ObjectId agentId;
 
     public ObjectId getId() {
         return id;
@@ -91,8 +95,8 @@ public class Company {
 
     @Override
     public String toString() {
-        return String.format("{id:%s,slug:%s,tradingAs:%s,fullName:%s,description:%s,registrationNumber:%s,vatNumber:%s}", id, slug, tradingAs, fullName, description,registrationNumber,
-                vatNumber);
+        return String.format("{id:%s,slug:%s,tradingAs:%s,fullName:%s,description:%s,registrationNumber:%s,vatNumber:%s,agentName:%s,agentID:%s}", id, slug, tradingAs, fullName,
+                description,registrationNumber,vatNumber,agentName,agentId);
     }
 
     @Override

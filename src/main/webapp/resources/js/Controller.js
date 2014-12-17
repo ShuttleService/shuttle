@@ -3,7 +3,7 @@
  */
 
 angular.module('controllers', ['services']).
-    controller('SharedController', function ($rootScope,$scope, $log,CompanyService,DriverService,VehicleService,RESULT_SIZE) {
+    controller('SharedController', function ($rootScope,$scope, $log,CompanyService,DriverService,VehicleService,AgentService,RESULT_SIZE) {
         $rootScope.sharedState = {};
         var params = {skip:0,limit:RESULT_SIZE};
 
@@ -22,10 +22,16 @@ angular.module('controllers', ['services']).
             $rootScope.sharedState.driverPage = DriverService.get(params)
         };
 
+        $scope.findAgents = function(){
+            $log.debug('Calling Agent Service Get To Get An AgentPage To Set On The $rootScope Shared State');
+            $rootScope.sharedState.agentPage = AgentService.get(params);
+        };
+
         $scope.init = function(){
             $scope.findCompanies();
             $scope.findVehicles();
             $scope.findDrivers();
+            $scope.findAgents();
         };
 
         $scope.init();
@@ -205,9 +211,12 @@ angular.module('controllers', ['services']).
         };
 
         $scope.saveClick = function () {
+            console.log('Saving The Company. Please Wait...');
 
-            console.log('Clicked Save Button');
-
+            if($scope.agent !== undefined && $scope.agent !== null) {
+                $scope.company.agentName = $scope.agent.fullName;
+                $scope.company.agentId = $scope.agent.id;
+            }
             if ($scope.new === true) {
                 $scope.recentlyAddedCompany = CompanyService.save($scope.company, function (data) {
                     $log.debug('Added The Company ' + $scope.recentlyAddedCompany.tradingAs + '. Listing All The Companies.');

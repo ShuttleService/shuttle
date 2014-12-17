@@ -3,17 +3,18 @@
  */
 describe('Testing The "SharedController" (The Controller That Holds The State That Is To Be Used Across Other Controller)', function () {
 
-    var controller, $rootScope, CompanyService,VehicleService,DriverService,$scope, RESULT_SIZE,params;
+    var controller, $rootScope, CompanyService,VehicleService,DriverService,AgentService,$scope, RESULT_SIZE,params;
 
     beforeEach(module('controllers'));
 
-    beforeEach(inject(function (_$rootScope_, _CompanyService_,_VehicleService_,_DriverService_,$controller, _RESULT_SIZE_) {
+    beforeEach(inject(function (_$rootScope_, _CompanyService_,_VehicleService_,_DriverService_,_AgentService_,$controller, _RESULT_SIZE_) {
         $rootScope = _$rootScope_;
         expect($rootScope).toBeDefined();
         $scope = $rootScope.$new();
         CompanyService = _CompanyService_;
         VehicleService = _VehicleService_;
         DriverService = _DriverService_;
+        AgentService = _AgentService_;
 
         RESULT_SIZE = _RESULT_SIZE_;
         expect(RESULT_SIZE).toBeDefined();
@@ -21,6 +22,7 @@ describe('Testing The "SharedController" (The Controller That Holds The State Th
         expect(VehicleService).toBeDefined();
         expect(DriverService).toBeDefined();
         params = {skip:0, limit:RESULT_SIZE};
+        expect(AgentService).toBeDefined();
 
         controller = $controller('SharedController', {
             $scope: $scope
@@ -71,13 +73,24 @@ describe('Testing The "SharedController" (The Controller That Holds The State Th
 
     });
 
+    it('Should Call The AgentService.get And Set The AgentPage On The $rootScope SharedState',function(){
+        var agents = [2,3,4,5];
+        var page = {content:agents};
+        spyOn(AgentService,'get').andReturn(page);
+        expect($scope.findAgents).toBeDefined();
+        $scope.findAgents();
+        expect(AgentService.get).toHaveBeenCalledWith(params);
+        expect($rootScope.sharedState.agentPage).toEqual(page);
+    });
     it('Init Should Call The Various Methods On The Scope To Populate The Drop Downs', function () {
         spyOn($scope, 'findCompanies');
         spyOn($scope,'findVehicles');
         spyOn($scope,'findDrivers');
+        spyOn($scope,'findAgents');
         $scope.init();
         expect($scope.findCompanies).toHaveBeenCalled();
         expect($scope.findVehicles).toHaveBeenCalled();
         expect($scope.findDrivers).toHaveBeenCalled();
+        expect($scope.findAgents).toHaveBeenCalled();
     });
 });

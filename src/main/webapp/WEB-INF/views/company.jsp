@@ -40,10 +40,13 @@
                             <input type="text" class="form-control" name="logo" placeholder="Logo"
                                    ng-model="company.logo">
                         </div>
+                        <div class="form-group col-xs-6">
+                            <label class="control-label" for="agent">Agent</label>
+                            <select class="form-control" name="agent" id="agent" ng-model="agent" ng-options="agent.fullName for agent in sharedState.agentPage.content"></select>
+                        </div>
                         <div class="form-group col-xs-12">
                             <label class="control-label">Description</label>
-                            <textarea class="col-xs-12" ng-minlength="2" data-ng-model="company.description"
-                                      placeholder="Description" required></textarea>
+                            <textarea class="col-xs-12" ng-minlength="2" name="description" ng-model="company.description" placeholder="Description" required></textarea>
                         </div>
                     </form>
                 </div>
@@ -66,6 +69,7 @@
                 <th>Description</th>
                 <th>VAT Number</th>
                 <th>Registration Number</th>
+                <th>Agent</th>
             </tr>
             </thead>
             <tbody>
@@ -76,6 +80,7 @@
                 <td>{{company.description}}</td>
                 <td>{{company.vatNumber}}</td>
                 <td>{{company.registrationNumber}}</td>
+                <td>{{company.agentName}}</td>
             </tr>
             </tbody>
         </table>
