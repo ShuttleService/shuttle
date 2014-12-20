@@ -16,7 +16,7 @@ public class AdminController {
 
     @RequestMapping(value = "/"+VIEW_NAME,method = RequestMethod.GET)
     public String render(){
-        logger.debug("Showing The Admin Page");char c = 9; byte b = 9;
+        logger.debug("Showing The Admin Page");
         return VIEW_NAME;
     }
 }

@@ -3,7 +3,7 @@ package com.real.apps.shuttle.model;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -36,7 +36,7 @@ public class User  extends CompanyModel implements UserDetails{
   private Boolean accountNonLocked = true;
   private Boolean credentialsNonExpired = true;
   private Boolean enabled = true;
-  private Collection<? extends GrantedAuthority> authorities;
+  private Collection<SimpleGrantedAuthority> authorities;
 
   public void setAccountNonExpired(Boolean accountNonExpired) {
     this.accountNonExpired = accountNonExpired;
@@ -92,7 +92,7 @@ public class User  extends CompanyModel implements UserDetails{
   }
 
   @Override
-  public Collection<? extends GrantedAuthority> getAuthorities() {
+  public Collection<SimpleGrantedAuthority> getAuthorities() {
     return authorities;
   }
 
@@ -129,7 +129,7 @@ public class User  extends CompanyModel implements UserDetails{
     this.cellNumber = cellNumber;
   }
 
-  public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
+  public void setAuthorities(Collection<SimpleGrantedAuthority> authorities) {
     this.authorities = authorities;
   }
 
@@ -192,7 +192,7 @@ public class User  extends CompanyModel implements UserDetails{
   @Override
   public String toString() {
 
-    return String.format("{id:%s,username:%s,password%s,firstName:%s,surname:%s,email:%s,companyName:%s,companyId:%s,cellNumber:%s,dateOfBirth:%s,streetAddress:%s,surburb:%s,town:%s,province:%s,postalCode:%s," +
+    return String.format("{id:%s,username:%s,password:%s,firstName:%s,surname:%s,email:%s,companyName:%s,companyId:%s,cellNumber:%s,dateOfBirth:%s,streetAddress:%s,surburb:%s,town:%s,province:%s,postalCode:%s," +
         " accountNonExpired:%b,accountNonLocked:%b,credentialsNonExpired:%b,enabled:%b,authorities:%s}", id, username, password, firstName, surname, email, companyName, companyId, cellNumber, dateOfBirth,
       streetAddress, suburb, town, province, postalCode, accountNonExpired, accountNonLocked, credentialsNonExpired, email, authorities);
   }

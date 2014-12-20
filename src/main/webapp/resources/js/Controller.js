@@ -3,31 +3,31 @@
  */
 
 angular.module('controllers', ['services']).
-    controller('SharedController', function ($rootScope,$scope, $log,CompanyService,DriverService,VehicleService,AgentService,RESULT_SIZE) {
+    controller('SharedController', function ($rootScope, $scope, $log, CompanyService, DriverService, VehicleService, AgentService, RESULT_SIZE) {
         $rootScope.sharedState = {};
-        var params = {skip:0,limit:RESULT_SIZE};
+        var params = {skip: 0, limit: RESULT_SIZE};
 
-        $scope.findCompanies = function(){
+        $scope.findCompanies = function () {
             $log.debug('Calling Company Service Get To Get A CompanyPage To Set On The $rootScope Shared State');
             $rootScope.sharedState.companyPage = CompanyService.get(params);
         };
 
-        $scope.findVehicles = function(){
+        $scope.findVehicles = function () {
             $log.debug('Calling Vehicle Service Get To Get A VehiclePage To Set On The $rootScope Shared State');
             $rootScope.sharedState.vehiclePage = VehicleService.get(params);
         };
 
-        $scope.findDrivers = function(){
+        $scope.findDrivers = function () {
             $log.debug('Calling Driver Service Get To Get A DriverPage To Set On The $rootScope Shared State');
             $rootScope.sharedState.driverPage = DriverService.get(params)
         };
 
-        $scope.findAgents = function(){
+        $scope.findAgents = function () {
             $log.debug('Calling Agent Service Get To Get An AgentPage To Set On The $rootScope Shared State');
             $rootScope.sharedState.agentPage = AgentService.get(params);
         };
 
-        $scope.init = function(){
+        $scope.init = function () {
             $scope.findCompanies();
             $scope.findVehicles();
             $scope.findDrivers();
@@ -95,22 +95,22 @@ angular.module('controllers', ['services']).
 
         $scope.saveClick = function () {
             console.log('Attempting To Save The Trip');
-            if($scope.company !== undefined) {
+            if ($scope.company !== undefined) {
                 var companyId = $scope.company.id;
                 var companyName = $scope.company.tradingAs;
                 $log.debug('Setting The Trip Company Id To ' + companyId + ' Company Name To ' + companyName);
                 $scope.trip.companyId = companyId;
                 $scope.trip.companyName = companyName;
             }
-            if($scope.driver !== undefined) {
+            if ($scope.driver !== undefined) {
                 var driverId = $scope.driver.id;
-                var driverName = $scope.driver.firstName+' '+$scope.driver.surname;
+                var driverName = $scope.driver.firstName + ' ' + $scope.driver.surname;
                 $log.debug('Setting The Driver Id To ' + driverId + ' And Driver Name To ' + driverName);
                 $scope.trip.driverId = driverId;
                 $scope.trip.driverName = driverName;
             }
-            if($scope.vehicle !== undefined) {
-                var vehicleName = $scope.vehicle.make + ' ' + $scope.vehicle.model +' '+ $scope.vehicle.licenseNumber;
+            if ($scope.vehicle !== undefined) {
+                var vehicleName = $scope.vehicle.make + ' ' + $scope.vehicle.model + ' ' + $scope.vehicle.licenseNumber;
                 var vehicleId = $scope.vehicle.id;
                 $log.debug('Setting The VehicleName To ' + vehicleName + ' Vehicle License Number To ' + vehicleId);
                 $scope.trip.vehicleName = vehicleName;
@@ -213,7 +213,7 @@ angular.module('controllers', ['services']).
         $scope.saveClick = function () {
             console.log('Saving The Company. Please Wait...');
 
-            if($scope.agent !== undefined && $scope.agent !== null) {
+            if ($scope.agent !== undefined && $scope.agent !== null) {
                 $scope.company.agentName = $scope.agent.fullName;
                 $scope.company.agentId = $scope.agent.id;
             }
@@ -249,9 +249,9 @@ angular.module('controllers', ['services']).
         $scope.prestineUser = angular.copy($scope.user);
         $scope.confirmPasswordPrestine = angular.copy($scope.confirmPassword);
         $scope.new = true;
-
+        $scope.roles = ['admin', 'agent', 'world'];
         $scope.saveClick = function () {
-            console.log('Clicked Submit Button');
+            $log.debug('Clicked Submit Button. This Be The Authorities Submitted ' + $scope.user.authority);
             $scope.user.username = $scope.user.email;
 
             if ($scope.user.company !== undefined && $scope.user.company !== null) {
@@ -264,9 +264,19 @@ angular.module('controllers', ['services']).
                 $log.debug("Did not set the Company Name Or Company Id As There Is No company on the scope");
             }
 
+            if ($scope.user.authority !== undefined && $scope.user.authority !== null) {
+                $scope.user.authorities = [$scope.user.authority];
+                $log.debug('Set The Authorities to The Array ' + $scope.user.authorities);
+            } else {
+                $log.debug('There Are No Authorities Defined On The Scope');
+            }
+
+            $log.debug('This Be The Authorities Submitted With The User ' + $scope.user.authorities);
+
             UserService.save($scope.user, function (data) {
-                $log.info('Submitted To The Rest Service');
+                $log.info('Submitted To The Rest Service With The Role ');
                 $scope.user = data;
+                $scope.user.password = $scope.formHolder.confirmPassword;
                 $scope.list();
             });
 
@@ -294,7 +304,7 @@ angular.module('controllers', ['services']).
 
     controller('VehicleController', function ($scope, $log, FormSubmissionUtilService, VehicleService, RESULT_SIZE) {
         $scope.skip = 0;
-        $scope.vehicleTypes = ['Bakkie','Bus','Hatch Back','Lorry','Mini Bus','Sedan','Station Wagon','SUV','Truck','Van'];
+        $scope.vehicleTypes = ['Bakkie', 'Bus', 'Hatch Back', 'Lorry', 'Mini Bus', 'Sedan', 'Station Wagon', 'SUV', 'Truck', 'Van'];
         $scope.limit = RESULT_SIZE;
         $scope.vehicle = {};
         $scope.prestineVehicle = angular.copy($scope.vehicle);
@@ -314,8 +324,8 @@ angular.module('controllers', ['services']).
         $scope.saveClick = function () {
             $log.debug('Posting The Vehicle ' + $scope.vehicle);
             var companyName = $scope.company.tradingAs;
-            var companyId   = $scope.company.id;
-            $log.debug('Setting The Vehicle Company Name To '+companyName+' And The Company Id To '+companyId);
+            var companyId = $scope.company.id;
+            $log.debug('Setting The Vehicle Company Name To ' + companyName + ' And The Company Id To ' + companyId);
             $scope.vehicle.companyId = companyId;
             $scope.vehicle.companyName = companyName;
 
@@ -332,24 +342,24 @@ angular.module('controllers', ['services']).
         $scope.list();
     }).
 
-    controller('AgentController',function($scope,AgentService,FormSubmissionUtilService,RESULT_SIZE,$log){
+    controller('AgentController', function ($scope, AgentService, FormSubmissionUtilService, RESULT_SIZE, $log) {
 
         $scope.agent = {};
         $scope.skip = 0;
         $scope.limit = RESULT_SIZE;
 
-        $scope.list = function(){
-            $scope.page = AgentService.get({skip:$scope.skip,limit:$scope.limit});
+        $scope.list = function () {
+            $scope.page = AgentService.get({skip: $scope.skip, limit: $scope.limit});
         };
 
-        $scope.canSave = function(){
+        $scope.canSave = function () {
             return FormSubmissionUtilService.canSave($scope.addForm);
         };
 
-        $scope.saveClick = function(){
+        $scope.saveClick = function () {
             $log.debug('Attempting To Save An Agent. Please Wait...');
-            $scope.recentlySaved = AgentService.save($scope.agent,function(data){
-                $log.debug('Successfully saved The Agent And Got Back '+data);
+            $scope.recentlySaved = AgentService.save($scope.agent, function (data) {
+                $log.debug('Successfully saved The Agent And Got Back ' + data);
                 $scope.list();
             });
         };

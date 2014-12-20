@@ -120,6 +120,13 @@ describe('Testing The User Controller', function () {
 
     });
 
+    it('saveClick Should Set The Role As The List Of The Selected Role',function(){
+        var role = 'Test Role To Be Set As A Single Element In An Array Of Authorities.';
+        $scope.user.authority = role;
+        $scope.saveClick();
+        expect($scope.user.authorities).toEqual([role]);
+    });
+
 
     it("saveClick Should Still work if there is no company set and user.companyId", function () {
 
@@ -139,4 +146,10 @@ describe('Testing The User Controller', function () {
         expect($scope.user.companyId).toEqual(companyId);
     });
 
+    it('Should Initialize The List Of All Supported Roles, admin, agent and world ', function () {
+        var roles = ['admin','agent','world'];
+        expect($scope.roles).toBeDefined();
+        var actual = $scope.roles;
+        expect(actual).toEqual(roles);
+    });
 });

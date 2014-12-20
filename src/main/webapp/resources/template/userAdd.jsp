@@ -42,6 +42,11 @@
                         <input type="password" placeholder="Confirm Password" class="form-control" ng-minlength="6"
                                name="confirmPassword" ng-model="formHolder.confirmPassword" required>
                     </div>
+                    <div class="form-group col-xs-6">
+                        <label class="control-label">Role</label>
+                        <select placeholder="Role" class="form-control"
+                               name="authorities" ng-model="user.authority"  ng-options="role for role in roles" required></select>
+                    </div>
                   <div class="form-group col-xs-6">
                     <label class="control-label">Company</label>
                     <select class="form-control" name="company" ng-model="user.company" ng-options="company.tradingAs for company in sharedState.companyPage.content"></select>
