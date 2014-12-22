@@ -52,9 +52,10 @@ angular.module('controllers', ['services']).
         };
 
         $scope.saveClick = function () {
-            $scope.driver.companyId = $scope.company.id;
-            $scope.driver.companyName = $scope.company.tradingAs;
-
+            if($scope.company) {
+                $scope.driver.companyId = $scope.company.id;
+                $scope.driver.companyName = $scope.company.tradingAs;
+            }
             if ($scope.new === true) {
 
                 $scope.recentlyAddedDriver = DriverService.save($scope.driver, function (data) {
@@ -95,21 +96,21 @@ angular.module('controllers', ['services']).
 
         $scope.saveClick = function () {
             console.log('Attempting To Save The Trip');
-            if ($scope.company !== undefined) {
+            if ($scope.company) {
                 var companyId = $scope.company.id;
                 var companyName = $scope.company.tradingAs;
                 $log.debug('Setting The Trip Company Id To ' + companyId + ' Company Name To ' + companyName);
                 $scope.trip.companyId = companyId;
                 $scope.trip.companyName = companyName;
             }
-            if ($scope.driver !== undefined) {
+            if ($scope.driver) {
                 var driverId = $scope.driver.id;
                 var driverName = $scope.driver.firstName + ' ' + $scope.driver.surname;
                 $log.debug('Setting The Driver Id To ' + driverId + ' And Driver Name To ' + driverName);
                 $scope.trip.driverId = driverId;
                 $scope.trip.driverName = driverName;
             }
-            if ($scope.vehicle !== undefined) {
+            if ($scope.vehicle) {
                 var vehicleName = $scope.vehicle.make + ' ' + $scope.vehicle.model + ' ' + $scope.vehicle.licenseNumber;
                 var vehicleId = $scope.vehicle.id;
                 $log.debug('Setting The VehicleName To ' + vehicleName + ' Vehicle License Number To ' + vehicleId);
@@ -213,7 +214,7 @@ angular.module('controllers', ['services']).
         $scope.saveClick = function () {
             console.log('Saving The Company. Please Wait...');
 
-            if ($scope.agent !== undefined && $scope.agent !== null) {
+            if ($scope.agent) {
                 $scope.company.agentName = $scope.agent.fullName;
                 $scope.company.agentId = $scope.agent.id;
             }
@@ -249,12 +250,12 @@ angular.module('controllers', ['services']).
         $scope.prestineUser = angular.copy($scope.user);
         $scope.confirmPasswordPrestine = angular.copy($scope.confirmPassword);
         $scope.new = true;
-        $scope.roles = ['admin', 'agent', 'world'];
+        $scope.roles = ['ROLE_admin', 'ROLE_agent', 'ROLE_world'];
         $scope.saveClick = function () {
             $log.debug('Clicked Submit Button. This Be The Authorities Submitted ' + $scope.user.authority);
             $scope.user.username = $scope.user.email;
 
-            if ($scope.user.company !== undefined && $scope.user.company !== null) {
+            if ($scope.user.company) {
                 var companyName = $scope.user.company.tradingAs;
                 var companyId = $scope.user.company.id;
                 $log.debug('Setting Company Name to ' + companyName + ' Company Id To ' + companyId);
@@ -264,9 +265,9 @@ angular.module('controllers', ['services']).
                 $log.debug("Did not set the Company Name Or Company Id As There Is No company on the scope");
             }
 
-            if ($scope.user.authority !== undefined && $scope.user.authority !== null) {
-                $scope.user.authorities = [$scope.user.authority];
-                $log.debug('Set The Authorities to The Array ' + $scope.user.authorities);
+            if ($scope.user.authority) {
+                //$scope.user.authorities = [$scope.user.authority,'world'];
+                $log.debug('Set The Authority To ' + $scope.user.authority);
             } else {
                 $log.debug('There Are No Authorities Defined On The Scope');
             }
@@ -323,12 +324,13 @@ angular.module('controllers', ['services']).
 
         $scope.saveClick = function () {
             $log.debug('Posting The Vehicle ' + $scope.vehicle);
-            var companyName = $scope.company.tradingAs;
-            var companyId = $scope.company.id;
-            $log.debug('Setting The Vehicle Company Name To ' + companyName + ' And The Company Id To ' + companyId);
-            $scope.vehicle.companyId = companyId;
-            $scope.vehicle.companyName = companyName;
-
+            if( $scope.company) {
+                var companyName = $scope.company.tradingAs;
+                var companyId = $scope.company.id;
+                $log.debug('Setting The Vehicle Company Name To ' + companyName + ' And The Company Id To ' + companyId);
+                $scope.vehicle.companyId = companyId;
+                $scope.vehicle.companyName = companyName;
+            }
             VehicleService.save($scope.vehicle, function (data) {
                 $scope.list();
             });

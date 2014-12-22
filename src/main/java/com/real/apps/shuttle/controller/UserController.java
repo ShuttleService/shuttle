@@ -5,6 +5,7 @@ import com.real.apps.shuttle.service.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +27,7 @@ public class UserController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/{skip}/{limit}")
     @ResponseBody
-    public Page<User> list(@PathVariable("skip") int skip, @PathVariable("limit") int limit) {
+    public Page<User>page(@PathVariable("skip") int skip, @PathVariable("limit") int limit) {
         logger.debug(String.format("Listing users {skip:%s,limit:%s}", skip, limit));
         return service.list(skip, limit);
     }
@@ -35,6 +36,8 @@ public class UserController {
     @ResponseBody
     public User post(@RequestBody User user) {
         logger.debug("Posting User " + user);
+        user.getAuthorities().add(new SimpleGrantedAuthority(user.getAuthority()));
+        user.setAuthority(null);
         return service.insert(user);
     }
 

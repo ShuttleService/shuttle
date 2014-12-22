@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
  * Created by zorodzayi on 14/12/19.
  */
 @Component
-public class StringToGrantedAuthorityConverter implements Converter<String,GrantedAuthority>{
+public class StringToGrantedAuthorityConverter implements Converter<String,SimpleGrantedAuthority>{
     @Override
-    public GrantedAuthority convert(String s) {
+    public SimpleGrantedAuthority convert(String s) {
         return new SimpleGrantedAuthority(s);
     }
 }

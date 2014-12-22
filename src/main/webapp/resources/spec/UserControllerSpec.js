@@ -41,14 +41,12 @@ describe('Testing The User Controller', function () {
         $scope.user = user;
         var savedUser = {userName: 'Test UserName Returned From POSTED'};
         spyOn(UserService, 'save').andReturn(savedUser);
-        spyOn(UserService, 'list');
+        spyOn(UserService, 'get');
         expect($scope.saveClick).toBeDefined();
-
         $scope.saveClick();
-
         expect(UserService.save).toHaveBeenCalledWith(user, jasmine.any(Function));
         expect($scope.user.userName).toEqual(savedUser.userName);
-        expect(UserService.list).toHaveBeenCalled();
+        expect(UserService.get).toHaveBeenCalled();
     });
 
     it('Should Have a user on the $scope at init', function () {
@@ -124,7 +122,7 @@ describe('Testing The User Controller', function () {
         var role = 'Test Role To Be Set As A Single Element In An Array Of Authorities.';
         $scope.user.authority = role;
         $scope.saveClick();
-        expect($scope.user.authorities).toEqual([role]);
+        expect($scope.user.authority).toEqual(role);
     });
 
 
@@ -147,7 +145,7 @@ describe('Testing The User Controller', function () {
     });
 
     it('Should Initialize The List Of All Supported Roles, admin, agent and world ', function () {
-        var roles = ['admin','agent','world'];
+        var roles = ['ROLE_admin','ROLE_agent','ROLE_world'];
         expect($scope.roles).toBeDefined();
         var actual = $scope.roles;
         expect(actual).toEqual(roles);

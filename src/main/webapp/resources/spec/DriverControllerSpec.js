@@ -106,7 +106,6 @@ describe('Testing The Driver Controller', function () {
         spyOn($scope, 'list');
         expect($scope.saveClick).toBeDefined();
         $scope.saveClick();
-
         expect(DriverService.save).toHaveBeenCalledWith(driverToSave, jasmine.any(Function));
         expect($scope.recentlyAddedDriver).toEqual(savedDriver);
         expect($scope.list).toHaveBeenCalled();
