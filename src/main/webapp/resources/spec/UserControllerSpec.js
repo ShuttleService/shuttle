@@ -122,7 +122,7 @@ describe('Testing The User Controller', function () {
         var role = 'Test Role To Be Set As A Single Element In An Array Of Authorities.';
         $scope.user.authority = role;
         $scope.saveClick();
-        expect($scope.user.authority).toEqual(role);
+        expect($scope.user.authorities).toEqual([role]);
     });
 
 

@@ -266,7 +266,7 @@ angular.module('controllers', ['services']).
             }
 
             if ($scope.user.authority) {
-                //$scope.user.authorities = [$scope.user.authority,'world'];
+                $scope.user.authorities = [$scope.user.authority];
                 $log.debug('Set The Authority To ' + $scope.user.authority);
             } else {
                 $log.debug('There Are No Authorities Defined On The Scope');

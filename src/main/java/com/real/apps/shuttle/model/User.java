@@ -33,18 +33,8 @@ public class User extends CompanyModel implements UserDetails {
     private String town;
     private String province;
     private String postalCode;
-    private SimpleGrantedAuthority authority;
     private Boolean accountNonExpired = true;
     private Boolean accountNonLocked = true;
-
-    public SimpleGrantedAuthority getAuthority() {
-        return authority;
-    }
-
-    public void setAuthority(SimpleGrantedAuthority authority) {
-        this.authority = authority;
-    }
-
     private Boolean credentialsNonExpired = true;
     private Boolean enabled = true;
     private Collection<SimpleGrantedAuthority> authorities = new HashSet<>();
@@ -204,8 +194,8 @@ public class User extends CompanyModel implements UserDetails {
     public String toString() {
 
         return String.format("{id:%s,username:%s,password:%s,firstName:%s,surname:%s,email:%s,companyName:%s,companyId:%s,cellNumber:%s,dateOfBirth:%s,streetAddress:%s,surburb:%s,town:%s,province:%s,postalCode:%s," +
-                        " accountNonExpired:%b,accountNonLocked:%b,credentialsNonExpired:%b,enabled:%b,authorities:%s,authority:%s}", id, username, password, firstName, surname, email, companyName, companyId, cellNumber, dateOfBirth,
-                streetAddress, suburb, town, province, postalCode, accountNonExpired, accountNonLocked, credentialsNonExpired, email, authorities, authority);
+                        " accountNonExpired:%b,accountNonLocked:%b,credentialsNonExpired:%b,enabled:%b,authorities:%s}", id, username, password, firstName, surname, email, companyName, companyId, cellNumber, dateOfBirth,
+                streetAddress, suburb, town, province, postalCode, accountNonExpired, accountNonLocked, credentialsNonExpired, email, authorities);
     }
 
     @Override
