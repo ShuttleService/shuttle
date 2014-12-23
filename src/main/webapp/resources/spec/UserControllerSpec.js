@@ -145,7 +145,7 @@ describe('Testing The User Controller', function () {
     });
 
     it('Should Initialize The List Of All Supported Roles, admin, agent and world ', function () {
-        var roles = ['ROLE_admin','ROLE_agent','ROLE_world'];
+        var roles = [{role:'ROLE_admin'},{role:'ROLE_agent'},{role:'ROLE_world'}];
         expect($scope.roles).toBeDefined();
         var actual = $scope.roles;
         expect(actual).toEqual(roles);

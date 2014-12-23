@@ -36,7 +36,7 @@ public class UserController {
     @ResponseBody
     public User post(@RequestBody User user) {
         logger.debug("Posting User " + user);
-        user.getAuthorities().add(new SimpleGrantedAuthority(user.getAuthority()));
+        user.getAuthorities().add(user.getAuthority());
         user.setAuthority(null);
         return service.insert(user);
     }

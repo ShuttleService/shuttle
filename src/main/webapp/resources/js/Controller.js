@@ -250,7 +250,7 @@ angular.module('controllers', ['services']).
         $scope.prestineUser = angular.copy($scope.user);
         $scope.confirmPasswordPrestine = angular.copy($scope.confirmPassword);
         $scope.new = true;
-        $scope.roles = ['ROLE_admin', 'ROLE_agent', 'ROLE_world'];
+        $scope.roles = [{role:'ROLE_admin'}, {role:'ROLE_agent'}, {role:'ROLE_world'}];
         $scope.saveClick = function () {
             $log.debug('Clicked Submit Button. This Be The Authorities Submitted ' + $scope.user.authority);
             $scope.user.username = $scope.user.email;

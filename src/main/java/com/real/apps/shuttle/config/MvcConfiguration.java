@@ -1,12 +1,17 @@
 package com.real.apps.shuttle.config;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.real.apps.shuttle.converter.GrantedAuthorityToStringConverter;
+import com.real.apps.shuttle.converter.SimpleGrantedAuthorityInstanceCreator;
 import com.real.apps.shuttle.converter.StringToGrantedAuthorityConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -40,11 +45,14 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter {
 
     @Override
     public void configureMessageConverters(java.util.List<org.springframework.http.converter.HttpMessageConverter<?>> converters) {
-        converters.add(new GsonHttpMessageConverter());
+        Gson gson = new GsonBuilder().registerTypeAdapter(SimpleGrantedAuthority.class,new SimpleGrantedAuthorityInstanceCreator()).create();
+        GsonHttpMessageConverter messageConverter = new GsonHttpMessageConverter();
+        messageConverter.setGson(gson);
+        converters.add(messageConverter);
     }
 
     @Override
-    public void addFormatters(FormatterRegistry registry){
+    public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(new StringToGrantedAuthorityConverter());
         registry.addConverter(new GrantedAuthorityToStringConverter());
     }

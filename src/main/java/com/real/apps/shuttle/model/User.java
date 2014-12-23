@@ -33,20 +33,21 @@ public class User extends CompanyModel implements UserDetails {
     private String town;
     private String province;
     private String postalCode;
-    private String authority;
+    private SimpleGrantedAuthority authority;
     private Boolean accountNonExpired = true;
     private Boolean accountNonLocked = true;
-    private Boolean credentialsNonExpired = true;
-    private Boolean enabled = true;
-    private Collection<SimpleGrantedAuthority> authorities = new HashSet<>();
 
-    public String getAuthority() {
+    public SimpleGrantedAuthority getAuthority() {
         return authority;
     }
 
-    public void setAuthority(String authority) {
+    public void setAuthority(SimpleGrantedAuthority authority) {
         this.authority = authority;
     }
+
+    private Boolean credentialsNonExpired = true;
+    private Boolean enabled = true;
+    private Collection<SimpleGrantedAuthority> authorities = new HashSet<>();
 
     public void setAccountNonExpired(Boolean accountNonExpired) {
         this.accountNonExpired = accountNonExpired;
