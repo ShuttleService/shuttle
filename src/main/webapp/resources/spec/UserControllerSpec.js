@@ -98,7 +98,6 @@ describe('Testing The User Controller', function () {
     });
 
     it('saveClick Should Set The username To Be The Same As Email ', function () {
-
         var email = "Test Email To Be Copied To The User Name";
         $scope.user.email = email;
         $scope.saveClick();
@@ -115,15 +114,21 @@ describe('Testing The User Controller', function () {
         $scope.saveClick();
         expect($scope.user.companyId).toEqual(company.id);
         expect($scope.user.companyName).toEqual(company.tradingAs);
-
     });
+
+    it('saveClick Should Set The Role As The List Of The Selected Role',function(){
+        var role = 'Test Role To Be Set As A Single Element In An Array Of Authorities.';
+        $scope.user.authority = role;
+        $scope.saveClick();
+        expect($scope.user.authorities).toEqual([role]);
+    });
+
 
     it("saveClick Should Still work if there is no company set and user.companyId", function () {
 
         $scope.saveClick();
         expect($scope.user.companyId).toBeUndefined();
         expect($scope.user.companyName).toBeUndefined();
-
     });
 
     it('Should Set The Company Name And Company Id Based On the Values On The Company', function () {
@@ -137,7 +142,7 @@ describe('Testing The User Controller', function () {
     });
 
     it('Should Initialize The List Of All Supported Roles, admin, agent and world ', function () {
-        var roles = [{role:'ROLE_admin'},{role:'ROLE_agent'},{role:'ROLE_world'}];
+        var roles = [{role:'ROLE_admin'},{role:'ROLE_agent'},{role:'ROLE_world'},{role:'ROLE_companyUser'}];
         expect($scope.roles).toBeDefined();
         var actual = $scope.roles;
         expect(actual).toEqual(roles);

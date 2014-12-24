@@ -10,11 +10,12 @@
             <th>Cellphone Number</th>
             <th>Date Of Birth</th>
             <th>Street Address</th>
-            <th>Surburb</th>
+            <th>Suburb</th>
             <th>City / Town</th>
             <th>Postal Code</th>
             <th>Province</th>
             <th>Company</th>
+            <th>Role</th>
         </tr>
         </thead>
         <tr ng-repeat="user in page.content">
@@ -30,6 +31,7 @@
             <td>{{user.postalCode}}</td>
             <td>{{user.province}}</td>
             <td>{{user.companyName}}</td>
+            <td>{{user.authorities[0].role}}</td>
         </tr>
     </table>
 </div>

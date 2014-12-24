@@ -250,7 +250,7 @@ angular.module('controllers', ['services']).
         $scope.prestineUser = angular.copy($scope.user);
         $scope.confirmPasswordPrestine = angular.copy($scope.confirmPassword);
         $scope.new = true;
-        $scope.roles = [{role:'ROLE_admin'}, {role:'ROLE_agent'}, {role:'ROLE_world'}];
+        $scope.roles = [{role:'ROLE_admin'}, {role:'ROLE_agent'}, {role:'ROLE_world'},{role:'ROLE_companyUser'}];
         $scope.saveClick = function () {
             $log.debug('Clicked Submit Button. This Be The Authorities Submitted ' + $scope.user.authority);
             $scope.user.username = $scope.user.email;
@@ -265,12 +265,17 @@ angular.module('controllers', ['services']).
                 $log.debug("Did not set the Company Name Or Company Id As There Is No company on the scope");
             }
 
+            if ($scope.user.authority) {
+                $scope.user.authorities = [$scope.user.authority];
+                $log.debug('Set The Authority To ' + $scope.user.authority);
+            } else {
+                $log.debug('There Are No Authorities Defined On The Scope');
+            }
+
             $log.debug('This Be The Authorities Submitted With The User ' + $scope.user.authorities);
 
             UserService.save($scope.user, function (data) {
-                $log.info('Submitted To The Rest Service With The Role ');
-                $scope.user = data;
-                $scope.user.password = $scope.formHolder.confirmPassword;
+                $log.info('Submitted To The Rest Service With The Role '+$scope.user.authorities+'Got Back Id '+data.id);
                 $scope.list();
             });
 

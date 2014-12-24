@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
+<%@taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <html ng-app="controllers" ng-controller="SharedController">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -29,21 +30,46 @@
                     </button>
                     <a class="navbar-brand" href="#"><tiles:getAsString name="title"/></a>
                 </div>
+
                 <div class="collapse navbar-collapse" id="menu">
                     <ul class="nav navbar-nav">
-                        <li><a class="active" href="<spring:url value='trip'/>">Trips</a></li>
-                        <li><a href="<spring:url value='driver'/> ">Drivers</a></li>
-                        <li><a href="<spring:url value='vehicle' />">Vehicles</a></li>
-                        <li><a href="<spring:url value='user' />">Users</a> </li>
+                        <security:authorize access="hasAnyRole('ROLE_admin','ROLE_companyUser','ROLE_world')">
+                            <li><a class="active" href="<spring:url value='trip'/>">Trips</a></li>
+                        </security:authorize>
+                        <security:authorize access="hasAnyRole('ROLE_admin','ROLE_companyUser')">
+                            <li><a href="<spring:url value='driver'/> ">Drivers</a></li>
+                        </security:authorize>
+                        <security:authorize access="hasAnyRole('ROLE_admin','ROLE_companyUser')">
+                            <li><a href="<spring:url value='vehicle' />">Vehicles</a></li>
+                        </security:authorize>
+                        <security:authorize access="hasAnyRole('ROLE_admin','ROLE_companyUser')">
+                            <li><a href="<spring:url value='user' />">Users</a></li>
+                        </security:authorize>
+                        
                         <li><a href="<spring:url value="review"/>">Reviews</a></li>
-                        <li class="dropdown">
-                            <a data-toggle="dropdown" class="dropdown-toggle" data-target="#" href="#">Admin<b class="caret"></b> </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="<spring:url value='/agent'/>">Agents</a></li>
-                                <li><a href="<spring:url value='/company'/>">Companies</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="<spring:url value="logout"/>">Logout</a></li>
+
+                        <security:authorize access="hasAnyRole('ROLE_admin','ROLE_agent')">
+                            <li class="dropdown">
+                                <a data-toggle="dropdown" class="dropdown-toggle" data-target="#" href="#">Agent<b
+                                        class="caret"></b> </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="<spring:url value='/company'/>">Companies</a></li>
+                                </ul>
+                            </li>
+                        </security:authorize>
+                        <security:authorize access="hasAnyRole('ROLE_admin')">
+                            <li class="dropdown">
+                                <a data-toggle="dropdown" class="dropdown-toggle" data-target="#" href="#">Admin<b
+                                        class="caret"></b> </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="<spring:url value='/agent'/>">Agents</a></li>
+                                    <li><a href="<spring:url value='/company'/>">Companies</a></li>
+                                </ul>
+                            </li>
+                        </security:authorize>
+                        <li class="pull-right"><a href="<spring:url value="logout"/>">Logout</a></li>
+
+
                     </ul>
 
                 </div>

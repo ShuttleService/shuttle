@@ -23,6 +23,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private ShuttleUserDetailsServiceImpl userDetailsService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    private static final String ROLE_ADMIN = "admin";
+    private static final String ROLE_AGENT = "agent";
+    private static final String ROLE_COMPANY_USER  = "companyUser";
+    private static final String ROLE_WORLD = "world";
     @Override
     @Autowired
     public void configure(AuthenticationManagerBuilder builder) throws Exception {
@@ -33,8 +37,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-          .authorizeRequests().antMatchers("/resources/**").permitAll()
-                .anyRequest().hasRole("admin")
+          .authorizeRequests()
+                .antMatchers("/resources/**").permitAll()
+                .antMatchers("/home").hasAnyRole(ROLE_ADMIN,ROLE_AGENT,ROLE_COMPANY_USER,ROLE_WORLD)
+                .antMatchers("/").hasAnyRole(ROLE_ADMIN,ROLE_AGENT,ROLE_COMPANY_USER,ROLE_WORLD)
+                .antMatchers("/agent").hasRole(ROLE_ADMIN)
+                .antMatchers("/vehicle").hasAnyRole(ROLE_ADMIN,ROLE_COMPANY_USER)
+                .antMatchers("/driver").hasAnyRole(ROLE_ADMIN,ROLE_COMPANY_USER)
+                .antMatchers("/company").hasAnyRole(ROLE_ADMIN,ROLE_AGENT)
+                .antMatchers("/user").hasAnyRole(ROLE_ADMIN,ROLE_COMPANY_USER)
+                .antMatchers("/trip").hasAnyRole(ROLE_ADMIN,ROLE_WORLD,ROLE_COMPANY_USER)
                 .and()
                 .anonymous().principal("anonymous").authorities("ROLE_ANONYMOUS")
                 .and()
@@ -43,7 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 //.and()
                 .formLogin().loginPage("/login").permitAll()
-                .defaultSuccessUrl("/home")
+                //.defaultSuccessUrl("/home")
                 .and()
                 .logout();
 
