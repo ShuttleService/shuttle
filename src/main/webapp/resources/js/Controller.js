@@ -43,10 +43,6 @@ angular.module('controllers', ['services']).
         $scope.skip = 0;
         $scope.limit = RESULT_SIZE;
 
-        $scope.query = function () {
-            $scope.drivers = DriverService.query({skip: $scope.skip, limit: $scope.limit});
-        };
-
         $scope.canSave = function () {
             return FormSubmissionUtilService.canSave($scope.addForm);
         };
@@ -85,10 +81,6 @@ angular.module('controllers', ['services']).
         $scope.new = true;
         $scope.skip = 0;
         $scope.limit = RESULT_SIZE;
-
-        $scope.query = function () {
-            $scope.trips = TripService.query({skip: $scope.skip, limit: $scope.limit});
-        };
 
         $scope.canSave = function () {
             return FormSubmissionUtilService.canSave($scope.addForm);
@@ -152,13 +144,7 @@ angular.module('controllers', ['services']).
         $scope.skip = 0;
         $scope.limit = RESULT_SIZE;
 
-        $scope.query = function () {
-
-            $scope.reviews = ReviewService.query({skip: $scope.skip, limit: $scope.limit});
-        };
-
         $scope.canSave = function () {
-
             return FormSubmissionUtilService.canSave($scope.addForm);
         };
 
@@ -345,6 +331,7 @@ angular.module('controllers', ['services']).
     controller('AgentController', function ($scope, AgentService, FormSubmissionUtilService, RESULT_SIZE, $log) {
 
         $scope.agent = {};
+        $scope.pristineAgent = angular.copy($scope.agent);
         $scope.skip = 0;
         $scope.limit = RESULT_SIZE;
 
@@ -362,6 +349,10 @@ angular.module('controllers', ['services']).
                 $log.debug('Successfully saved The Agent And Got Back ' + data);
                 $scope.list();
             });
+        };
+
+        $scope.reset = function(){
+            $scope.agent = $scope.pristineAgent;
         };
 
         $scope.list();

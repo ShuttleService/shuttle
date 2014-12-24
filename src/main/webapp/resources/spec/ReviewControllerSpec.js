@@ -26,25 +26,25 @@ describe('Testing The Review Controller', function () {
         expect(RESULT_SIZE).toBeDefined();
     }));
 
-    it('Should Call The ReviewService Query With The Params On The Scope And Set The Resulting Reviews On The Scope', function () {
+    it('Should Call The ReviewService Get With The Params On The Scope And Set The Resulting Reviews On The Scope', function () {
 
         $controller('ReviewController', {
             $scope: $scope
         });
 
-        var reviews = [2, 4, 6];
+        var page = {content:[2, 4, 6]};
         var skip = 3;
         var limit = 10;
         var params = {skip: skip, limit: limit};
 
-        spyOn(ReviewService, 'query').andReturn(reviews);
+        spyOn(ReviewService, 'get').andReturn(page);
         $scope.skip = skip;
         $scope.limit = limit;
 
-        $scope.query();
+        $scope.list();
 
-        expect(ReviewService.query).toHaveBeenCalledWith(params);
-        expect($scope.reviews).toEqual(reviews);
+        expect(ReviewService.get).toHaveBeenCalledWith(params);
+        expect($scope.page).toEqual(page);
 
     });
 

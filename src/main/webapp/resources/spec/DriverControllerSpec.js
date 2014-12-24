@@ -41,11 +41,10 @@ describe('Testing The Driver Controller', function () {
         expect($scope.driver.companyName).toEqual(company.tradingAs);
     });
 
-    it('Query Should Call Query On The Service Using Parameters On The Scope And Set The Resulting Drivers On The Scope', function () {
+    it('List Should Call Get On The Service Using Parameters On The Scope And Set The Resulting Drivers On The Scope', function () {
+        var page = {content:[1, 2, 3]};
 
-        var drivers = [1, 2, 3];
-
-        spyOn(DriverService, 'query').andReturn(drivers);
+        spyOn(DriverService, 'get').andReturn(page);
 
         var controller = $controller('DriverController', {
             $scope: $scope
@@ -59,11 +58,9 @@ describe('Testing The Driver Controller', function () {
         var params = {skip: skip, limit: limit};
         $scope.skip = skip;
         $scope.limit = limit;
-
-        $scope.query();
-
-        expect(DriverService.query).toHaveBeenCalledWith(params);
-        expect($scope.drivers).toEqual(drivers);
+        $scope.list();
+        expect(DriverService.get).toHaveBeenCalledWith(params);
+        expect($scope.page).toEqual(page);
     });
 
     it('Should Have The Driver On The $scope at init', function () {

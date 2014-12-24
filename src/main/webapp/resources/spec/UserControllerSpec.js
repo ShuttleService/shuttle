@@ -39,14 +39,12 @@ describe('Testing The User Controller', function () {
         $scope.new = true;
         var user = {userName: 'Test UserName To POST '};
         $scope.user = user;
-        var savedUser = {userName: 'Test UserName Returned From POSTED'};
-        spyOn(UserService, 'save').andReturn(savedUser);
-        spyOn(UserService, 'get');
+        spyOn(UserService, 'save');
+        spyOn($scope, 'list');
         expect($scope.saveClick).toBeDefined();
         $scope.saveClick();
         expect(UserService.save).toHaveBeenCalledWith(user, jasmine.any(Function));
-        expect($scope.user.userName).toEqual(savedUser.userName);
-        expect(UserService.get).toHaveBeenCalled();
+        expect($scope.list).toHaveBeenCalled();
     });
 
     it('Should Have a user on the $scope at init', function () {

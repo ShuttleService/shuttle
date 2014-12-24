@@ -26,7 +26,7 @@ describe('Testing The Trip Controller', function () {
         expect(RESULT_SIZE).toBeDefined();
     }));
 
-    it('Should Call The Query On Trip Service With Params On The Scope And Set The Result List Of Trips On The Scope', function () {
+    it('Should Call Get On Trip Service With Params On The Scope And Set The Result Page On The Scope', function () {
 
         var controller = $controller('TripController', {
             $scope: $scope
@@ -34,19 +34,19 @@ describe('Testing The Trip Controller', function () {
 
         expect(controller).toBeDefined();
 
-        var trips = ['', 1, "3"];
+        var page = {content:['', 1, "3"]};
 
-        spyOn(TripService, 'query').andReturn(trips);
+        spyOn(TripService, 'get').andReturn(page);
         var skip = 3;
         var limit = 5;
         $scope.skip = skip;
         $scope.limit = limit;
 
         var params = {skip: skip, limit: limit};
-        $scope.query();
+        $scope.list();
 
-        expect(TripService.query).toHaveBeenCalledWith(params);
-        expect($scope.trips).toEqual(trips);
+        expect(TripService.get).toHaveBeenCalledWith(params);
+        expect($scope.page).toEqual(page);
     });
 
     it('Should Have A trip on The $scope', function () {
@@ -134,7 +134,6 @@ describe('Testing The Trip Controller', function () {
         $scope.saveClick();
 
         expect(TripService.save).toHaveBeenCalledWith(trip,jasmine.any(Function));
-        expect($scope.trip).toEqual(savedTrip);
         expect($scope.list).toHaveBeenCalled();
     });
 

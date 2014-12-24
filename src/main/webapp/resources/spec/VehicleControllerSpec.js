@@ -81,7 +81,6 @@ describe('Vehicle Controller Test', function () {
     });
 
     it('Should Call The FormSubmissionUtilService Can Save With The Form',function(){
-
         $scope.addForm = {$valid:true};
         spyOn(FormSubmissionUtilService,'canSave').andReturn(true);
         expect($scope.canSave).toBeDefined();

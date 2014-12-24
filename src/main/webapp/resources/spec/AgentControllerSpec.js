@@ -26,7 +26,16 @@ describe('Testing The Agent Controller', function () {
         expect($scope.agent).toBeDefined();
     });
 
+    it('Should Have A Pristine Agent On The $scope',function(){
+        expect($scope.pristineAgent).toBeDefined();
+    });
 
+    it('Reset Should Restore The Pristine User ',function(){
+        var pristineAgent = $scope.pristineAgent;
+        $scope.agent = {data:'Not pristine Agent'};
+        $scope.reset();
+        expect($scope.agent).toEqual(pristineAgent);
+    });
 
     it('Should Have skip and limit defined with the default values',function(){
         expect($scope.skip).toEqual(0);
