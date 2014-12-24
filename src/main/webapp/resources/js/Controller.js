@@ -265,13 +265,6 @@ angular.module('controllers', ['services']).
                 $log.debug("Did not set the Company Name Or Company Id As There Is No company on the scope");
             }
 
-            if ($scope.user.authority) {
-                $scope.user.authorities = [$scope.user.authority];
-                $log.debug('Set The Authority To ' + $scope.user.authority);
-            } else {
-                $log.debug('There Are No Authorities Defined On The Scope');
-            }
-
             $log.debug('This Be The Authorities Submitted With The User ' + $scope.user.authorities);
 
             UserService.save($scope.user, function (data) {
