@@ -3,6 +3,7 @@ package com.real.apps.shuttle.service;
 import com.real.apps.shuttle.model.Trip;
 import com.real.apps.shuttle.repository.RepositoryConfig;
 import com.real.apps.shuttle.repository.TripRepository;
+import org.bson.types.ObjectId;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnitRuleMockery;
@@ -32,7 +33,8 @@ public class TripServiceTest {
     public JUnitRuleMockery context = new JUnitRuleMockery();
     @Mock
     private TripRepository repository;
-
+    private final int skip = 0;
+    private final int limit = 100;
     @Test
     public void shouldCallSaveOnRepository(){
         final Trip trip = new Trip();
@@ -48,8 +50,6 @@ public class TripServiceTest {
 
     @Test
     public void shouldCallRepositoryListWithTheGivenSkipAndList(){
-        final int skip = 0;
-        final int limit = 100;
         final Page<Trip> page = new PageImpl<Trip>(Arrays.asList(new Trip()));
 
         context.checking(new Expectations(){{
@@ -61,4 +61,36 @@ public class TripServiceTest {
         Page<Trip> actual = impl.list(skip,limit);
         assertThat(actual.getContent().get(0),is(page.getContent().get(0)));
     }
+
+    @Test
+    public void shouldCallRepositoryFindByClientId(){
+        final Page<Trip> page = new PageImpl<>(Arrays.asList(new Trip()));
+        final ObjectId id = ObjectId.get();
+
+        context.checking(new Expectations(){{
+            oneOf(repository).findByClientId(id, new PageRequest(skip,limit));
+            will(returnValue(page));
+        }});
+
+        impl.setRepository(repository);
+        Page<Trip> actual = impl.pageByClientId(id,skip,limit);
+        assertThat(actual,is(page));
+    }
+
+    @Test
+    public void shouldCallRepositoryFindByCompanyId(){
+        final Page<Trip> page = new PageImpl<>(Arrays.asList(new Trip()));
+        final ObjectId id = ObjectId.get();
+
+        context.checking(new Expectations(){{
+            oneOf(repository).findByCompanyId(id, new PageRequest(skip,limit));
+            will(returnValue(page));
+        }});
+
+        impl.setRepository(repository);
+
+        Page<Trip> actual = impl.pageByCompanyId(id,skip,limit);
+        assertThat(actual,is(page));
+    }
+
 }

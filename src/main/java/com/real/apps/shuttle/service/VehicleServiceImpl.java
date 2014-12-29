@@ -22,6 +22,11 @@ public class VehicleServiceImpl implements VehicleService
     }
 
     @Override
+    public Page<Vehicle> pageByCompanyId(ObjectId companyId, int skip, int limit) {
+        return repository.findByCompanyId(companyId,new PageRequest(skip,limit));
+    }
+
+    @Override
     public Vehicle insert(Vehicle vehicle) {
         return repository.save(vehicle);
     }

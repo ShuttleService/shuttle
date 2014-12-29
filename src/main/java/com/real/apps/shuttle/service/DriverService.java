@@ -12,6 +12,8 @@ import java.util.List;
 public interface DriverService {
     Page<Driver> list(int skip, int limit);
 
+    Page<Driver> pageByCompanyId(ObjectId companyId,int skip, int limit);
+
     Driver insert(Driver driver);
 
     Driver delete(Driver driver);

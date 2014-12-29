@@ -3,6 +3,7 @@ package com.real.apps.shuttle.service;
 import com.real.apps.shuttle.model.Vehicle;
 import com.real.apps.shuttle.repository.RepositoryConfig;
 import com.real.apps.shuttle.repository.VehicleRepository;
+import org.bson.types.ObjectId;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnitRuleMockery;
@@ -33,6 +34,9 @@ public class VehicleServiceTest {
     @Mock
     private VehicleRepository repository;
 
+    private final int skip = 0;
+    private final int limit = 10;
+
     @Test
     public void shouldCallSaveOnRepository(){
         final Vehicle vehicle = new Vehicle();
@@ -47,9 +51,6 @@ public class VehicleServiceTest {
     }
     @Test
     public void shouldCallRepositoryListWithTheGivenSkipAndLimit(){
-        final int skip = 0;
-        final int limit = 10;
-
         final Page<Vehicle> page = new PageImpl<Vehicle>(Arrays.asList(new Vehicle()));
         context.checking(new Expectations(){{
             oneOf(repository).findAll(new PageRequest(skip,limit));
@@ -59,5 +60,18 @@ public class VehicleServiceTest {
         impl.setRepository(repository);
         Page<Vehicle> actual = impl.list(skip,limit);
         assertThat(page.getContent().get(0),is(actual.getContent().get(0)));
+    }
+    @Test
+    public void shouldCallRepositoryFindByCompanyId(){
+        final Page<Vehicle> page = new PageImpl<>(Arrays.asList(new Vehicle()));
+        final ObjectId id = ObjectId.get();
+        context.checking(new Expectations(){{
+            oneOf(repository).findByCompanyId(id,new PageRequest(skip,limit));
+            will(returnValue(page));
+        }});
+
+        impl.setRepository(repository);
+        Page<Vehicle> actual = impl.pageByCompanyId(id,skip,limit);
+        assertThat(actual,is(page));
     }
 }

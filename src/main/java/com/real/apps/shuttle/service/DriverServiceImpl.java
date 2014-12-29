@@ -21,6 +21,11 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
+    public Page<Driver> pageByCompanyId(ObjectId companyId,int skip,int limit) {
+        return repository.findByCompanyId(companyId,new PageRequest(skip,limit));
+    }
+
+    @Override
     public Driver insert(Driver driver) {
         return repository.save(driver);
     }

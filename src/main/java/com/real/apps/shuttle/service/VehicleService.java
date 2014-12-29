@@ -12,6 +12,8 @@ import java.util.List;
 public interface VehicleService {
     Page<Vehicle> list(int skip, int limit);
 
+    Page<Vehicle> pageByCompanyId(ObjectId companyId,int skip, int limit);
+
     Vehicle insert(Vehicle vehicle);
 
     Vehicle update(Vehicle vehicle);

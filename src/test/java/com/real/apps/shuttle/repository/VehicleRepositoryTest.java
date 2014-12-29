@@ -28,7 +28,7 @@ public class VehicleRepositoryTest {
     private VehicleRepository repository;
     @Autowired
     private MongoOperations operations;
-    
+
     @After
     public void cleanUp(){
         operations.dropCollection("vehicle");

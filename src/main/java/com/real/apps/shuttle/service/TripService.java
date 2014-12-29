@@ -12,6 +12,10 @@ import java.util.List;
 public interface TripService {
     Page<Trip> list(int skip, int limit);
 
+    Page<Trip> pageByCompanyId(ObjectId companyId,int skip,int limit);
+
+    Page<Trip> pageByClientId(ObjectId companyId,int skip, int limit);
+
     Trip insert(Trip trip);
 
     Trip delete(Trip trip);
