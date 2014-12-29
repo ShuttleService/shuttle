@@ -26,6 +26,8 @@ public class AgentRepositotyTest {
     private AgentRepository repository;
     @Autowired
     private MongoOperations template;
+    private String agentName = "Test Agent Name 1";
+    private String agentName2 = "Test Agent Name 2";
 
     @After
     public void cleanUp(){
@@ -48,9 +50,6 @@ public class AgentRepositotyTest {
 
     @Test
     public void shouldFindTheGivenNumberOfAgents(){
-        String agentName = "Test Agent Name 1";
-        String agentName2 = "Test Agent Name 2";
-
         Agent agent = new Agent();
         agent.setFullName(agentName);
         agent.setSlug(agentName);

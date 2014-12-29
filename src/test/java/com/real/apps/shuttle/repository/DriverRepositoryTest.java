@@ -1,6 +1,8 @@
 package com.real.apps.shuttle.repository;
 
 import com.real.apps.shuttle.model.Driver;
+import org.bson.types.ObjectId;
+import org.junit.After;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
@@ -26,6 +28,10 @@ public class DriverRepositoryTest {
     @Autowired
     private MongoOperations operations;
 
+    @After
+    public void cleanUp(){
+        operations.dropCollection("driver");
+    }
     @Test
     public void shouldInsertADriverInTheDatabase(){
         String name = "Test Driver Name To Be Inserted Into The Database";
@@ -50,6 +56,32 @@ public class DriverRepositoryTest {
         Page<Driver> page = repository.findAll(new PageRequest(skip,limit));
         assertThat(page.getSize(),is(limit));
         operations.dropCollection("driver");
+    }
+
+    @Test
+    public void shouldFindOnlyDriversWithAGivenCompanyId(){
+        ObjectId id = ObjectId.get();
+        ObjectId control = ObjectId.get();
+
+        Driver driverToBeFound = new Driver();
+        driverToBeFound.setCompanyId(id);
+        driverToBeFound.setEmail("Test Email For Driver To Be Found");
+        Driver driverToBeFound2 = new Driver();
+        driverToBeFound2.setCompanyId(id);
+        driverToBeFound2.setEmail("Test Email For Driver 2 Not To Be Found");
+
+        Driver driverNotToBeFound = new Driver();
+        driverNotToBeFound.setCompanyId(control);
+        driverNotToBeFound.setEmail("Test Email For Driver Not To Be Found");
+
+        assertNotNull(repository.save(driverNotToBeFound).getId());
+        assertNotNull(repository.save(driverToBeFound).getId());
+        assertNotNull(repository.save(driverToBeFound2).getId());
+
+        Page<Driver> page = repository.findByCompanyId(id,new PageRequest(0,100));
+        assertThat(page.getTotalElements(),is(2l));
+        assertThat(page.getContent().get(0).getCompanyId(),is(id));
+        assertThat(page.getContent().get(1).getCompanyId(),is(id));
     }
 
 }

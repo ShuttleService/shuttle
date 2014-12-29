@@ -1,7 +1,9 @@
-package com.real.apps.shuttle.repository;
+package com.real.apps.shuttle.service;
 
 import com.real.apps.shuttle.model.Agent;
 
+import com.real.apps.shuttle.repository.AgentRepository;
+import com.real.apps.shuttle.repository.RepositoryConfig;
 import com.real.apps.shuttle.service.AgentServiceImpl;
 import com.real.apps.shuttle.service.ServiceConfig;
 import org.jmock.Expectations;

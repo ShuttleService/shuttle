@@ -2,6 +2,8 @@ package com.real.apps.shuttle.repository;
 
 import com.real.apps.shuttle.model.User;
 import org.bson.types.ObjectId;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 /**
@@ -9,4 +11,5 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  */
 public interface UserRepository extends PagingAndSortingRepository<User,ObjectId>{
   User findByUsername(String username);
+  Page<User> findByCompanyId(ObjectId companyId,Pageable pageable);
 }

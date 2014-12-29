@@ -1,6 +1,7 @@
 package com.real.apps.shuttle.repository;
 
 import com.real.apps.shuttle.model.User;
+import org.bson.types.ObjectId;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +17,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.sameInstance;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -79,4 +81,32 @@ public class UserRepositoryTest {
     User actual = repository.findByUsername(username);
     assertThat(actual,is(user));
   }
+
+  @Test
+  public void shouldFindOnlyUsersWithTheGivenCompanId(){
+    ObjectId id = ObjectId.get();
+    ObjectId control = ObjectId.get();
+    User userToBeFound = new User();
+    userToBeFound.setUsername("Test Username For User To Be Found");
+    userToBeFound.setEmail("Test Email For User To Be Found");
+    userToBeFound.setCompanyId(id);
+    User userToBeFound2 = new User();
+    userToBeFound2.setEmail("Test Email For User To Be Found 2");
+    userToBeFound2.setUsername("Test User Name For User To Be Found 2");
+    userToBeFound2.setCompanyId(id);
+    User userNotToBeFound = new User();
+    userNotToBeFound.setEmail("Test Email For User Not To Be Found");
+    userNotToBeFound.setUsername("Test Username For User Not To Be Found");
+    userNotToBeFound.setCompanyId(control);
+
+    assertNotNull(repository.save(userToBeFound).getId());
+    assertNotNull(repository.save(userToBeFound2).getId());
+    assertNotNull(repository.save(userNotToBeFound).getId());
+
+    Page<User> actual = repository.findByCompanyId(id,new PageRequest(0,100));
+    assertThat(actual.getTotalElements(),is(2l));
+    assertThat(actual.getContent().get(0).getCompanyId(),is(id));
+    assertThat(actual.getContent().get(1).getCompanyId(),is(id));
+  }
+
 }

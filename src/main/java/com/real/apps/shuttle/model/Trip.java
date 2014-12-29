@@ -15,6 +15,8 @@ public class Trip extends CompanyModel {
     private String clientName;
     @Indexed
     private String destination;
+    @Indexed
+    private ObjectId clientId;
     private int pricePerKm;
     private int price;
     private String vehicleName;
@@ -121,11 +123,19 @@ public class Trip extends CompanyModel {
         this.driverId = driverId;
     }
 
+    public ObjectId getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(ObjectId clientId) {
+        this.clientId = clientId;
+    }
+
     @Override
     public String toString() {
 
-        return String.format("{source:%s,id:%s,clientName:%s,destination:%s,pricePerKm:%d,price:%d,vehicleName:%s,vehicleId:%s,driverName:%s,driverId:%s,distance:%d,clientCellNumber:%s}",source, id, clientName, destination
-                ,pricePerKm, price, vehicleName,vehicleId,driverName,driverId,distance,clientCellNumber);
+        return String.format("{source:%s,id:%s,clientName:%s,destination:%s,pricePerKm:%d,price:%d,vehicleName:%s,vehicleId:%s,driverName:%s,driverId:%s,distance:%d," +
+                        "clientCellNumber:%s,clientId:%s}", source, id, clientName, destination,pricePerKm, price, vehicleName,vehicleId,driverName,driverId,distance,clientCellNumber,clientId);
     }
     @Override
     public boolean equals(Object object){
