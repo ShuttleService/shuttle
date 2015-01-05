@@ -34,6 +34,7 @@ public class HomeControllerTest {
     private WebApplicationContext webApplicationContext;
     private MockMvc mockMvc;
     final String HOME = "home";
+
     @Before
     public void init(){
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
@@ -46,7 +47,6 @@ public class HomeControllerTest {
     }
 
     @Test
-
     public void rootShouldRenderHomePage() throws Exception {
         mockMvc.perform(get("/")).andDo(print()).andExpect(status().isOk()).andExpect(view().name(HOME));
     }
