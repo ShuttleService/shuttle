@@ -27,6 +27,10 @@ import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.*;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -39,7 +43,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class AgentControllerTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
-
     @Autowired
     private AgentController controller;
     @Rule
@@ -50,13 +53,15 @@ public class AgentControllerTest {
     private static final String VIEW_PAGE = AgentController.VIEW_NAME;
 
     @Before
-    public void init(){
+    public void init() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
+
     @Test
     public void shouldRenderAgentPage() throws Exception {
-        mockMvc.perform(get("/"+VIEW_PAGE)).andDo(print()).andExpect(status().isOk()).andExpect(view().name(VIEW_PAGE));
+        mockMvc.perform(get("/" + VIEW_PAGE)).andDo(print()).andExpect(status().isOk()).andExpect(view().name(VIEW_PAGE));
     }
+
     @Test
     public void shouldCallServiceFindAll() throws Exception {
         String agentName = "Test Agent Name To Be Return In The List Of Find All";
@@ -65,13 +70,14 @@ public class AgentControllerTest {
         final Page<Agent> page = new PageImpl<>(agents);
         agent.setFullName(agentName);
         final int skip = 0, limit = 2;
-        context.checking(new Expectations(){{
-            oneOf(service).list(skip,limit);
+        context.checking(new Expectations() {{
+            oneOf(service).list(skip, limit);
             will(returnValue(page));
         }});
         controller.setService(service);
-        mockMvc.perform(get(String.format("/%s/%d/%d",VIEW_PAGE,skip,limit))).andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$.content[0].fullName").value(agentName));
+        mockMvc.perform(get(String.format("/%s/%d/%d", VIEW_PAGE, skip, limit))).andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$.content[0].fullName").value(agentName));
     }
+
     @Test
     public void shouldCallInsertOnSave() throws Exception {
         String agentName = "Test Agent Name To Be Mock Inserted";
@@ -79,13 +85,18 @@ public class AgentControllerTest {
         agent.setFullName(agentName);
         Gson gson = new Gson();
         String agentString = gson.toJson(agent);
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
             oneOf(service).insert(with(any(Agent.class)));
             will(returnValue(agent));
         }});
 
         controller.setService(service);
-        mockMvc.perform(post("/"+VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(agentString)).andDo(print()).andExpect(status().isOk()).
+        mockMvc.perform(post("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(agentString)).andDo(print()).andExpect(status().isOk()).
                 andExpect(jsonPath("$.fullName").value(agentName));
+    }
+
+    @Test
+    public void shouldGetAllAgentsIfAnAdminIsLoggedIn() {
+
     }
 }
