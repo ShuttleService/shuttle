@@ -29,7 +29,7 @@ public class AgentController {
     @ResponseBody
     public Page<Agent> page(@PathVariable("skip") int skip,@PathVariable("limit") int limit){
         logger.debug(String.format("Finding Agents {skip:%d,limit:%d}",skip,limit));
-        return service.list(skip,limit);
+        return service.page(skip,limit);
     }
 
     @RequestMapping(method = RequestMethod.POST)

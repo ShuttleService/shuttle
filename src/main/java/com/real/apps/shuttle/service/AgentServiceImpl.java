@@ -15,7 +15,7 @@ public class AgentServiceImpl implements AgentService {
     @Autowired
     private AgentRepository repository;
     @Override
-    public Page<Agent> list(int skip, int limit) {
+    public Page<Agent> page(int skip, int limit) {
         return repository.findAll(new PageRequest(skip,limit));
     }
 

@@ -47,6 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/company").hasAnyRole(ROLE_ADMIN,ROLE_AGENT)
                 .antMatchers("/user").hasAnyRole(ROLE_ADMIN,ROLE_COMPANY_USER)
                 .antMatchers("/trip").hasAnyRole(ROLE_ADMIN,ROLE_WORLD,ROLE_COMPANY_USER)
+                .antMatchers("/admin").hasAnyRole(ROLE_ADMIN)
                 .and()
                 .anonymous().principal("anonymous").authorities("ROLE_ANONYMOUS")
                 .and()

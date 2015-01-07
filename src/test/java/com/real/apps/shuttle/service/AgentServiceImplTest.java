@@ -69,7 +69,7 @@ public class AgentServiceImplTest {
         }});
         service.setRepository(repository);
 
-        Page<Agent> actual = service.list(skip,limit);
+        Page<Agent> actual = service.page(skip,limit);
         assertThat(actual,is(page));
     }
 
