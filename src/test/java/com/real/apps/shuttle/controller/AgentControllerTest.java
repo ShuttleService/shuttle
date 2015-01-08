@@ -29,11 +29,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.real.apps.shuttle.controller.UserDetailsUtils.admin;
+import static com.real.apps.shuttle.controller.UserDetailsUtils.agent;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.junit.Assert.*;
 /**
  * Created by zorodzayi on 14/12/17.
  */
@@ -64,6 +66,7 @@ public class AgentControllerTest {
     }
     @After
     public void cleanUp(){
+        assertNotNull(agentService);
         controller.setService(agentService);
     }
     @Test
@@ -95,6 +98,26 @@ public class AgentControllerTest {
         controller.setService(service);
         mockMvcWithSecurity.perform(get(String.format("/%s/%d/%d",VIEW_PAGE,skip,limit)).with(user(admin(ObjectId.get())))).andExpect(status().isOk()).andExpect(jsonPath("$.content[0].fullName").value(agentName));
         context.assertIsSatisfied();
+    }
+
+    @Test
+    public void shouldCallServiceFindOneIfAnAgentIsLoggedIn() throws Exception {
+        String agentName = "Test Agent Name To Be Returned By Find One.";
+        final ObjectId id = ObjectId.get();
+        final Agent agent = new Agent();
+        agent.setFullName(agentName);
+        agent.setId(id);
+
+        context.checking(new Expectations(){{
+            oneOf(service).findOne(id);
+            will(returnValue(agent));
+        }});
+
+        controller.setService(service);
+
+        mockMvcWithSecurity.perform(get(String.format("/%s/%d/%d",VIEW_PAGE,skip,limit)).with(user(agent(id)))).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.content[0].id._time").value(id.getTimestamp()));
     }
 
     @Test

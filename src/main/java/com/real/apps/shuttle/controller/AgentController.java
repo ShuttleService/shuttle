@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.UnknownHttpStatusCodeException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
+import static com.real.apps.shuttle.miscellaneous.Role.*;
 /**
  * Created by zorodzayi on 14/12/17.
  */
@@ -34,9 +37,23 @@ public class AgentController {
     public Page<Agent> page(@PathVariable("skip") int skip,@PathVariable("limit") int limit,@AuthenticationPrincipal User user){
         logger.debug(String.format("Finding Agents {skip:%d,limit:%d,authenticatedUser:%s}",skip,limit,user));
         if(user == null){
-            return  new PageImpl<>(new ArrayList<Agent>());
+            return new PageImpl<>(new ArrayList<Agent>());
         }
-        return service.page(skip,limit);
+
+        String role = user.getAuthorities() != null && user.getAuthorities().iterator().hasNext() ?
+        user.getAuthorities().iterator().next().getAuthority() : "";
+
+        if(ADMIN.equals(role)){
+            return service.page(skip,limit);
+        }else if(AGENT.equals(role) && user.getAgentId() != null ){
+            Agent agent = service.findOne(user.getAgentId());
+            List<Agent> agents = new ArrayList<>();
+            if(agent != null ){
+                agents.add(agent);
+            }
+            return new PageImpl<>(agents);
+        }
+        return new PageImpl<>(new ArrayList<Agent>());
     }
 
     @RequestMapping(method = RequestMethod.POST)

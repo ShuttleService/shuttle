@@ -1,6 +1,7 @@
 package com.real.apps.shuttle.service;
 
 import com.real.apps.shuttle.model.Agent;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 
 /**
@@ -8,5 +9,6 @@ import org.springframework.data.domain.Page;
  */
 public interface AgentService {
     Page<Agent> page(int skip,int limit);
+    Agent findOne(ObjectId id);
     Agent insert(Agent agent);
 }

@@ -37,6 +37,9 @@ public class User extends CompanyModel implements UserDetails {
     private Boolean accountNonLocked = true;
     private Boolean credentialsNonExpired = true;
     private Boolean enabled = true;
+    private ObjectId agentId;
+    private String agentName;
+
     private Collection<SimpleGrantedAuthority> authorities = new HashSet<>();
 
     public void setAccountNonExpired(Boolean accountNonExpired) {
@@ -186,6 +189,22 @@ public class User extends CompanyModel implements UserDetails {
         return surname;
     }
 
+    public ObjectId getAgentId() {
+        return agentId;
+    }
+
+    public void setAgentId(ObjectId agentId) {
+        this.agentId = agentId;
+    }
+
+    public String getAgentName() {
+        return agentName;
+    }
+
+    public void setAgentName(String agentName) {
+        this.agentName = agentName;
+    }
+
     public void setSurname(String surname) {
         this.surname = surname;
     }
@@ -194,8 +213,8 @@ public class User extends CompanyModel implements UserDetails {
     public String toString() {
 
         return String.format("{id:%s,username:%s,password:%s,firstName:%s,surname:%s,email:%s,companyName:%s,companyId:%s,cellNumber:%s,dateOfBirth:%s,streetAddress:%s,surburb:%s,town:%s,province:%s,postalCode:%s," +
-                        " accountNonExpired:%b,accountNonLocked:%b,credentialsNonExpired:%b,enabled:%b,authorities:%s}", id, username, password, firstName, surname, email, companyName, companyId, cellNumber, dateOfBirth,
-                streetAddress, suburb, town, province, postalCode, accountNonExpired, accountNonLocked, credentialsNonExpired, email, authorities);
+                        " accountNonExpired:%b,accountNonLocked:%b,credentialsNonExpired:%b,enabled:%b,authorities:%s,agentId:%s,agentName:%s}", id, username, password, firstName, surname, email, companyName, companyId, cellNumber, dateOfBirth,
+                streetAddress, suburb, town, province, postalCode, accountNonExpired, accountNonLocked, credentialsNonExpired, email, authorities,agentId,agentName);
     }
 
     @Override

@@ -6,9 +6,11 @@ import com.real.apps.shuttle.repository.AgentRepository;
 import com.real.apps.shuttle.repository.RepositoryConfig;
 import com.real.apps.shuttle.service.AgentServiceImpl;
 import com.real.apps.shuttle.service.ServiceConfig;
+import org.bson.types.ObjectId;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnitRuleMockery;
+import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,7 +40,12 @@ public class AgentServiceImplTest {
     public JUnitRuleMockery context = new JUnitRuleMockery();
     @Mock
     private AgentRepository repository;
-
+    @Autowired
+    private AgentRepository agentRepository;
+    @After
+    public void cleanUp(){
+        service.setRepository(agentRepository);
+    }
     @Test
     public void shouldCallRepositorySave(){
         final Agent agent = new Agent();
@@ -71,6 +78,24 @@ public class AgentServiceImplTest {
 
         Page<Agent> actual = service.page(skip,limit);
         assertThat(actual,is(page));
+    }
+
+    @Test
+    public void shouldCallRepositoryFindOne(){
+        final ObjectId id = ObjectId.get();
+        final Agent agent = new Agent();
+        agent.setId(id);
+
+        context.checking(new Expectations(){{
+            oneOf(repository).findOne(id);
+            will(returnValue(agent));
+        }});
+
+        service.setRepository(repository);
+
+        Agent actual = service.findOne(id);
+        assertThat(actual,is(agent));
+        context.assertIsSatisfied();
     }
 
 }
