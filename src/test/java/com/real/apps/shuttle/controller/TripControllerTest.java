@@ -10,10 +10,7 @@ import org.bson.types.ObjectId;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnitRuleMockery;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -50,12 +47,16 @@ public class TripControllerTest {
     public JUnitRuleMockery context = new JUnitRuleMockery();
     @Mock
     private TripService service;
-
+    @Autowired
+    private TripService tripService;
     @Before
     public void init() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
-
+    @After
+    public void cleanUp(){
+        controller.setService(tripService);
+    }
     @Test
     public void shouldRenderTripPage() throws Exception {
         mockMvc.perform(get("/" + VIEW_PAGE)).andDo(print()).andExpect(view().name(VIEW_PAGE)).andExpect(status().isOk());

@@ -1,8 +1,10 @@
 package com.real.apps.shuttle.security;
 
 import com.real.apps.shuttle.config.MvcConfiguration;
+import com.real.apps.shuttle.controller.AgentController;
 import com.real.apps.shuttle.model.User;
 import com.real.apps.shuttle.repository.UserRepository;
+import com.real.apps.shuttle.service.AgentService;
 import org.bson.types.ObjectId;
 import org.junit.Before;
 import org.junit.Test;
@@ -253,7 +255,7 @@ public class SecurityConfigTest {
         mockMvc.perform(get(vehicle).with(user(world(id)))).andExpect(status().isForbidden());
         mockMvc.perform(get(vehicle)).andExpect(status().is3xxRedirection());
     }
-    
+
     @Test
     public void allShouldAccessReviewPage() throws Exception {
         mockMvc.perform(get("/review")).andExpect(status().isOk());

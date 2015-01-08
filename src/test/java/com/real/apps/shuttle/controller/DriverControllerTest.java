@@ -9,6 +9,7 @@ import org.bson.types.ObjectId;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnitRuleMockery;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -47,17 +48,21 @@ public class DriverControllerTest {
     public JUnitRuleMockery context = new JUnitRuleMockery();
     @Mock
     private DriverService service;
-
+    @Autowired
+    private DriverService driverService;
     private Logger logger = Logger.getLogger(DriverControllerTest.class);
     private MockMvc mockMvc;
     private final String VIEW_PAGE = "driver";
-
 
     @Before
     public void init() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
+    @After
+    public void cleanUp(){
+        controller.setService(driverService);
+    }
     @Test
     public void shouldRenderDriverPage() throws Exception {
         mockMvc.perform(get("/" + VIEW_PAGE)).andDo(print()).andExpect(status().isOk()).andExpect(view().name(VIEW_PAGE));

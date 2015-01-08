@@ -8,6 +8,7 @@ import org.bson.types.ObjectId;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnitRuleMockery;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -50,16 +51,21 @@ public class AgentControllerTest {
     public JUnitRuleMockery context = new JUnitRuleMockery();
     @Mock
     private AgentService service;
+    @Autowired
+    private AgentService agentService;
     private MockMvc mockMvc;
     private MockMvc mockMvcWithSecurity;
     private static final String VIEW_PAGE = AgentController.VIEW_NAME;
     private final int skip = 0, limit = 2;
     @Before
     public void init() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).addFilters().alwaysDo(print()).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).alwaysDo(print()).build();
         mockMvcWithSecurity = MockMvcBuilders.webAppContextSetup(webApplicationContext).addFilter(springSecurityFilterChain).alwaysDo(print()).build();
     }
-
+    @After
+    public void cleanUp(){
+        controller.setService(agentService);
+    }
     @Test
     public void shouldRenderAgentPage() throws Exception {
         mockMvc.perform(get("/" + VIEW_PAGE)).andDo(print()).andExpect(status().isOk()).andExpect(view().name(VIEW_PAGE));

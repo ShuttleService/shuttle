@@ -8,6 +8,7 @@ import org.bson.types.ObjectId;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnitRuleMockery;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -47,13 +48,18 @@ public class CompanyControllerTest {
     private MockMvc mockMvc;
     @Mock
     private CompanyService service;
+    @Autowired
+    private CompanyService companyService;
     private static final String VIEW_PAGE = CompanyController.VIEW_PAGE;
 
     @Before
     public void init() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
-
+    @After
+    public void cleanUp(){
+        controller.setService(companyService);
+    }
     @Test
     public void shouldRenderCompanyPage() throws Exception {
         mockMvc.perform(get("/" + VIEW_PAGE)).andDo(print()).

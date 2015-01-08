@@ -8,6 +8,7 @@ import org.bson.types.ObjectId;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnitRuleMockery;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -49,12 +50,16 @@ public class VehicleControllerTest {
     public JUnitRuleMockery context = new JUnitRuleMockery();
     @Mock
     private VehicleService service;
-
+    @Autowired
+    private VehicleService vehicleService;
     @Before
     public void init() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
-
+    @After
+    public void cleanUp(){
+        controller.setService(vehicleService);
+    }
     @Test
     public void shouldRenderVehiclePage() throws Exception {
 

@@ -7,6 +7,7 @@ import com.real.apps.shuttle.service.UserService;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnitRuleMockery;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -48,13 +49,18 @@ public class UserControllerTest {
     private static final String VIEW_PAGE = UserController.VIEW_NAME;
     @Mock
     private UserService service;
-
+    @Autowired
+    private UserService userService;
 
     @Before
     public void init() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
+    @After
+    public void cleanUp(){
+        controller.setService(userService);
+    }
     @Test
     public void shouldRenderUserHomePage() throws Exception {
 
