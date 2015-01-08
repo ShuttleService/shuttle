@@ -1,15 +1,19 @@
 package com.real.apps.shuttle.controller;
 
 import com.real.apps.shuttle.model.Agent;
+import com.real.apps.shuttle.model.User;
 import com.real.apps.shuttle.service.AgentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.UnknownHttpStatusCodeException;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by zorodzayi on 14/12/17.
@@ -27,8 +31,11 @@ public class AgentController {
     }
     @RequestMapping(value = "/{skip}/{limit}")
     @ResponseBody
-    public Page<Agent> page(@PathVariable("skip") int skip,@PathVariable("limit") int limit){
-        logger.debug(String.format("Finding Agents {skip:%d,limit:%d}",skip,limit));
+    public Page<Agent> page(@PathVariable("skip") int skip,@PathVariable("limit") int limit,@AuthenticationPrincipal User user){
+        logger.debug(String.format("Finding Agents {skip:%d,limit:%d,authenticatedUser:%s}",skip,limit,user));
+        if(user == null){
+            return  new PageImpl<>(new ArrayList<Agent>());
+        }
         return service.page(skip,limit);
     }
 

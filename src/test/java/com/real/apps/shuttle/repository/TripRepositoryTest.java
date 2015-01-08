@@ -28,7 +28,6 @@ public class TripRepositoryTest {
     private TripRepository repository;
     @Autowired
     private MongoOperations template;
-
     @Test
     public void cleanUp(){
         template.dropCollection("trip");

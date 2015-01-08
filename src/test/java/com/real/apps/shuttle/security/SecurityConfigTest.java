@@ -23,8 +23,8 @@ import java.util.Arrays;
 
 import static com.real.apps.shuttle.controller.UserDetailsUtils.*;
 import static org.junit.Assert.assertNotNull;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -49,9 +49,10 @@ public class SecurityConfigTest {
     private MongoOperations mongoTemplate;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
-    private  ObjectId id = ObjectId.get();
+    private ObjectId id = ObjectId.get();
+
     @Before
-    public void init(){
+    public void init() {
         assertNotNull(webApplicationContext);
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).addFilters(springSecurityFilterChain).alwaysDo(print()).build();
         assertNotNull(springSecurityFilterChain);
@@ -106,6 +107,20 @@ public class SecurityConfigTest {
     }
 
     @Test
+    public void adminAndAgentShouldAccessAgents() throws Exception {
+        String agent = "/agent/0/100";
+        mockMvc.perform(get(agent).with(user(admin(id)))).andExpect(status().isOk());
+        mockMvc.perform(get(agent).with(user(agent(id)))).andExpect(status().isOk());
+    }
+
+    @Test
+    public void nonAdminAndNonAgentShouldBeForbiddenAccessToAgents() throws Exception {
+        String agent = "/agent/0/100";
+        mockMvc.perform(get(agent).with(user(companyUser(id)))).andExpect(status().isForbidden());
+        mockMvc.perform(get(agent).with(user(world(id)))).andExpect(status().isForbidden());
+        mockMvc.perform(get(agent)).andExpect(status().is3xxRedirection());
+    }
+    @Test
     public void adminAndAgentShouldAccessTheCompanyPage() throws Exception {
         String company = "/company";
         mockMvc.perform(get(company).with(user(admin(id)))).andExpect(status().isOk());
@@ -113,10 +128,24 @@ public class SecurityConfigTest {
     }
 
     @Test
-    public void nonAdminAndAgentShouldBeForbiddenAccessToTheCompanyPage() throws Exception {
+    public void nonAdminAndNonAgentShouldBeForbiddenAccessToTheCompanyPage() throws Exception {
         String company = "/company";
         mockMvc.perform(get(company).with(user(companyUser(id)))).andExpect(status().isForbidden());
         mockMvc.perform(get(company).with(user(world(id)))).andExpect(status().isForbidden());
+        mockMvc.perform(get(company)).andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    public void adminAgentCompanyUserAndWorldShouldAccessCompanies() throws Exception {
+        String company = "/company/0/100";
+        mockMvc.perform(get(company).with(user(admin(id)))).andExpect(status().isOk());
+        mockMvc.perform(get(company).with(user(companyUser(id)))).andExpect(status().isOk());
+        mockMvc.perform(get(company).with(user(world(id)))).andExpect(status().isOk());
+    }
+
+    @Test
+    public void nonAdminNonAgentNonCompanyUserShouldBeForbiddenAccessToCompanies() throws Exception {
+        String company = "/company/0/100";
         mockMvc.perform(get(company)).andExpect(status().is3xxRedirection());
     }
 
@@ -125,6 +154,21 @@ public class SecurityConfigTest {
         String driver = "/driver";
         mockMvc.perform(get(driver).with(user(admin(id)))).andExpect(status().isOk());
         mockMvc.perform(get(driver).with(user(companyUser(id)))).andExpect(status().isOk());
+    }
+
+    @Test
+    public void adminCompanyUserAndWorldShouldAccessTheDrivers() throws Exception {
+        String driver = "/driver/0/100";
+        mockMvc.perform(get(driver).with(user(admin(id)))).andExpect(status().isOk());
+        mockMvc.perform(get(driver).with(user(companyUser(id)))).andExpect(status().isOk());
+        mockMvc.perform(get(driver).with(user(world(id)))).andExpect(status().isOk());
+    }
+
+    @Test
+    public void nonAdminNonCompanyUserAndNonWorldShouldBeForbiddenAccessToDrivers() throws Exception {
+        String driver = "/driver/0/100";
+        mockMvc.perform(get(driver).with(user(agent(id)))).andExpect(status().isForbidden());
+        mockMvc.perform(get(driver)).andExpect(status().is3xxRedirection());
     }
 
     @Test
@@ -143,6 +187,20 @@ public class SecurityConfigTest {
     }
 
     @Test
+    public void adminWorldAndCompanyUserShouldAccessTrips() throws Exception {
+        String trip = "/trip/0/100";
+        mockMvc.perform(get(trip).with(user(admin(id)))).andExpect(status().isOk());
+        mockMvc.perform(get(trip).with(user(companyUser(id)))).andExpect(status().isOk());
+        mockMvc.perform(get(trip).with(user(world(id)))).andExpect(status().isOk());
+    }
+
+    @Test
+    public void nonAdminNonWorldAndNonCompanyUserShouldBeForbiddenAccessToTrips() throws Exception {
+        String trip = "/trip/0/100";
+        mockMvc.perform(get(trip).with(user(agent(id)))).andExpect(status().isForbidden());
+        mockMvc.perform(get(trip)).andExpect(status().is3xxRedirection());
+    }
+    @Test
     public void companyUserAndAdminShouldAccessTheUserPage() throws Exception {
         String user = "/user";
         mockMvc.perform(get(user).with(user(admin(id)))).andExpect(status().isOk());
@@ -150,8 +208,23 @@ public class SecurityConfigTest {
     }
 
     @Test
-    public void noneAdminAndNonCompanyUserShouldBeForbiddenAccessToTheUserPage() throws Exception {
+    public void nonAdminAndNonCompanyUserShouldBeForbiddenAccessToTheUserPage() throws Exception {
         String user = "/user";
+        mockMvc.perform(get(user).with(user(agent(id)))).andExpect(status().isForbidden());
+        mockMvc.perform(get(user).with(user(world(id)))).andExpect(status().isForbidden());
+        mockMvc.perform(get(user)).andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    public void adminAndCompanyUserShouldAccessUsers() throws Exception {
+        String vehicle = "/user/0/100";
+        mockMvc.perform(get(vehicle).with(user(admin(id)))).andExpect(status().isOk());
+        mockMvc.perform(get(vehicle).with(user(companyUser(id)))).andExpect(status().isOk());
+    }
+
+    @Test
+    public void nonAdminAndNonCompanyUserShouldBeForbiddenAccessToUsers() throws Exception {
+        String user = "/user/0/100";
         mockMvc.perform(get(user).with(user(agent(id)))).andExpect(status().isForbidden());
         mockMvc.perform(get(user).with(user(world(id)))).andExpect(status().isForbidden());
         mockMvc.perform(get(user)).andExpect(status().is3xxRedirection());
@@ -165,13 +238,22 @@ public class SecurityConfigTest {
     }
 
     @Test
+    public void allShouldAccessVehicles() throws Exception {
+        String vehicle = "/vehicle/0/100";
+        mockMvc.perform(get(vehicle).with(user(admin(id)))).andExpect(status().isOk());
+        mockMvc.perform(get(vehicle).with(user(companyUser(id)))).andExpect(status().isOk());
+        mockMvc.perform(get(vehicle).with(user(agent(id)))).andExpect(status().isOk());
+        mockMvc.perform(get(vehicle).with(user(world(id)))).andExpect(status().isOk());
+    }
+
+    @Test
     public void nonAdminAndNonCompanyShouldBeForbiddenAccessToTheVehiclePage() throws Exception {
         String vehicle = "/vehicle";
         mockMvc.perform(get(vehicle).with(user(agent(id)))).andExpect(status().isForbidden());
         mockMvc.perform(get(vehicle).with(user(world(id)))).andExpect(status().isForbidden());
         mockMvc.perform(get(vehicle)).andExpect(status().is3xxRedirection());
     }
-
+    
     @Test
     public void allShouldAccessReviewPage() throws Exception {
         mockMvc.perform(get("/review")).andExpect(status().isOk());

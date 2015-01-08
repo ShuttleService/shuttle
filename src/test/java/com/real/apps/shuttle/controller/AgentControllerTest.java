@@ -56,7 +56,7 @@ public class AgentControllerTest {
     private final int skip = 0, limit = 2;
     @Before
     public void init() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).alwaysDo(print()).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).addFilters().alwaysDo(print()).build();
         mockMvcWithSecurity = MockMvcBuilders.webAppContextSetup(webApplicationContext).addFilter(springSecurityFilterChain).alwaysDo(print()).build();
     }
 
@@ -66,16 +66,16 @@ public class AgentControllerTest {
     }
 
     @Test
-    public void shouldNotCallServiceAtAllIfThereIsNoUserLoggedIn() throws Exception {
+    public void shouldNotCallServiceIfThereIsNoUserLoggedIn() throws Exception {
         context.checking(new Expectations() {{
             never(service).page(skip, limit);
         }});
         controller.setService(service);
-        mockMvc.perform(get(String.format("/%s/%d/%d", VIEW_PAGE, skip, limit))).andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$.content").value(null));
+        mockMvc.perform(get(String.format("/%s/%d/%d", VIEW_PAGE, skip, limit))).andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$.total").value(0));
     }
 
     @Test
-    public void shouldCallServiceFindAllIfAnAdminIsLoggedIn() throws Exception {
+    public void shouldCallServicePageIfAnAdminIsLoggedIn() throws Exception {
         String agentName = "Test Agent Name To Be Return In The List Of Find All";
         final Agent agent = new Agent();
         agent.setFullName(agentName);
