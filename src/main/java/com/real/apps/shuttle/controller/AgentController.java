@@ -36,8 +36,10 @@ public class AgentController {
     @ResponseBody
     public Page<Agent> page(@PathVariable("skip") int skip,@PathVariable("limit") int limit,@AuthenticationPrincipal User user){
         logger.debug(String.format("Finding Agents {skip:%d,limit:%d,authenticatedUser:%s}",skip,limit,user));
+        Page<Agent> emptyPage = new PageImpl<>(new ArrayList<Agent>());
         if(user == null){
-            return new PageImpl<>(new ArrayList<Agent>());
+            logger.debug(String.format("There Is No Authenticated User. Will Return Empty Page"));
+            return emptyPage;
         }
 
         String role = user.getAuthorities() != null && user.getAuthorities().iterator().hasNext() ?
@@ -53,7 +55,7 @@ public class AgentController {
             }
             return new PageImpl<>(agents);
         }
-        return new PageImpl<>(new ArrayList<Agent>());
+        return emptyPage;
     }
 
     @RequestMapping(method = RequestMethod.POST)
