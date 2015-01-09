@@ -58,7 +58,7 @@ public class VehicleServiceTest {
         }});
 
         impl.setRepository(repository);
-        Page<Vehicle> actual = impl.list(skip,limit);
+        Page<Vehicle> actual = impl.page(skip,limit);
         assertThat(page.getContent().get(0),is(actual.getContent().get(0)));
     }
     @Test

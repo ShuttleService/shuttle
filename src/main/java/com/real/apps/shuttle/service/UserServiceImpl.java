@@ -2,6 +2,7 @@ package com.real.apps.shuttle.service;
 
 import com.real.apps.shuttle.model.User;
 import com.real.apps.shuttle.repository.UserRepository;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,8 +20,18 @@ public class UserServiceImpl implements UserService {
   private PasswordEncoder passwordEncoder;
 
   @Override
-  public Page<User> list(int skip, int limit) {
+  public Page<User> page(int skip, int limit) {
     return repository.findAll(new PageRequest(skip, limit));
+  }
+
+  @Override
+  public Page<User> pageByCompanyId(ObjectId companyId, int skip, int limit) {
+    return null;
+  }
+
+  @Override
+  public User findOne(ObjectId id) {
+    return repository.findOne(id);
   }
 
   @Override

@@ -109,4 +109,21 @@ public class UserRepositoryTest {
     assertThat(actual.getContent().get(1).getCompanyId(),is(id));
   }
 
+  @Test
+  public void shouldCallRepositoryFindOneAndReturnTheFoundUser(){
+    User user = new User();
+    user.setEmail("Test Email For User To Be Found");
+    user.setUsername(user.getEmail());
+
+    User control = new User();
+    control.setEmail("Test Email For User Not To Be Found");
+    control.setUsername(control.getEmail());
+
+    ObjectId id = repository.save(user).getId();
+    assertNotNull(id);
+    assertNotNull(repository.save(control));
+
+    User actual = repository.findOne(id);
+    assertThat(actual,is(user));
+  }
 }

@@ -17,7 +17,7 @@ public class VehicleServiceImpl implements VehicleService
     @Autowired
     private VehicleRepository repository;
     @Override
-    public Page<Vehicle> list(int skip, int limit) {
+    public Page<Vehicle> page(int skip, int limit) {
         return repository.findAll(new PageRequest(skip,limit));
     }
 

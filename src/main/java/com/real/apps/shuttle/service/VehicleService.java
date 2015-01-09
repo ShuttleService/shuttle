@@ -10,7 +10,7 @@ import java.util.List;
  * Created by zorodzayi on 14/10/15.
  */
 public interface VehicleService {
-    Page<Vehicle> list(int skip, int limit);
+    Page<Vehicle> page(int skip, int limit);
 
     Page<Vehicle> pageByCompanyId(ObjectId companyId,int skip, int limit);
 
