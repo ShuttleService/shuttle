@@ -12,11 +12,15 @@ import java.util.List;
 public interface CompanyService {
     Company insert(Company company);
 
-    Page<Company> list(int skip, int limit);
+    Page<Company> page(int skip, int limit);
+
+    Page<Company> pageByAgentId(ObjectId agentId,int skip, int limit);
 
     Company update(Company company);
 
     Company findOne(ObjectId id);
+
+
 
     Company delete(Company company);
 }

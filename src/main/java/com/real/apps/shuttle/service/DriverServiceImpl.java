@@ -16,7 +16,7 @@ public class DriverServiceImpl implements DriverService {
     @Autowired
     private DriverRepository repository;
     @Override
-    public Page<Driver> list(int skip, int limit) {
+    public Page<Driver> page(int skip, int limit) {
         return repository.findAll( new PageRequest(skip,limit));
     }
 

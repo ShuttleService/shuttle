@@ -24,9 +24,15 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public Page<Company> list(int skip, int limit) {
+    public Page<Company> page(int skip, int limit) {
         logger.debug(String.format("Finding Companies {skip:%d,limit:%d}",skip,limit));
         return repository.findAll(new PageRequest(skip,limit));
+    }
+
+    @Override
+    public Page<Company> pageByAgentId(ObjectId agentId,int skip, int limit) {
+        logger.debug(String.format("Finding Companies {AgentId:%s,skip:%d,limit:%d}",agentId,skip,limit));
+        return repository.findByAgentId(agentId,new PageRequest(skip,limit));
     }
 
     @Override

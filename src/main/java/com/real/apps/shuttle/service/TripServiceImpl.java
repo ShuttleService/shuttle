@@ -17,7 +17,7 @@ public class TripServiceImpl implements TripService {
     private TripRepository repository;
 
     @Override
-    public Page<Trip> list(int skip, int limit) {
+    public Page<Trip> page(int skip, int limit) {
         return repository.findAll(new PageRequest(skip,limit));
     }
 
@@ -27,8 +27,8 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public Page<Trip> pageByClientId(ObjectId companyId, int skip, int limit) {
-        return repository.findByClientId(companyId,new PageRequest(skip,limit));
+    public Page<Trip> pageByUserId(ObjectId userId, int skip, int limit) {
+        return repository.findByClientId(userId,new PageRequest(skip,limit));
     }
 
     @Override

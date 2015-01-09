@@ -10,7 +10,10 @@ import org.bson.types.ObjectId;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnitRuleMockery;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,6 +29,10 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.real.apps.shuttle.controller.UserDetailsUtils.admin;
+import static com.real.apps.shuttle.controller.UserDetailsUtils.companyUser;
+import static com.real.apps.shuttle.controller.UserDetailsUtils.world;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -40,6 +47,7 @@ public class TripControllerTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
     private MockMvc mockMvc;
+    private MockMvc mockMvcWithSecurity;
     private final String VIEW_PAGE = TripController.VIEW_NAME;
     @Autowired
     private TripController controller;
@@ -49,36 +57,41 @@ public class TripControllerTest {
     private TripService service;
     @Autowired
     private TripService tripService;
+    private  final int skip = 0, limit = 2;
+
+
     @Before
     public void init() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).alwaysDo(print()).build();
     }
+
     @After
     public void cleanUp(){
         controller.setService(tripService);
     }
+
     @Test
     public void shouldRenderTripPage() throws Exception {
         mockMvc.perform(get("/" + VIEW_PAGE)).andDo(print()).andExpect(view().name(VIEW_PAGE)).andExpect(status().isOk());
     }
 
     @Test
-    public void shouldCallListOnServiceAndReturnAListOfTrips() throws Exception {
-        final int skip = 1;
-        final int limit = 2;
+    public void shouldReturnAPageOfAllTripsWhenAnAdminIsLoggedIn() throws Exception {
         final String source = "Test Source To List";
         Trip trip = new Trip();
         trip.setSource(source);
         List<Trip> trips = Arrays.asList(trip);
         final Page<Trip> page = new PageImpl<Trip>(trips);
         context.checking(new Expectations() {{
-            oneOf(service).list(skip, limit);
+            oneOf(service).page(skip, limit);
             will(returnValue(page));
         }});
 
         controller.setService(service);
 
-        mockMvc.perform(get("/" + VIEW_PAGE + "/" + skip + "/" + limit)).andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$.content[0].source").value(source));
+        mockMvc.perform(get("/" + VIEW_PAGE + "/" + skip + "/" + limit).with(user(admin(ObjectId.get())))).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.content[0].source").value(source));
     }
 
     @Test
@@ -149,12 +162,51 @@ public class TripControllerTest {
             will(returnValue(trip));
         }});
 
-        String tripString = new Gson().toJson(trip);
-
         mockMvc.perform(get("/"+VIEW_PAGE+"/one/"+id)).andDo(print()).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.id._time").value(id.getTimestamp()));
     }
 
+    @Test
+    public void shouldReturnTripsOfTheCompanyWhenACompanyUserIsLoggedIn() throws Exception {
+        final ObjectId id = ObjectId.get();
+        final Trip trip = new Trip();
+        trip.setCompanyId(id);
+        final Page<Trip> page = new PageImpl<>(Arrays.asList(trip));
+
+        controller.setService(service);
+
+        context.checking(new Expectations(){{
+            oneOf(service).pageByCompanyId(id,skip,limit);
+            will(returnValue(page));
+        }});
+
+        mockMvc.perform(get(String.format("/%s/%d/%d",VIEW_PAGE,skip,limit)).with(user(companyUser(id)))).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.content[0].companyId._time").value(id.getTimestamp()));
+
+        context.assertIsSatisfied();
+    }
+
+    @Test
+    public void shouldReturnTheLoggedInUserTripsWhenAWorldIsLoggedIn() throws Exception {
+        final ObjectId id = ObjectId.get();
+        final Trip trip = new Trip();
+        trip.setClientId(id);
+        final Page<Trip> page = new PageImpl<>(Arrays.asList(trip));
+
+        controller.setService(service);
+
+        context.checking(new Expectations(){{
+            oneOf(service).pageByUserId(id,skip,limit);
+            will(returnValue(page));
+        }});
+
+        mockMvc.perform(get(String.format("/%s/%d/%d",VIEW_PAGE,skip,limit)).with(user(world(id)))).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.content[0].clientId._time").value(id.getTimestamp()));
+
+        context.assertIsSatisfied();
+    }
 
 }

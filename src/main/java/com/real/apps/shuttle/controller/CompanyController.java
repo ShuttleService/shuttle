@@ -1,15 +1,22 @@
 package com.real.apps.shuttle.controller;
 
+import static com.real.apps.shuttle.miscellaneous.Role.*;
+
+import com.real.apps.shuttle.model.Agent;
 import com.real.apps.shuttle.model.Company;
+import com.real.apps.shuttle.model.User;
 import com.real.apps.shuttle.service.CompanyService;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by zorodzayi on 14/10/16.
@@ -29,9 +36,50 @@ public class CompanyController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/{skip}/{limit}")
     @ResponseBody
-    public Page<Company> page(@PathVariable("skip") int skip, @PathVariable("limit") int limit) {
-        logger.debug(String.format("Getting List With {skip:%d,limit:%d}", skip, limit));
-        return service.list(skip, limit);
+    public Page<Company> page(@PathVariable("skip") int skip, @PathVariable("limit") int limit,@AuthenticationPrincipal User user) {
+        logger.debug(String.format("Getting List With {skip:%d,limit:%d,user:%s}", skip, limit,user));
+        Page<Company> emptyPage = new PageImpl<>(new ArrayList<Company>());
+        if (user == null){
+            logger.debug("There is no logged in user. Returning empty page");
+            return emptyPage;
+        }
+
+        String role = user.getAuthorities() != null && user.getAuthorities().iterator().hasNext() ? user.getAuthorities().iterator().next().getAuthority() : "";
+        logger.debug(String.format("Finding Companies For Role %s",role));
+        if(ADMIN.equals(role) || WORLD.equals(role)){
+            logger.debug("We have Either An Admin or A World Logged in. Finding all companies");
+            return service.page(skip,limit);
+        }
+        else if(AGENT.equals(role)){
+            ObjectId agentId = user.getAgentId();
+            logger.debug(String.format("We have an agent finding companies {agentId:%s} ",agentId));
+            if(agentId == null ){
+                logger.debug("Agent Id null and return empty page");
+                return emptyPage;
+            }
+
+            logger.debug("Agent Id not null searching the database for companies belonging to the agent id ");
+            return service.pageByAgentId(user.getAgentId(),skip,limit);
+        }else if(COMPANY_USER.equals(role)){
+            ObjectId companyId = user.getCompanyId();
+            logger.debug("We have a Company User. Finding The Company. {CompanyId:"+companyId+"}");
+            if(companyId == null){
+                logger.debug("Company Id is null returning Empty Page");
+                return emptyPage;
+            }else{
+                logger.debug(String.format("Finding One Company {CompanyId:%s}",companyId));
+                Company company = service.findOne(companyId);
+                if(company == null ){
+                    logger.debug("Could not find the Company with Id "+companyId);
+                }else{
+                    logger.debug(String.format("Adding found company to page list"));
+                    return new PageImpl<>(Arrays.asList(company));
+                }
+            }
+        }
+
+        logger.debug("There was a logged in user but returning empty page still.");
+        return emptyPage;
     }
 
     @ResponseBody

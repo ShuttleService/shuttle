@@ -35,6 +35,8 @@ public class CompanyServiceTest {
     public JUnitRuleMockery context = new JUnitRuleMockery();
     @Mock
     private CompanyRepository repository;
+    private final int skip = 0;
+    private final int limit = 10;
 
     @Test
     public void shouldCallRepositorySaveOnInsert() {
@@ -53,8 +55,6 @@ public class CompanyServiceTest {
 
     @Test
     public void shouldCallRepositoryFindAll() {
-        final int skip = 0;
-        final int limit = 10;
         List<Company> companyList = Arrays.asList(new Company());
         final Page<Company> page = new PageImpl(companyList);
         context.checking(new Expectations() {{
@@ -63,7 +63,23 @@ public class CompanyServiceTest {
         }});
 
         service.setRepository(repository);
-        Page actual = service.list(skip, limit);
+        Page actual = service.page(skip, limit);
         assertThat(page.getContent().get(0),is(actual.getContent().get(0)));
+    }
+
+    @Test
+    public void shouldCallRepositoryFindByAgentId(){
+        final Page<Company> page = new PageImpl<>(Arrays.asList(new Company()));
+        final ObjectId id = ObjectId.get();
+
+        context.checking(new Expectations(){{
+            oneOf(repository).findByAgentId(id,new PageRequest(skip,limit));
+            will(returnValue(page));
+        }});
+
+        service.setRepository(repository);
+
+        Page<Company> actual = service.pageByAgentId(id,skip,limit);
+        assertThat(actual,is(page));
     }
 }

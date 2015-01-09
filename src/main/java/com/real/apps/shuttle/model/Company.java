@@ -93,6 +93,22 @@ public class Company {
         this.logo = logo;
     }
 
+    public String getAgentName() {
+        return agentName;
+    }
+
+    public void setAgentName(String agentName) {
+        this.agentName = agentName;
+    }
+
+    public ObjectId getAgentId() {
+        return agentId;
+    }
+
+    public void setAgentId(ObjectId agentId) {
+        this.agentId = agentId;
+    }
+
     @Override
     public String toString() {
         return String.format("{id:%s,slug:%s,tradingAs:%s,fullName:%s,description:%s,registrationNumber:%s,vatNumber:%s,agentName:%s,agentID:%s}", id, slug, tradingAs, fullName,

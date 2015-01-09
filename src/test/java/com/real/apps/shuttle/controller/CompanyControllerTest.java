@@ -24,12 +24,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.servlet.Filter;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
+import static com.real.apps.shuttle.controller.UserDetailsUtils.*;
 
 /**
  * Created by zorodzayi on 14/10/16.
@@ -46,20 +49,26 @@ public class CompanyControllerTest {
     @Rule
     public JUnitRuleMockery context = new JUnitRuleMockery();
     private MockMvc mockMvc;
+    private MockMvc mockMvcWithSecurity;
+    @Autowired
+    private Filter springSecurityFilterChain;
     @Mock
     private CompanyService service;
     @Autowired
     private CompanyService companyService;
     private static final String VIEW_PAGE = CompanyController.VIEW_PAGE;
-
+    private final int skip = 0, limit = 100;
     @Before
     public void init() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).alwaysDo(print()).build();
+        mockMvcWithSecurity = MockMvcBuilders.webAppContextSetup(webApplicationContext).alwaysDo(print()).addFilter(springSecurityFilterChain).build();
     }
+
     @After
     public void cleanUp(){
         controller.setService(companyService);
     }
+
     @Test
     public void shouldRenderCompanyPage() throws Exception {
         mockMvc.perform(get("/" + VIEW_PAGE)).andDo(print()).
@@ -68,9 +77,7 @@ public class CompanyControllerTest {
     }
 
     @Test
-    public void shouldCallServiceListAndReturnAListOfCompanies() throws Exception {
-        final int skip = 1;
-        final int limit = 10;
+    public void shouldCallServicePageAndReturnAPageOfCompaniesWhenWorldIsLoggedIn() throws Exception {
         String slug = "Test List Company Slug";
         Company company = new Company();
         company.setSlug(slug);
@@ -78,11 +85,11 @@ public class CompanyControllerTest {
         final Page<Company> page = new PageImpl<Company>(list);
         controller.setService(service);
         context.checking(new Expectations() {{
-            oneOf(service).list(skip, limit);
+            oneOf(service).page(skip, limit);
             will(returnValue(page));
         }});
 
-        mockMvc.perform(get("/" + VIEW_PAGE + "/" + skip + "/" + limit)).andDo(print()).
+        mockMvcWithSecurity.perform(get("/" + VIEW_PAGE + "/" + skip + "/" + limit).with(user(world(ObjectId.get())))).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.content[0].slug").value(slug));
     }
@@ -164,5 +171,73 @@ public class CompanyControllerTest {
         mockMvc.perform(get("/" + VIEW_PAGE + "/one/" + id)).andDo(print()).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.id._time").value(id.getTimestamp()));
+    }
+
+    @Test
+    public void shouldCallServicePageIfAnAdminIsLoggedIn() throws Exception {
+        final ObjectId id = ObjectId.get();
+        final Company company = new Company();
+        company.setId(id);
+        final Page<Company> page = new PageImpl<>(Arrays.asList(company));
+
+        controller.setService(service);
+
+        context.checking(new Expectations(){{
+            oneOf(service).page(skip,limit);
+            will(returnValue(page));
+        }});
+
+        mockMvcWithSecurity.perform(get(String.format("/%s/%d/%d",VIEW_PAGE,skip,limit)).with(user(admin(id)))).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.content[0].id._time").value(id.getTimestamp()));
+    }
+
+    @Test
+    public void shouldRedirectToLoginPageWhenNoUserIsLoggedIn() throws Exception {
+        mockMvcWithSecurity.perform(get(String.format("/%s/%d/%d",VIEW_PAGE,skip,limit))).
+                andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    public void shouldCallServiceFindByAgentIdIfAnAgentIsLoggedIn() throws Exception {
+        final ObjectId id = ObjectId.get();
+        final  Company company = new Company();
+
+        company.setAgentId(id);
+        company.setId(id);
+
+        final Page<Company> page = new PageImpl<>(Arrays.asList(company));
+
+        context.checking(new Expectations(){{
+            oneOf(service).pageByAgentId(id,skip,limit);
+            will(returnValue(page));
+        }});
+
+        controller.setService(service);
+
+        mockMvcWithSecurity.perform(get(String.format("/%s/%d/%d",VIEW_PAGE,skip,limit)).with(user(agent(id)))).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.content[0].id._time").value(id.getTimestamp()));
+
+        context.assertIsSatisfied();
+    }
+
+    @Test
+    public void shouldReturnTheCompanyWhenACompanyUserIsLoggedOn() throws Exception {
+        final ObjectId id = ObjectId.get();
+        final Company company = new Company();
+        company.setId(id);
+
+        context.checking(new Expectations(){{
+            oneOf(service).findOne(id);
+            will(returnValue(company));
+        }});
+
+        controller.setService(service);
+
+       mockMvcWithSecurity.perform(get(String.format("/%s/%d/%d",VIEW_PAGE,skip,limit)).with(user(companyUser(id)))).
+               andExpect(status().isOk()).
+               andExpect(jsonPath("$.content[0].id._time").value(id.getTimestamp()));
+        context.assertIsSatisfied();
     }
 }

@@ -10,11 +10,11 @@ import java.util.List;
  * Created by zorodzayi on 14/10/11.
  */
 public interface TripService {
-    Page<Trip> list(int skip, int limit);
+    Page<Trip> page(int skip, int limit);
 
     Page<Trip> pageByCompanyId(ObjectId companyId,int skip,int limit);
 
-    Page<Trip> pageByClientId(ObjectId companyId,int skip, int limit);
+    Page<Trip> pageByUserId(ObjectId userId,int skip, int limit);
 
     Trip insert(Trip trip);
 

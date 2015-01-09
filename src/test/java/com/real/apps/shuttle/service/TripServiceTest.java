@@ -58,12 +58,12 @@ public class TripServiceTest {
         }});
 
         impl.setRepository(repository);
-        Page<Trip> actual = impl.list(skip,limit);
+        Page<Trip> actual = impl.page(skip,limit);
         assertThat(actual.getContent().get(0),is(page.getContent().get(0)));
     }
 
     @Test
-    public void shouldCallRepositoryFindByClientId(){
+    public void shouldCallRepositoryFindByUserId(){
         final Page<Trip> page = new PageImpl<>(Arrays.asList(new Trip()));
         final ObjectId id = ObjectId.get();
 
@@ -73,7 +73,7 @@ public class TripServiceTest {
         }});
 
         impl.setRepository(repository);
-        Page<Trip> actual = impl.pageByClientId(id,skip,limit);
+        Page<Trip> actual = impl.pageByUserId(id,skip,limit);
         assertThat(actual,is(page));
     }
 

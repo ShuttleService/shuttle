@@ -25,9 +25,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.servlet.Filter;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.real.apps.shuttle.controller.UserDetailsUtils.admin;
+import static com.real.apps.shuttle.controller.UserDetailsUtils.companyUser;
+import static com.real.apps.shuttle.controller.UserDetailsUtils.world;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -53,10 +58,15 @@ public class DriverControllerTest {
     private Logger logger = Logger.getLogger(DriverControllerTest.class);
     private MockMvc mockMvc;
     private final String VIEW_PAGE = "driver";
+    private final int skip = 0, limit = 2;
+    private MockMvc mockMvcWithSecurity;
+    @Autowired
+    private Filter springSecurityFilterChain;
 
     @Before
     public void init() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).alwaysDo(print()).build();
+        mockMvcWithSecurity = MockMvcBuilders.webAppContextSetup(webApplicationContext).alwaysDo(print()).addFilter(springSecurityFilterChain).build();
     }
 
     @After
@@ -69,25 +79,25 @@ public class DriverControllerTest {
     }
 
     @Test
-    public void shouldCallDriverServiceAndReturnAListOfDrivers() throws Exception {
+    public void shouldCallDriverServicePageReturnAPageOfDriversIfAdminIsLoggedIn() throws Exception {
         final Driver driver = new Driver();
         final String firstName = "Test First Name";
         driver.setFirstName(firstName);
         List<Driver> drivers = Arrays.asList(driver);
         final Page<Driver> page = new PageImpl<Driver>(drivers);
         controller.setService(service);
-        final int skip = 1;
-        final int limit = 2;
 
         context.checking(new Expectations() {{
-            oneOf(service).list(skip, limit);
+            oneOf(service).page(skip, limit);
             will(returnValue(page));
         }});
-        mockMvc.perform(get("/" + VIEW_PAGE + "/" + skip + "/" + limit)).andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$.content[0].firstName").value(firstName));
+        mockMvc.perform(get("/" + VIEW_PAGE + "/" + skip + "/" + limit).with(user(admin(ObjectId.get())))).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.content[0].firstName").value(firstName));
     }
 
     @Test
-    public void shouldCallDriverServiceIsertAndReturnTheInsertedDriver() throws Exception {
+    public void shouldCallDriverServiceInsertAndReturnTheInsertedDriver() throws Exception {
         final Driver driver = new Driver();
         String firstName = "Test Driver First Name To Delete";
         driver.setFirstName(firstName);
@@ -127,7 +137,7 @@ public class DriverControllerTest {
     }
 
     @Test
-    public void shouldCallServiceUpateAndReturnTheUpdatedDriver() throws Exception {
+    public void shouldCallServiceUpdateAndReturnTheUpdatedDriver() throws Exception {
         String firstName = "Test Driver Name To Update";
         final Driver driver = new Driver();
         driver.setFirstName(firstName);
@@ -160,4 +170,51 @@ public class DriverControllerTest {
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.id._time").value(id.getTimestamp()));
     }
+
+    @Test
+    public void shouldReturnOnlyDriversFromTheCompanyWhenACompanyUserIsLoggedIn() throws Exception {
+        final ObjectId id = ObjectId.get();
+        Driver driver = new Driver();
+        driver.setCompanyId(id);
+        final Page<Driver> page = new PageImpl<>(Arrays.asList(driver));
+
+        controller.setService(service);
+
+        context.checking(new Expectations(){
+            {
+                oneOf(service).pageByCompanyId(id,skip,limit);
+                will(returnValue(page));
+            }
+        });
+
+        mockMvcWithSecurity.perform(get(String.format("/%s/%d/%d",VIEW_PAGE,skip,limit)).with(user(companyUser(id)))).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.content[0].companyId._time").value(id.getTimestamp()));
+
+        context.assertIsSatisfied();
+    }
+
+    @Test
+    public void shouldReturnAllDriversWhenAWorldIsLoggedIn() throws Exception {
+        final ObjectId id = ObjectId.get();
+        Driver driver = new Driver();
+        driver.setCompanyId(id);
+        final Page<Driver> page = new PageImpl<>(Arrays.asList(driver));
+
+        controller.setService(service);
+
+        context.checking(new Expectations(){
+            {
+                oneOf(service).page(skip,limit);
+                will(returnValue(page));
+            }
+        });
+
+        mockMvcWithSecurity.perform(get(String.format("/%s/%d/%d",VIEW_PAGE,skip,limit)).with(user(world(id)))).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.content[0].companyId._time").value(id.getTimestamp()));
+
+        context.assertIsSatisfied();
+    }
+
 }

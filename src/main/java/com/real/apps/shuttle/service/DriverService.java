@@ -10,7 +10,7 @@ import java.util.List;
  * Created by zorodzayi on 14/10/10.
  */
 public interface DriverService {
-    Page<Driver> list(int skip, int limit);
+    Page<Driver> page(int skip, int limit);
 
     Page<Driver> pageByCompanyId(ObjectId companyId,int skip, int limit);
 

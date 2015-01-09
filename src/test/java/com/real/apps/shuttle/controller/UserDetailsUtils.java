@@ -24,11 +24,12 @@ public class UserDetailsUtils {
         return user;
     }
 
-    public static User world(ObjectId companyId){
+    public static User world(ObjectId id){
         User user = new User();
         user.setUsername("world");
         user.setPassword("worldPassword");
-        user.setCompanyId(companyId);
+        user.setId(id);
+        user.setCompanyId(id);
         user.setAuthorities(Arrays.asList(new SimpleGrantedAuthority(WORLD)));
         return user;
     }

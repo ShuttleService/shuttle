@@ -62,7 +62,7 @@ public class DriverServiceTest {
 
         impl.setRepository(repository);
 
-        Page<Driver> actual = impl.list(skip, limit);
+        Page<Driver> actual = impl.page(skip, limit);
         assertThat(actual.getContent().get(0), is(page.getContent().get(0)));
     }
 

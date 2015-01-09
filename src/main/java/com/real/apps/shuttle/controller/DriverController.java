@@ -1,17 +1,19 @@
 package com.real.apps.shuttle.controller;
 
-import com.real.apps.shuttle.model.Company;
 import com.real.apps.shuttle.model.Driver;
+import com.real.apps.shuttle.model.User;
 import com.real.apps.shuttle.service.DriverService;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
+import java.util.ArrayList;
+import static com.real.apps.shuttle.miscellaneous.Role.*;
 /**
  * Created by zorodzayi on 14/10/05.
  */
@@ -31,9 +33,32 @@ public class DriverController {
 
     @RequestMapping(method = RequestMethod.GET,value = "/{skip}/{limit}" )
     @ResponseBody
-    public Page<Driver> list(@PathVariable("skip") int skip,@PathVariable("limit") int limit){
-        logger.debug(String.format("Getting List With {skip:%d,limit:%d}",skip,limit));
-        return service.list(skip,limit);
+    public Page<Driver> list(@PathVariable("skip") int skip,@PathVariable("limit") int limit,@AuthenticationPrincipal User user){
+        logger.debug(String.format("Finding Drivers {skip:%d,limit:%d,user:%s}",skip,limit,user));
+        Page<Driver> emptyPage = new PageImpl<>(new ArrayList<Driver>());
+        if(user == null){
+            logger.debug("No User is logged in. Returning empty list of drivers ");
+            return emptyPage;
+        }
+
+        String role = user.getAuthorities() != null && !user.getAuthorities().isEmpty() ? user.getAuthorities().iterator().next().getAuthority() : "";
+        logger.debug("The User Role Will Be "+role);
+
+        if(ADMIN.equals(role) || WORLD.equals(role)){
+            logger.debug(String.format("We have Either An Admin  Or A World Logged in. Finding all drivers"));
+            return service.page(skip,limit);
+        }else if(COMPANY_USER.equals(role)){
+            logger.debug(String.format("We have a Company User logged in. Finding the drivers for that company"));
+            ObjectId companyId = user.getCompanyId();
+            if(companyId == null){
+                logger.debug(String.format("Company Id on the user is null returning empty list"));
+                return emptyPage;
+            }else {
+                logger.debug(String.format("Company Id will be %s. Finding Drivers For the Company",companyId));
+                return service.pageByCompanyId(companyId,skip,limit);
+            }
+        }
+        return emptyPage;
     }
 
     @ResponseBody
