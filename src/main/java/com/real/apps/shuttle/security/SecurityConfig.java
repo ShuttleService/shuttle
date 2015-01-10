@@ -43,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/home").hasAnyRole(ROLE_ADMIN, ROLE_AGENT, ROLE_COMPANY_USER, ROLE_WORLD)
                 .antMatchers("/").hasAnyRole(ROLE_ADMIN, ROLE_AGENT, ROLE_COMPANY_USER, ROLE_WORLD)
                 .antMatchers("/admin").hasAnyRole(ROLE_ADMIN)
-                .antMatchers("/agent").hasRole(ROLE_ADMIN)
+                .antMatchers("/agent").hasAnyRole(ROLE_ADMIN,ROLE_AGENT)
                 .antMatchers("/agent/*/*").hasAnyRole(ROLE_ADMIN, ROLE_AGENT)
                 .antMatchers("/vehicle").hasAnyRole(ROLE_ADMIN, ROLE_COMPANY_USER)
                 .antMatchers("/driver").hasAnyRole(ROLE_ADMIN, ROLE_COMPANY_USER)

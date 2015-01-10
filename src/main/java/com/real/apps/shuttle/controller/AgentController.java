@@ -30,8 +30,6 @@ public class AgentController {
     public static final String VIEW_NAME = "agent";
     @Autowired
     private AgentService service;
-    @Autowired
-    private UserService userService;
     private Logger logger = LoggerFactory.getLogger(AgentController.class);
     @RequestMapping
     public String render(){
@@ -65,9 +63,25 @@ public class AgentController {
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public Agent post(@RequestBody Agent agent){
-        logger.debug(String.format("Posting agent %s",agent));
-        return service.insert(agent);
+    public Agent post(@RequestBody Agent agent,@AuthenticationPrincipal User user){
+        logger.debug(String.format("Posting agent %s {user:%s}",agent,user));
+        if(user == null){
+            logger.debug("There is no user logged in. Returning without saving the agent");
+        }else{
+            String role = user.getAuthorities() != null && !user.getAuthorities().isEmpty() ? user.getAuthorities().iterator().next().getAuthority() : "";
+            switch (role){
+                case  ADMIN:{
+                    logger.debug(String.format("An Admin Is Logged In. Inserting The Agent"));
+                    return service.insert(agent);
+                }
+                case AGENT:{
+                    logger.debug(String.format("An Agent Is Logged In. Not Inserting The Agent. An Agent Cannot Create Another Agent"));
+                    return agent;
+                }
+            }
+        }
+        logger.debug("Could Not Insert Agent. Returning unsaved agent");
+        return agent;
     }
 
     public void setService(AgentService service) {

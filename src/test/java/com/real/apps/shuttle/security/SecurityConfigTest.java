@@ -92,17 +92,17 @@ public class SecurityConfigTest {
     }
 
     @Test
-    public void adminShouldAccessTheAgentPage() throws Exception {
+    public void adminAndAgentShouldAccessTheAgentPage() throws Exception {
         String agent = "/agent";
         mockMvc.perform(get(agent).with(user(admin(id)))).andExpect(status().isOk());
+        mockMvc.perform(get(agent).with(user(agent(id)))).andExpect(status().isOk());
     }
 
     @Test
-    public void nonAdminShouldBeForbiddenAccessToTheAgentPage() throws Exception {
+    public void nonAdminAndNonAgeneShouldBeForbiddenAccessToTheAgentPage() throws Exception {
         String agent = "/agent";
         mockMvc.perform(get(agent).with(user(companyUser(id)))).andExpect(status().isForbidden());
         mockMvc.perform(get(agent).with(user(world(id)))).andExpect(status().isForbidden());
-        mockMvc.perform(get(agent).with(user(agent(id)))).andExpect(status().isForbidden());
         mockMvc.perform(get(agent)).andExpect(status().is3xxRedirection());
     }
 
