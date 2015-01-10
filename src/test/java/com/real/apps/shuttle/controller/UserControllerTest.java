@@ -2,6 +2,9 @@ package com.real.apps.shuttle.controller;
 
 import com.google.gson.Gson;
 import com.real.apps.shuttle.config.MvcConfiguration;
+
+import static com.real.apps.shuttle.controller.UserDetailsUtils.*;
+import static com.real.apps.shuttle.miscellaneous.Role.*;
 import com.real.apps.shuttle.model.User;
 import com.real.apps.shuttle.service.UserService;
 import org.bson.types.ObjectId;
@@ -27,14 +30,12 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.real.apps.shuttle.controller.UserDetailsUtils.admin;
-import static com.real.apps.shuttle.controller.UserDetailsUtils.companyUser;
-import static com.real.apps.shuttle.controller.UserDetailsUtils.world;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 
 /**
  * Created by zorodzayi on 14/10/22.
@@ -103,10 +104,8 @@ public class UserControllerTest {
             will(returnValue(user));
         }});
         String userJsonString = new Gson().toJson(user);
-
         controller.setService(service);
-
-        mockMvc.perform(post("/"+VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(userJsonString))
+        mockMvc.perform(post("/"+VIEW_PAGE).with(user(agent(ObjectId.get()))).contentType(MediaType.APPLICATION_JSON).content(userJsonString))
                 .andExpect(status().isOk()).
                 andExpect(jsonPath("$.firstName").value(firstName));
         context.assertIsSatisfied();
@@ -151,4 +150,37 @@ public class UserControllerTest {
         context.assertIsSatisfied();
     }
 
+    @Test
+    public void shouldReturnAllRolesWhenAnAdminIsLoggedIn() throws Exception {
+        mockMvc.perform(get(String.format("/%s/role",VIEW_PAGE)).with(user(admin(ObjectId.get())))).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$[0].role").value(ADMIN)).
+                andExpect(jsonPath("$[1].role").value(AGENT)).
+                andExpect(jsonPath("$[2].role").value(COMPANY_USER)).
+                andExpect(jsonPath("$[3].role").value(WORLD));
+    }
+
+    @Test
+    public void shouldReturnCompanyUserAndWorldRolesWhenCompanyUserIsLoggedIn() throws Exception {
+        mockMvc.perform(get(String.format("/%s/role",VIEW_PAGE)).with(user(companyUser(ObjectId.get())))).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$[0].role").value(COMPANY_USER)).
+                andExpect(jsonPath("$[1].role").value(WORLD)).
+                andExpect(jsonPath("$[2].role").doesNotExist());
+    }
+
+    @Test
+    public void shouldReturnWorldRoleWhenAWorldIsLoggedIn() throws Exception {
+        mockMvc.perform(get(String.format("/%s/role", VIEW_PAGE)).with(user(world(ObjectId.get())))).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$[0].role").value(WORLD)).
+                andExpect(jsonPath("$[1].role").doesNotExist());
+    }
+    @Test
+    public  void shouldReturnWorldRoleWhenUserIsAnonymous() throws Exception {
+        mockMvc.perform(get(String.format("/%s/role",VIEW_PAGE))).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$[0].role").value(WORLD)).
+                andExpect(jsonPath("$[1].role").doesNotExist());
+    }
 }

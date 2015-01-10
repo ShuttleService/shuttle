@@ -44,7 +44,7 @@
                 <button class="btn btn-default" data-target="#add" data-toggle="modal" onclick="event.preventDefault()">Sign Up</button>
             </form>
 
-            <span class="col-xs-5"></span>
+            <span class="col-xs-5" ng-controller="SharedController"></span>
         </div>
     </div>
 </div>

@@ -1,10 +1,8 @@
 package com.real.apps.shuttle.security;
 
 import com.real.apps.shuttle.config.MvcConfiguration;
-import com.real.apps.shuttle.controller.AgentController;
 import com.real.apps.shuttle.model.User;
 import com.real.apps.shuttle.repository.UserRepository;
-import com.real.apps.shuttle.service.AgentService;
 import org.bson.types.ObjectId;
 import org.junit.Before;
 import org.junit.Test;
@@ -203,10 +201,11 @@ public class SecurityConfigTest {
         mockMvc.perform(get(trip)).andExpect(status().is3xxRedirection());
     }
     @Test
-    public void companyUserAndAdminShouldAccessTheUserPage() throws Exception {
+    public void anonymousCompanyUserAndAdminShouldAccessTheUserPage() throws Exception {
         String user = "/user";
         mockMvc.perform(get(user).with(user(admin(id)))).andExpect(status().isOk());
         mockMvc.perform(get(user).with(user(companyUser(id)))).andExpect(status().isOk());
+        mockMvc.perform(get(user)).andExpect(status().isOk());
     }
 
     @Test
@@ -214,7 +213,6 @@ public class SecurityConfigTest {
         String user = "/user";
         mockMvc.perform(get(user).with(user(agent(id)))).andExpect(status().isForbidden());
         mockMvc.perform(get(user).with(user(world(id)))).andExpect(status().isForbidden());
-        mockMvc.perform(get(user)).andExpect(status().is3xxRedirection());
     }
 
     @Test

@@ -3,7 +3,7 @@
  */
 
 angular.module('controllers', ['services']).
-    controller('SharedController', function ($rootScope, $scope, $log, CompanyService, DriverService, VehicleService, AgentService, RESULT_SIZE) {
+    controller('SharedController', function ($rootScope, $scope, $log,AgentService,CompanyService, DriverService,UserService,VehicleService, RESULT_SIZE) {
         $rootScope.sharedState = {};
         var params = {skip: 0, limit: RESULT_SIZE};
 
@@ -27,11 +27,17 @@ angular.module('controllers', ['services']).
             $rootScope.sharedState.agentPage = AgentService.get(params);
         };
 
+        $scope.findRoles = function(){
+            $log.debug('Calling User Service Find Roles To Get Roles And Set Them On The $rootScope Shared State ');
+            $rootScope.sharedState.roles = UserService.query({subPath1:'role'});
+        };
+
         $scope.init = function () {
             $scope.findCompanies();
             $scope.findVehicles();
             $scope.findDrivers();
             $scope.findAgents();
+            $scope.findRoles();
         };
 
         $scope.init();

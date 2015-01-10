@@ -78,9 +78,21 @@ describe('Testing The User Service', function () {
         expect(actualUser.userName).toEqual(savedUser.userName);
     });
 
+    it('Should Set The Sub Path To role. Call The URL And Return The Roles ',function(){
+        var subPath1 = {subPath1:'role'};
+        var url = CONTEXT_ROOT+'/user/role';
+        var roles = ['Test Role '];
+        $httpBackend.expectGET(url).respond(roles);
+
+        var actual = UserService.query(subPath1);
+
+        $httpBackend.flush();
+
+        expect(actual.length).toEqual(1);
+        expect(actual[0]).toEqual(roles[0]);
+    });
 
     afterEach(function () {
-
         $httpBackend.verifyNoOutstandingExpectation();
         $httpBackend.verifyNoOutstandingRequest();
     });

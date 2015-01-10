@@ -27,6 +27,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String ROLE_AGENT = "agent";
     private static final String ROLE_COMPANY_USER  = "companyUser";
     private static final String ROLE_WORLD = "world";
+    private static final String ROLE_ANONYMOUS = "ANONYMOUS";
     @Override
     @Autowired
     public void configure(AuthenticationManagerBuilder builder) throws Exception {
@@ -49,8 +50,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/driver/*/*").hasAnyRole(ROLE_ADMIN,ROLE_COMPANY_USER,ROLE_WORLD)
                 .antMatchers("/company").hasAnyRole(ROLE_ADMIN, ROLE_AGENT)
                 .antMatchers("/company/*/*").hasAnyRole(ROLE_ADMIN,ROLE_AGENT,ROLE_COMPANY_USER,ROLE_WORLD)
-                .antMatchers("/user").hasAnyRole(ROLE_ADMIN,ROLE_COMPANY_USER)
-                .antMatchers("/user/*/*").hasAnyRole(ROLE_ADMIN,ROLE_COMPANY_USER)
+                .antMatchers("/user").hasAnyRole(ROLE_ADMIN,ROLE_COMPANY_USER,ROLE_ANONYMOUS).
+                 antMatchers("/user/*/*").hasAnyRole(ROLE_ADMIN,ROLE_COMPANY_USER)
                 .antMatchers("/trip").hasAnyRole(ROLE_ADMIN,ROLE_WORLD, ROLE_COMPANY_USER)
                 .antMatchers("/trip/*/*").hasAnyRole(ROLE_ADMIN, ROLE_COMPANY_USER,ROLE_WORLD)
                 .and()

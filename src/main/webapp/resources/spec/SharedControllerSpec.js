@@ -3,11 +3,11 @@
  */
 describe('Testing The "SharedController" (The Controller That Holds The State That Is To Be Used Across Other Controller)', function () {
 
-    var controller, $rootScope, CompanyService,VehicleService,DriverService,AgentService,$scope, RESULT_SIZE,params;
+    var controller, $rootScope,UserService,CompanyService,VehicleService,DriverService,AgentService,$scope, RESULT_SIZE,params;
 
     beforeEach(module('controllers'));
 
-    beforeEach(inject(function (_$rootScope_, _CompanyService_,_VehicleService_,_DriverService_,_AgentService_,$controller, _RESULT_SIZE_) {
+    beforeEach(inject(function (_$rootScope_, _CompanyService_,_UserService_,_VehicleService_,_DriverService_,_AgentService_,$controller, _RESULT_SIZE_) {
         $rootScope = _$rootScope_;
         expect($rootScope).toBeDefined();
         $scope = $rootScope.$new();
@@ -15,12 +15,15 @@ describe('Testing The "SharedController" (The Controller That Holds The State Th
         VehicleService = _VehicleService_;
         DriverService = _DriverService_;
         AgentService = _AgentService_;
+        UserService = _UserService_;
 
         RESULT_SIZE = _RESULT_SIZE_;
+
         expect(RESULT_SIZE).toBeDefined();
         expect(CompanyService).toBeDefined();
         expect(VehicleService).toBeDefined();
         expect(DriverService).toBeDefined();
+        expect(UserService).toBeDefined();
         params = {skip:0, limit:RESULT_SIZE};
         expect(AgentService).toBeDefined();
 
@@ -82,15 +85,29 @@ describe('Testing The "SharedController" (The Controller That Holds The State Th
         expect(AgentService.get).toHaveBeenCalledWith(params);
         expect($rootScope.sharedState.agentPage).toEqual(page);
     });
+
+    it('Should Call Service query with {subPath1:role}, get the roles and set them on the $scope ', function () {
+        var roles = ['ROLE_admin','ROLE_agent','ROLE_world','ROLE_companyUser'];
+        spyOn(UserService,'query').andReturn(roles);
+        expect($scope.findRoles).toBeDefined();
+        $scope.findRoles();
+        expect(UserService.query).toHaveBeenCalledWith({subPath1:'role'});
+        expect($scope.sharedState.roles).toEqual(roles);
+    });
+
     it('Init Should Call The Various Methods On The Scope To Populate The Drop Downs', function () {
         spyOn($scope, 'findCompanies');
         spyOn($scope,'findVehicles');
         spyOn($scope,'findDrivers');
         spyOn($scope,'findAgents');
+        spyOn($scope,'findRoles');
+
         $scope.init();
+
         expect($scope.findCompanies).toHaveBeenCalled();
         expect($scope.findVehicles).toHaveBeenCalled();
         expect($scope.findDrivers).toHaveBeenCalled();
         expect($scope.findAgents).toHaveBeenCalled();
+        expect($scope.findRoles).toHaveBeenCalled();
     });
 });

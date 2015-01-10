@@ -38,7 +38,7 @@ angular.module('services', ['ngResource']).
 
     factory('UserService',function($resource,CONTEXT_ROOT){
 
-       return $resource(CONTEXT_ROOT+'/user/:_id/:skip/:limit',{_id:'@_id',skip:'@skip',limit:'@limit'},{put:{method:'PUT'}});
+       return $resource(CONTEXT_ROOT+'/user/:subPath1/:_id/:skip/:limit',{subPath1: '@subPath1',_id:'@_id',skip:'@skip',limit:'@limit'},{put:{method:'PUT'}});
     })
 
     .factory('VehicleService',function($resource,CONTEXT_ROOT){

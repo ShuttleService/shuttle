@@ -14,6 +14,16 @@ import java.util.Arrays;
  */
 public class UserDetailsUtils {
 
+    public static User anonymous(ObjectId companyId){
+        User user = new User();
+        user.setUsername("agent");
+        user.setPassword("agentPassword");
+        user.setCompanyId(companyId);
+        user.setAgentId(companyId);
+        user.setAuthorities(Arrays.asList(new SimpleGrantedAuthority("anonymous")));
+        return user;
+    }
+
     public static User agent(ObjectId companyId){
         User user = new User();
         user.setUsername("agent");
