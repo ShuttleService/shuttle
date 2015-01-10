@@ -42,7 +42,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public Company findOne(ObjectId id) {
-        return null;
+        return repository.findOne(id);
     }
 
     @Override

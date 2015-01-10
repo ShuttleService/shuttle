@@ -78,7 +78,7 @@ public class UserRepositoryTest {
     repository.save(user);
     repository.save(user1);
 
-    User actual = repository.findByUsername(username);
+    User actual = repository.findOneByUsername(username);
     assertThat(actual,is(user));
   }
 

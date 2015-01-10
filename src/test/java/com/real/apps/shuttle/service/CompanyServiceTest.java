@@ -82,4 +82,21 @@ public class CompanyServiceTest {
         Page<Company> actual = service.pageByAgentId(id,skip,limit);
         assertThat(actual,is(page));
     }
+
+    @Test
+    public void shouldCallRepositoryFindOne(){
+        final  Company company = new Company();
+        final ObjectId id = ObjectId.get();
+        company.setId(id);
+
+        context.checking(new Expectations(){{
+            oneOf(repository).findOne(id);
+            will(returnValue(company));
+        }});
+
+        service.setRepository(repository);
+
+        Company actual = service.findOne(id);
+        assertThat(actual,is(company));
+    }
 }

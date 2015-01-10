@@ -42,7 +42,7 @@ public class ShuttleUserDetailsServiceTest {
     service.setRepository(repository);
 
     context.checking(new Expectations(){{
-      oneOf(repository).findByUsername(username);
+      oneOf(repository).findOneByUsername(username);
       will(returnValue(user));
     }});
 

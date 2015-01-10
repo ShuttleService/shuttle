@@ -213,7 +213,7 @@ public class User extends CompanyModel implements UserDetails {
     public String toString() {
 
         return String.format("{id:%s,username:%s,password:%s,firstName:%s,surname:%s,email:%s,companyName:%s,companyId:%s,cellNumber:%s,dateOfBirth:%s,streetAddress:%s,surburb:%s,town:%s,province:%s,postalCode:%s," +
-                        " accountNonExpired:%b,accountNonLocked:%b,credentialsNonExpired:%b,enabled:%b,authorities:%s,agentId:%s,agentName:%s}", id, username, password, firstName, surname, email, companyName, companyId, cellNumber, dateOfBirth,
+                        " accountNonExpired:%b,accountNonLocked:%b,credentialsNonExpired:%b,enabled:%b,authorities:%s,agentId:%s,agentName:%s}", id, username, "[PROTECTED]", firstName, surname, email, companyName, companyId, cellNumber, dateOfBirth,
                 streetAddress, suburb, town, province, postalCode, accountNonExpired, accountNonLocked, credentialsNonExpired, email, authorities,agentId,agentName);
     }
 

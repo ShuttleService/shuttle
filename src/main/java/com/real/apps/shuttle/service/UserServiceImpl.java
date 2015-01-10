@@ -26,7 +26,12 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public Page<User> pageByCompanyId(ObjectId companyId, int skip, int limit) {
-    return null;
+    return repository.findByCompanyId(companyId,new PageRequest(skip,limit));
+  }
+
+  @Override
+  public User findOneByUsername(String username) {
+    return repository.findOneByUsername(username);
   }
 
   @Override

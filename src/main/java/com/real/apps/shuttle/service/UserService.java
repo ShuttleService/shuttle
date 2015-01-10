@@ -12,6 +12,7 @@ import java.util.List;
 public interface UserService {
     Page<User> page(int skip,int limit);
     Page<User> pageByCompanyId(ObjectId companyId,int skip, int limit);
+    User findOneByUsername(String username);
     User findOne(ObjectId id);
     User insert(User user);
 }

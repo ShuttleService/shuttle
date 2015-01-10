@@ -2,6 +2,7 @@ package com.real.apps.shuttle.repository;
 
 import com.real.apps.shuttle.model.Trip;
 import org.bson.types.ObjectId;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class TripRepositoryTest {
     private TripRepository repository;
     @Autowired
     private MongoOperations template;
-    @Test
+    @After
     public void cleanUp(){
         template.dropCollection("trip");
     }

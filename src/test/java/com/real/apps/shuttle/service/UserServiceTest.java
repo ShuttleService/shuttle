@@ -6,6 +6,7 @@ import com.real.apps.shuttle.repository.UserRepository;
 import org.bson.types.ObjectId;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
+
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.After;
 import org.junit.Rule;
@@ -19,10 +20,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.jws.soap.SOAPBinding;
 import java.util.Arrays;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
 
 /**
  * Created by zorodzayi on 14/11/01.
@@ -40,7 +43,7 @@ public class UserServiceTest {
     private PasswordEncoder encoder;
     @Autowired
     private UserRepository userRepository;
-
+    private final int skip = 0, limit = 10;
     @After
     public void cleanUp(){
         impl.setRepository(userRepository);
@@ -82,8 +85,6 @@ public class UserServiceTest {
 
     @Test
     public void shouldCallRepositoryListWithTheGivenSkipAndLimit(){
-        final int skip = 0;
-        final int limit = 10;
         final Page<User> page = new PageImpl<User>(Arrays.asList(new User()));
         context.checking(new Expectations(){{
             oneOf(repository).findAll(new PageRequest(skip,limit));
@@ -111,4 +112,39 @@ public class UserServiceTest {
         User actual = impl.findOne(id);
         assertThat(actual,is(user));
     }
+
+    @Test
+    public void shouldCallRepositoryFindOneByUsername(){
+        final  User user = new User();
+        final String username = "Test Username To Be Found";
+        user.setUsername(username);
+
+        impl.setRepository(repository);
+
+        context.checking(new Expectations(){{
+            oneOf(repository).findOneByUsername(username);
+            will(returnValue(user));
+        }});
+
+        User actual = impl.findOneByUsername(username);
+        assertThat(actual,is(user));
+    }
+
+    @Test
+    public void shouldCallRepositoryFindByCompanyId(){
+        final User user = new User();
+        final ObjectId id = ObjectId.get();
+        user.setCompanyId(id);
+        final Page<User> page = new PageImpl<>(Arrays.asList(user));
+        impl.setRepository(repository);
+
+        context.checking(new Expectations(){{
+            oneOf(repository).findByCompanyId(id,new PageRequest(skip,limit));
+            will(returnValue(page));
+        }});
+
+        Page<User> actual = impl.pageByCompanyId(id,skip,limit);
+        assertThat(actual,is(page));
+    }
+
 }

@@ -18,7 +18,7 @@ public class ShuttleUserDetailsServiceImpl implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    return repository.findByUsername(username);
+    return repository.findOneByUsername(username);
   }
 
   public void setRepository(UserRepository repository) {
