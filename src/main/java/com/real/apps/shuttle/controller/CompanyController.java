@@ -15,6 +15,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.jws.soap.SOAPBinding;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -84,9 +85,31 @@ public class CompanyController {
 
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)
-    public Company post(@RequestBody Company company) {
-        logger.debug(String.format("Posting With Company:%s", company));
-        return service.insert(company);
+    public Company post(@RequestBody Company company,@AuthenticationPrincipal User user) {
+        logger.debug(String.format("Posting Company {company:%s,Logged In User:%s}",company,user));
+        if(user == null){
+            logger.debug("No User Is Logged In Therefore Not Inserting Any Company. Returning The Un Saved Company");
+            return company;
+        }else {
+            String role = user.getAuthorities() != null && !user.getAuthorities().isEmpty() ? user.getAuthorities().iterator().next().getAuthority() : "";
+            logger.debug(String.format("{Role:%s}",role));
+            switch (role){
+                case ADMIN:{
+                    logger.debug(String.format("Logged In As Admin. Inserting the user as is"));
+                    return service.insert(company);
+                }
+                case AGENT:{
+                    ObjectId agentId = user.getAgentId();
+                    String agentName = user.getAgentName();
+                    logger.debug(String.format("Logged In As Agent. Setting The Agent Id And Agent Name To The One On The Logged In User {AgentId:%s,AgentName:%s}",agentId,agentName));
+                    company.setAgentId(agentId);
+                    company.setAgentName(agentName);
+                    return service.insert(company);
+                }
+            }
+        }
+        logger.debug("Did not do anything to the company. Returning it");
+        return company;
     }
 
     @ResponseBody
@@ -98,9 +121,27 @@ public class CompanyController {
 
     @ResponseBody
     @RequestMapping(method = RequestMethod.DELETE)
-    public Company delete(@RequestBody Company company){
-        logger.debug(String.format("Deleting With Company:%s",company));
-        return service.delete(company);
+    public Company delete(@RequestBody Company company,@AuthenticationPrincipal User user){
+        logger.debug(String.format("Deleting Company {Company:%s,LoggedInUser:%s",company,user));
+        if(user == null){
+            logger.debug(String.format("Attempting To Delete Company With No User Logged In. Delete Will Not Proceed. Returning The Company That Was Not Deleted"));
+            return company;
+        }else{
+            logger.debug("There is A User Logged In. ");
+            String role = user.getAuthorities() != null && !user.getAuthorities().isEmpty() ? user.getAuthorities().iterator().next().getAuthority() : "";
+            logger.debug(String.format("{role:%s}",role));
+            switch (role){
+                case ADMIN:{
+                    logger.debug(String.format("Logged In As Admin. Going Ahead With The Delete And Returning The Deleted Company"));
+                    return service.delete(company);
+                }
+                case AGENT:{
+                    logger.debug(String.format("Logged In As An Agent. An Agent Cannot Delete A Company For Now. Returning The Undeleted Company"));
+                    return company;
+                }
+            }
+        }
+        return company;
     }
 
     @ResponseBody

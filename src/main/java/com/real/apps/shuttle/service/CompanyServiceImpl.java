@@ -19,7 +19,6 @@ public class CompanyServiceImpl implements CompanyService {
     private Logger logger = Logger.getLogger(CompanyServiceImpl.class);
     @Override
     public Company insert(Company company) {
-
         return repository.save(company);
     }
 
@@ -47,7 +46,9 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public Company delete(Company company) {
-        return null;
+        logger.debug(String.format("Deleting Company %s",company));
+        repository.delete(company);
+        return company;
     }
 
     public void setRepository(CompanyRepository repository) {

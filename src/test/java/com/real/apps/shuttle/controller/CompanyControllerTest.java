@@ -2,7 +2,9 @@ package com.real.apps.shuttle.controller;
 
 import com.google.gson.Gson;
 import com.real.apps.shuttle.config.MvcConfiguration;
+import com.real.apps.shuttle.model.Agent;
 import com.real.apps.shuttle.model.Company;
+import com.real.apps.shuttle.model.User;
 import com.real.apps.shuttle.service.CompanyService;
 import org.bson.types.ObjectId;
 import org.jmock.Expectations;
@@ -16,6 +18,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -49,29 +52,30 @@ public class CompanyControllerTest {
     @Rule
     public JUnitRuleMockery context = new JUnitRuleMockery();
     private MockMvc mockMvc;
-    private MockMvc mockMvcWithSecurity;
     @Autowired
     private Filter springSecurityFilterChain;
     @Mock
     private CompanyService service;
     @Autowired
     private CompanyService companyService;
+    @Autowired
+    private MongoOperations mongoTemplate;
     private static final String VIEW_PAGE = CompanyController.VIEW_PAGE;
     private final int skip = 0, limit = 100;
+
     @Before
     public void init() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).alwaysDo(print()).build();
-        mockMvcWithSecurity = MockMvcBuilders.webAppContextSetup(webApplicationContext).alwaysDo(print()).addFilter(springSecurityFilterChain).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).addFilter(springSecurityFilterChain).alwaysDo(print()).build();
     }
 
     @After
-    public void cleanUp(){
+    public void cleanUp() {
         controller.setService(companyService);
     }
 
     @Test
     public void shouldRenderCompanyPage() throws Exception {
-        mockMvc.perform(get("/" + VIEW_PAGE)).andDo(print()).
+        mockMvc.perform(get("/" + VIEW_PAGE).with(user(admin(ObjectId.get())))).
                 andExpect(status().isOk()).
                 andExpect(view().name(VIEW_PAGE));
     }
@@ -89,13 +93,13 @@ public class CompanyControllerTest {
             will(returnValue(page));
         }});
 
-        mockMvcWithSecurity.perform(get("/" + VIEW_PAGE + "/" + skip + "/" + limit).with(user(world(ObjectId.get())))).
+        mockMvc.perform(get("/" + VIEW_PAGE + "/" + skip + "/" + limit).with(user(world(ObjectId.get())))).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.content[0].slug").value(slug));
     }
 
     @Test
-    public void shouldCallServiceInsertAndReturnTheInsertedCompany() throws Exception {
+    public void shouldCallServiceInsertAndReturnTheInsertedCompanyWhenAdminIsLoggedIn() throws Exception {
         final Company company = new Company();
         String slug = "Test Slug To Insert";
         company.setSlug(slug);
@@ -110,10 +114,30 @@ public class CompanyControllerTest {
         Gson gson = new Gson();
         String companyString = gson.toJson(company);
 
-        mockMvc.perform(post("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(companyString)).
-                andDo(print()).
+        mockMvc.perform(post("/" + VIEW_PAGE).with(user(admin(ObjectId.get()))).contentType(MediaType.APPLICATION_JSON).content(companyString)).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.slug").value(slug));
+    }
+
+    @Test
+    public void shouldSetTheAgentIdAndAgentNameToTheLoggedInAgentCallServiceInsertAndReturnTheInsertedCompanyWhenAgentIsLoggedIn() throws Exception {
+        final Company company = new Company();
+
+        String agentName = "Test Agent Name  To Insert";
+        ObjectId agentId = ObjectId.get();
+        User agent = agent(agentId);
+
+        agent.setAgentId(agentId);
+        agent.setAgentName(agentName);
+
+        Gson gson = new Gson();
+        String companyString = gson.toJson(company);
+
+        mockMvc.perform(post("/" + VIEW_PAGE).with(user(agent)).contentType(MediaType.APPLICATION_JSON).content(companyString)).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.agentName").value(agentName)).
+                andExpect(jsonPath("$.agentId._time").value(agentId.getTimestamp()));
+        mongoTemplate.dropCollection("company");
     }
 
     @Test
@@ -130,14 +154,14 @@ public class CompanyControllerTest {
 
         String companyString = new Gson().toJson(company);
 
-        mockMvc.perform(put("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(companyString)).andDo(print()).
+        mockMvc.perform(put("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(companyString).with(user(admin(ObjectId.get())))).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.slug").value(slug));
 
     }
 
     @Test
-    public void shouldCallServiceDeleteAndReturnTheDeletedCompany() throws Exception {
+    public void shouldCallServiceDeleteAndReturnTheDeletedCompanyWhenLoggedOnAsAdmin() throws Exception {
         String slug = "Test Slug To Delete";
         final Company company = new Company();
         company.setSlug(slug);
@@ -150,7 +174,26 @@ public class CompanyControllerTest {
             will(returnValue(company));
         }});
 
-        mockMvc.perform(delete("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(companyString)).andDo(print()).
+        mockMvc.perform(delete("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).with(user(admin(ObjectId.get()))).content(companyString)).andDo(print()).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.slug").value(slug));
+    }
+
+    @Test
+    public void nonAdminShouldBeNotADeleteCompany() throws Exception {
+        String slug = "Test Slug To Delete";
+        final Company company = new Company();
+        company.setSlug(slug);
+
+        controller.setService(service);
+
+        final String companyString = new Gson().toJson(company);
+        context.checking(new Expectations() {{
+            never(service).delete(with(any(Company.class)));
+            will(returnValue(company));
+        }});
+
+        mockMvc.perform(delete("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).with(user(agent(ObjectId.get()))).content(companyString)).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.slug").value(slug));
     }
@@ -168,7 +211,7 @@ public class CompanyControllerTest {
             will(returnValue(company));
         }});
 
-        mockMvc.perform(get("/" + VIEW_PAGE + "/one/" + id)).andDo(print()).
+        mockMvc.perform(get("/" + VIEW_PAGE + "/one/" + id).with(user(admin(id)))).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.id._time").value(id.getTimestamp()));
     }
@@ -182,40 +225,40 @@ public class CompanyControllerTest {
 
         controller.setService(service);
 
-        context.checking(new Expectations(){{
-            oneOf(service).page(skip,limit);
+        context.checking(new Expectations() {{
+            oneOf(service).page(skip, limit);
             will(returnValue(page));
         }});
 
-        mockMvcWithSecurity.perform(get(String.format("/%s/%d/%d",VIEW_PAGE,skip,limit)).with(user(admin(id)))).
+        mockMvc.perform(get(String.format("/%s/%d/%d", VIEW_PAGE, skip, limit)).with(user(admin(id)))).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.content[0].id._time").value(id.getTimestamp()));
     }
 
     @Test
     public void shouldRedirectToLoginPageWhenNoUserIsLoggedIn() throws Exception {
-        mockMvcWithSecurity.perform(get(String.format("/%s/%d/%d",VIEW_PAGE,skip,limit))).
+        mockMvc.perform(get(String.format("/%s/%d/%d", VIEW_PAGE, skip, limit))).
                 andExpect(status().is3xxRedirection());
     }
 
     @Test
     public void shouldCallServiceFindByAgentIdIfAnAgentIsLoggedIn() throws Exception {
         final ObjectId id = ObjectId.get();
-        final  Company company = new Company();
+        final Company company = new Company();
 
         company.setAgentId(id);
         company.setId(id);
 
         final Page<Company> page = new PageImpl<>(Arrays.asList(company));
 
-        context.checking(new Expectations(){{
-            oneOf(service).pageByAgentId(id,skip,limit);
+        context.checking(new Expectations() {{
+            oneOf(service).pageByAgentId(id, skip, limit);
             will(returnValue(page));
         }});
 
         controller.setService(service);
 
-        mockMvcWithSecurity.perform(get(String.format("/%s/%d/%d",VIEW_PAGE,skip,limit)).with(user(agent(id)))).
+        mockMvc.perform(get(String.format("/%s/%d/%d", VIEW_PAGE, skip, limit)).with(user(agent(id)))).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.content[0].id._time").value(id.getTimestamp()));
 
@@ -228,16 +271,16 @@ public class CompanyControllerTest {
         final Company company = new Company();
         company.setId(id);
 
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
             oneOf(service).findOne(id);
             will(returnValue(company));
         }});
 
         controller.setService(service);
 
-       mockMvcWithSecurity.perform(get(String.format("/%s/%d/%d",VIEW_PAGE,skip,limit)).with(user(companyUser(id)))).
-               andExpect(status().isOk()).
-               andExpect(jsonPath("$.content[0].id._time").value(id.getTimestamp()));
+        mockMvc.perform(get(String.format("/%s/%d/%d", VIEW_PAGE, skip, limit)).with(user(companyUser(id)))).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.content[0].id._time").value(id.getTimestamp()));
         context.assertIsSatisfied();
     }
 }

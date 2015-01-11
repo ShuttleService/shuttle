@@ -99,4 +99,19 @@ public class CompanyServiceTest {
         Company actual = service.findOne(id);
         assertThat(actual,is(company));
     }
+
+    @Test
+    public void shouldCallRepositoryDelete(){
+        final Company company = new Company();
+
+        context.checking(new Expectations(){
+            {
+                oneOf(repository).delete(company);
+            }
+        });
+
+        service.setRepository(repository);
+        Company actual = service.delete(company);
+        assertThat(actual,is(company));
+    }
 }
