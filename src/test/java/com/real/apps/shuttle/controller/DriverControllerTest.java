@@ -3,6 +3,7 @@ package com.real.apps.shuttle.controller;
 import com.google.gson.Gson;
 import com.real.apps.shuttle.config.MvcConfiguration;
 import com.real.apps.shuttle.model.Driver;
+import com.real.apps.shuttle.model.User;
 import com.real.apps.shuttle.service.DriverService;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
@@ -17,6 +18,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -29,9 +31,7 @@ import javax.servlet.Filter;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.real.apps.shuttle.controller.UserDetailsUtils.admin;
-import static com.real.apps.shuttle.controller.UserDetailsUtils.companyUser;
-import static com.real.apps.shuttle.controller.UserDetailsUtils.world;
+import static com.real.apps.shuttle.controller.UserDetailsUtils.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -59,14 +59,14 @@ public class DriverControllerTest {
     private MockMvc mockMvc;
     private final String VIEW_PAGE = "driver";
     private final int skip = 0, limit = 2;
-    private MockMvc mockMvcWithSecurity;
+    @Autowired
+    private MongoOperations mongoTemplate;
     @Autowired
     private Filter springSecurityFilterChain;
 
     @Before
     public void init() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).alwaysDo(print()).build();
-        mockMvcWithSecurity = MockMvcBuilders.webAppContextSetup(webApplicationContext).alwaysDo(print()).addFilter(springSecurityFilterChain).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).addFilter(springSecurityFilterChain).alwaysDo(print()).build();
     }
 
     @After
@@ -75,7 +75,9 @@ public class DriverControllerTest {
     }
     @Test
     public void shouldRenderDriverPage() throws Exception {
-        mockMvc.perform(get("/" + VIEW_PAGE)).andDo(print()).andExpect(status().isOk()).andExpect(view().name(VIEW_PAGE));
+        mockMvc.perform(get("/" + VIEW_PAGE).with(user(companyUser(ObjectId.get()))))
+                .andExpect(status().isOk()).
+                andExpect(view().name(VIEW_PAGE));
     }
 
     @Test
@@ -97,7 +99,7 @@ public class DriverControllerTest {
     }
 
     @Test
-    public void shouldCallDriverServiceInsertAndReturnTheInsertedDriver() throws Exception {
+    public void shouldCallDriverServiceInsertAndReturnTheInsertedDriverWhenAdminIsLoggedIn() throws Exception {
         final Driver driver = new Driver();
         String firstName = "Test Driver First Name To Delete";
         driver.setFirstName(firstName);
@@ -112,32 +114,75 @@ public class DriverControllerTest {
         String driverString = new Gson().toJson(driver);
 
         logger.debug("The String From The Object Mapped Object " + driverString);
-        mockMvc.perform(post("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(driverString)).
+        mockMvc.perform(post("/" + VIEW_PAGE).with(user(admin(ObjectId.get()))).contentType(MediaType.APPLICATION_JSON).content(driverString)).
                 andDo(print()).
-                andExpect(status().
-                        isOk()).
+                andExpect(status().isOk()).
                 andExpect(jsonPath("$.firstName").value(firstName));
     }
 
     @Test
-    public void shouldCallServiceDeleteAndReturnTheDeletedDriver() throws Exception {
+    public void shouldSetTheDriverCompanyIdAndCompanyNameToTheLoggedInCompanyCallDriverServiceInsertAndReturnTheInsertedDriverWhenCompanyUserIsLoggedIn() throws Exception {
+        final Driver driver = new Driver();
+        String companyName = "Test Driver Company Name To Be Inserted";
+        ObjectId companyId = ObjectId.get();
+
+        User user = companyUser(companyId);
+        user.setCompanyId(companyId);
+        user.setCompanyName(companyName);
+
+        String driverString = new Gson().toJson(driver);
+
+        logger.debug("The String From The Object Mapped Object " + driverString);
+
+
+        mockMvc.perform(post("/" + VIEW_PAGE).with(user(user)).contentType(MediaType.APPLICATION_JSON).content(driverString)).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.companyName").value(companyName)).
+                andExpect(jsonPath("$.companyId._time").value(companyId.getTimestamp()));
+
+        mongoTemplate.dropCollection("driver");
+    }
+
+
+    @Test
+    public void shouldCallServiceDeleteAndReturnTheDeletedDriverWhenAdminIsLoggedIn() throws Exception {
         String firstName = "Test Driver First Name To Delete";
         final Driver driver = new Driver();
         driver.setFirstName(firstName);
         controller.setService(service);
+
         context.checking(new Expectations() {{
             oneOf(service).delete(with(any(Driver.class)));
             will(returnValue(driver));
         }});
 
         String driverString = new Gson().toJson(driver);
-        mockMvc.perform(delete("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(driverString)).andDo(print()).
+        mockMvc.perform(delete("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).with(user(admin(ObjectId.get()))).content(driverString)).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.firstName").value(firstName));
     }
 
     @Test
-    public void shouldCallServiceUpdateAndReturnTheUpdatedDriver() throws Exception {
+    public void shouldNotDeleteTheDriverWhenNonAdminIsLoggedIn() throws Exception {
+        String firstName = "Test Driver First Name To Delete";
+        final Driver driver = new Driver();
+        driver.setFirstName(firstName);
+        controller.setService(service);
+
+        context.checking(new Expectations() {{
+            never(service).delete(with(any(Driver.class)));
+            will(returnValue(driver));
+        }});
+
+        String driverString = new Gson().toJson(driver);
+
+        mockMvc.perform(delete("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).with(user(companyUser(ObjectId.get()))).content(driverString)).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.firstName").value(firstName));
+    }
+
+    @Test
+    public void shouldCallServiceUpdateAndReturnTheUpdatedDriverWhenAdminIsLoggedIn() throws Exception {
         String firstName = "Test Driver Name To Update";
         final Driver driver = new Driver();
         driver.setFirstName(firstName);
@@ -148,9 +193,27 @@ public class DriverControllerTest {
         }});
 
         String driverString = new Gson().toJson(driver);
-        mockMvc.perform(put("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(driverString)).andDo(print()).
+        mockMvc.perform(put("/" + VIEW_PAGE).with(user(admin(ObjectId.get()))).contentType(MediaType.APPLICATION_JSON).content(driverString)).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.firstName").value(firstName));
+    }
+
+    @Test
+    public void shouldSetTheCompanyIdAndCompanyNameOfTheLoggedInUserToTheDriverWhenCompanyUserIsLoggedIn() throws Exception {
+        String companyName = "Test Driver Name To Update";
+        ObjectId companyId = ObjectId.get();
+        final Driver driver = new Driver();
+
+        User user = companyUser(companyId);
+        user.setCompanyId(companyId);
+        user.setCompanyName(companyName);
+
+        String driverString = new Gson().toJson(driver);
+
+        mockMvc.perform(put("/" + VIEW_PAGE).with(user(user)).contentType(MediaType.APPLICATION_JSON).content(driverString)).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.companyName").value(companyName)).
+                andExpect(jsonPath("$.companyId._time").value(companyId.getTimestamp()));
     }
 
     @Test
@@ -166,7 +229,7 @@ public class DriverControllerTest {
 
         controller.setService(service);
 
-        mockMvc.perform(get("/" + VIEW_PAGE + "/one/" + id)).andDo(print()).
+        mockMvc.perform(get("/" + VIEW_PAGE + "/one/" + id).with(user(admin(id)))).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.id._time").value(id.getTimestamp()));
     }
@@ -187,7 +250,7 @@ public class DriverControllerTest {
             }
         });
 
-        mockMvcWithSecurity.perform(get(String.format("/%s/%d/%d",VIEW_PAGE,skip,limit)).with(user(companyUser(id)))).
+        mockMvc.perform(get(String.format("/%s/%d/%d",VIEW_PAGE,skip,limit)).with(user(companyUser(id)))).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.content[0].companyId._time").value(id.getTimestamp()));
 
@@ -210,7 +273,7 @@ public class DriverControllerTest {
             }
         });
 
-        mockMvcWithSecurity.perform(get(String.format("/%s/%d/%d",VIEW_PAGE,skip,limit)).with(user(world(id)))).
+        mockMvc.perform(get(String.format("/%s/%d/%d",VIEW_PAGE,skip,limit)).with(user(world(id)))).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.content[0].companyId._time").value(id.getTimestamp()));
 
