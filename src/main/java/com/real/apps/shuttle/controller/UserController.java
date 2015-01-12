@@ -1,6 +1,6 @@
 package com.real.apps.shuttle.controller;
 
-import com.real.apps.shuttle.model.Agent;
+import com.real.apps.shuttle.miscellaneous.Role;
 import com.real.apps.shuttle.model.User;
 import com.real.apps.shuttle.service.UserService;
 import org.apache.log4j.Logger;
@@ -88,9 +88,24 @@ public class UserController {
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public User post(@RequestBody User user) {
-        logger.debug("Posting User " + user);
-        return service.insert(user);
+    public User post(@RequestBody User newUser,@AuthenticationPrincipal User user) {
+        logger.debug(String.format("Posting User %s. {LoggedInUser:%s}",user,user));
+        if(user == null){
+            logger.debug(String.format("No User Is Logged In. Assuming Adding user for the first time. Going ahead with the insert"));
+            return service.insert(newUser);
+        }
+
+        String role = Role.role(user);
+
+        switch (role){
+            case ADMIN:{
+                logger.debug(String.format("Admin User Logged In. Inserting User As Is"));
+                return service.insert(newUser);
+            }
+        }
+
+        logger.debug("At The End Of The Method. Not Inserting The User. Returning The User As Is.");
+        return user;
     }
 
     @RequestMapping(value = "/role")

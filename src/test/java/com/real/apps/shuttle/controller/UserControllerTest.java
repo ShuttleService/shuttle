@@ -2,9 +2,6 @@ package com.real.apps.shuttle.controller;
 
 import com.google.gson.Gson;
 import com.real.apps.shuttle.config.MvcConfiguration;
-
-import static com.real.apps.shuttle.controller.UserDetailsUtils.*;
-import static com.real.apps.shuttle.miscellaneous.Role.*;
 import com.real.apps.shuttle.model.User;
 import com.real.apps.shuttle.service.UserService;
 import org.bson.types.ObjectId;
@@ -27,9 +24,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.servlet.Filter;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.real.apps.shuttle.controller.UserDetailsUtils.*;
+import static com.real.apps.shuttle.miscellaneous.Role.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -57,20 +57,26 @@ public class UserControllerTest {
     private UserService service;
     @Autowired
     private UserService userService;
-    private  final int skip = 12,limit = 34;
+    private final int skip = 12, limit = 34;
+
+    @Autowired
+    private Filter springSecurityFilterChain;
 
     @Before
     public void init() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).alwaysDo(print()).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).addFilters(springSecurityFilterChain).alwaysDo(print()).build();
     }
 
     @After
-    public void cleanUp(){
+    public void cleanUp() {
         controller.setService(userService);
     }
+
     @Test
     public void shouldRenderUserHomePage() throws Exception {
-        mockMvc.perform(get("/" + VIEW_PAGE)).andDo(print()).andExpect(status().isOk()).andExpect(view().name(VIEW_PAGE));
+        mockMvc.perform(get("/" + VIEW_PAGE)).andDo(print()).
+                andExpect(status().isOk()).
+                andExpect(view().name(VIEW_PAGE));
     }
 
     @Test
@@ -94,22 +100,51 @@ public class UserControllerTest {
     }
 
     @Test
-    public void shouldCallUserServiceInsertAndReturnTheInsertedUser() throws Exception {
+    public void shouldCallUserServiceInsertAndReturnTheInsertedUserWhenAnonymousOrAdminIsLoggedIn() throws Exception {
         String firstName = "Test First Name For User To Insert ";
-        final  User user = new User();
+        final User user = new User();
         user.setFirstName(firstName);
 
-        context.checking(new Expectations(){{
-            oneOf(service).insert(with(any(User.class)));
+        context.checking(new Expectations() {{
+            exactly(2).of(service).insert(with(any(User.class)));
             will(returnValue(user));
         }});
+
         String userJsonString = new Gson().toJson(user);
+
         controller.setService(service);
-        mockMvc.perform(post("/"+VIEW_PAGE).with(user(agent(ObjectId.get()))).contentType(MediaType.APPLICATION_JSON).content(userJsonString))
+
+        mockMvc.perform(post("/" + VIEW_PAGE).with(user(admin(ObjectId.get()))).contentType(MediaType.APPLICATION_JSON).content(userJsonString))
                 .andExpect(status().isOk()).
                 andExpect(jsonPath("$.firstName").value(firstName));
+
+        mockMvc.perform(post("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(userJsonString))
+                .andExpect(status().isOk()).
+                andExpect(jsonPath("$.firstName").value(firstName));
+
         context.assertIsSatisfied();
     }
+
+    @Test
+    public void shouldNotCallServiceInsertWhenWorldIsLoggedInAsAWorldShouldNotCreateOtherUsers() throws Exception {
+        final User user = new User();
+        final ObjectId id = ObjectId.get();
+
+        user.setId(id);
+
+        context.checking(new Expectations() {{
+            never(service).insert(with(any(User.class)));
+        }});
+
+        String jsonUser = new Gson().toJson(user);
+
+        controller.setService(service);
+
+        mockMvc.perform(post(String.format("/%s",VIEW_PAGE)).with(user(world(ObjectId.get()))).contentType(MediaType.APPLICATION_JSON).content(jsonUser)).
+                andExpect(status().isOk()).andExpect(jsonPath("$.id._time").value(id.getTimestamp()));
+    }
+
+
 
     @Test
     public void shouldFindUsersForTheCompanyWhenACompanyUserIsLoggedOn() throws Exception {
@@ -120,12 +155,12 @@ public class UserControllerTest {
 
         controller.setService(service);
 
-        context.checking(new Expectations(){{
-            oneOf(service).pageByCompanyId(id,skip,limit);
+        context.checking(new Expectations() {{
+            oneOf(service).pageByCompanyId(id, skip, limit);
             will(returnValue(page));
         }});
 
-        mockMvc.perform(get(String.format("/%s/%d/%d",VIEW_PAGE,skip,limit)).with(user(companyUser(id)))).
+        mockMvc.perform(get(String.format("/%s/%d/%d", VIEW_PAGE, skip, limit)).with(user(companyUser(id)))).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.content[0].companyId._time").value(id.getTimestamp()));
         context.assertIsSatisfied();
@@ -139,12 +174,12 @@ public class UserControllerTest {
 
         controller.setService(service);
 
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
             oneOf(service).findOne(id);
             will(returnValue(user));
         }});
 
-        mockMvc.perform(get(String.format("/%s/%d/%d",VIEW_PAGE,skip,limit)).with(user(world(id)))).
+        mockMvc.perform(get(String.format("/%s/%d/%d", VIEW_PAGE, skip, limit)).with(user(world(id)))).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.content[0].id._time").value(id.getTimestamp()));
         context.assertIsSatisfied();
@@ -152,7 +187,7 @@ public class UserControllerTest {
 
     @Test
     public void shouldReturnAllRolesWhenAnAdminIsLoggedIn() throws Exception {
-        mockMvc.perform(get(String.format("/%s/role",VIEW_PAGE)).with(user(admin(ObjectId.get())))).
+        mockMvc.perform(get(String.format("/%s/role", VIEW_PAGE)).with(user(admin(ObjectId.get())))).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$[0].role").value(ADMIN)).
                 andExpect(jsonPath("$[1].role").value(AGENT)).
@@ -162,7 +197,7 @@ public class UserControllerTest {
 
     @Test
     public void shouldReturnCompanyUserAndWorldRolesWhenCompanyUserIsLoggedIn() throws Exception {
-        mockMvc.perform(get(String.format("/%s/role",VIEW_PAGE)).with(user(companyUser(ObjectId.get())))).
+        mockMvc.perform(get(String.format("/%s/role", VIEW_PAGE)).with(user(companyUser(ObjectId.get())))).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$[0].role").value(COMPANY_USER)).
                 andExpect(jsonPath("$[1].role").value(WORLD)).
@@ -176,11 +211,13 @@ public class UserControllerTest {
                 andExpect(jsonPath("$[0].role").value(WORLD)).
                 andExpect(jsonPath("$[1].role").doesNotExist());
     }
+
     @Test
-    public  void shouldReturnWorldRoleWhenUserIsAnonymous() throws Exception {
-        mockMvc.perform(get(String.format("/%s/role",VIEW_PAGE))).
+    public void shouldReturnWorldRoleWhenUserIsAnonymous() throws Exception {
+        mockMvc.perform(get(String.format("/%s/role", VIEW_PAGE))).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$[0].role").value(WORLD)).
                 andExpect(jsonPath("$[1].role").doesNotExist());
     }
+
 }

@@ -201,32 +201,28 @@ public class SecurityConfigTest {
         mockMvc.perform(get(trip)).andExpect(status().is3xxRedirection());
     }
     @Test
-    public void anonymousCompanyUserAndAdminShouldAccessTheUserPage() throws Exception {
+    public void anonymousAgentCompanyUserAdminAndWorldShouldAccessTheUserPage() throws Exception {
         String user = "/user";
         mockMvc.perform(get(user).with(user(admin(id)))).andExpect(status().isOk());
         mockMvc.perform(get(user).with(user(companyUser(id)))).andExpect(status().isOk());
+        mockMvc.perform(get(user).with(user(world(id)))).andExpect(status().isOk());
+        mockMvc.perform(get(user).with(user(anonymous(id)))).andExpect(status().isOk());
         mockMvc.perform(get(user)).andExpect(status().isOk());
     }
 
-    @Test
-    public void nonAdminAndNonCompanyUserShouldBeForbiddenAccessToTheUserPage() throws Exception {
-        String user = "/user";
-        mockMvc.perform(get(user).with(user(agent(id)))).andExpect(status().isForbidden());
-        mockMvc.perform(get(user).with(user(world(id)))).andExpect(status().isForbidden());
-    }
 
     @Test
-    public void adminAndCompanyUserShouldAccessUsers() throws Exception {
+    public void adminCompanyUserAndWorldShouldAccessUsers() throws Exception {
         String vehicle = "/user/0/100";
         mockMvc.perform(get(vehicle).with(user(admin(id)))).andExpect(status().isOk());
+        mockMvc.perform(get(vehicle).with(user(agent(id)))).andExpect(status().isOk());
         mockMvc.perform(get(vehicle).with(user(companyUser(id)))).andExpect(status().isOk());
+        mockMvc.perform(get(vehicle).with(user(world(id)))).andExpect(status().isOk());
     }
 
     @Test
-    public void nonAdminAndNonCompanyUserShouldBeForbiddenAccessToUsers() throws Exception {
+    public void anonymousShouldBeForbiddenAccessToUsers() throws Exception {
         String user = "/user/0/100";
-        mockMvc.perform(get(user).with(user(agent(id)))).andExpect(status().isForbidden());
-        mockMvc.perform(get(user).with(user(world(id)))).andExpect(status().isForbidden());
         mockMvc.perform(get(user)).andExpect(status().is3xxRedirection());
     }
 

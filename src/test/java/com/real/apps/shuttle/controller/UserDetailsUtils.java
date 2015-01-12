@@ -16,11 +16,11 @@ public class UserDetailsUtils {
 
     public static User anonymous(ObjectId companyId){
         User user = new User();
-        user.setUsername("agent");
-        user.setPassword("agentPassword");
+        user.setUsername("anonymous");
+        user.setPassword("anonymousPassword");
         user.setCompanyId(companyId);
         user.setAgentId(companyId);
-        user.setAuthorities(Arrays.asList(new SimpleGrantedAuthority("anonymous")));
+        user.setAuthorities(Arrays.asList(new SimpleGrantedAuthority("ROLE_ANONYMOUS")));
         return user;
     }
 
