@@ -43,7 +43,7 @@ public class TripServiceImpl implements TripService {
 
     @Override
     public Trip update(Trip trip) {
-        return null;
+        return repository.save(trip);
     }
 
     @Override

@@ -7,6 +7,7 @@ import org.bson.types.ObjectId;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnitRuleMockery;
+import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -33,8 +34,16 @@ public class TripServiceTest {
     public JUnitRuleMockery context = new JUnitRuleMockery();
     @Mock
     private TripRepository repository;
+    @Autowired
+    private TripRepository tripRepository;
+
     private final int skip = 0;
     private final int limit = 100;
+
+    @After
+    public void cleanUp(){
+        impl.setRepository(tripRepository);
+    }
     @Test
     public void shouldCallSaveOnRepository(){
         final Trip trip = new Trip();
@@ -93,4 +102,17 @@ public class TripServiceTest {
         assertThat(actual,is(page));
     }
 
+    @Test
+    public void shouldCallRepositorySave(){
+        final Trip trip = new Trip();
+
+        context.checking(new Expectations(){{
+            oneOf(repository).save(trip);
+            will(returnValue(trip));
+        }});
+
+        impl.setRepository(repository);
+        impl.update(trip);
+        context.assertIsSatisfied();
+    }
 }

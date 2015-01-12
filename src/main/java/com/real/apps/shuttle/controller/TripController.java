@@ -77,23 +77,95 @@ public class TripController {
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public Trip post(@RequestBody Trip trip) {
-        logger.debug(String.format("Posting The Trip %s", trip));
-        return service.insert(trip);
+    public Trip post(@RequestBody Trip trip,@AuthenticationPrincipal User user) {
+        logger.debug(String.format("Posting The Trip {trip:%s,user:%s}", trip,user));
+
+        if(user == null){
+            logger.debug("There Is No User Logged In. Will Not Add The Trip. Returning The Trip Unsaved");
+            return trip;
+        }
+
+        String role = role(user);
+        logger.debug(String.format("{role:%s}",role));
+        switch(role){
+            case ADMIN:{
+                logger.debug("Logged In As An Admin. Inserting The Trip As Is");
+                return service.insert(trip);
+            }
+            case COMPANY_USER:{
+                trip.setCompanyIdAndCompanyName(user,logger);
+                return service.insert(trip);
+            }
+            case WORLD:{
+                ObjectId id = user.getId();
+                String name = user.getFirstName() + " "+user.getSurname();
+
+                logger.debug(String.format("Logged In As World Setting The Trip Client Details To The Logged In User Details {name:%s,id:%s}",name,id));
+                trip.setClientId(id);
+                trip.setClientName(name);
+                return service.insert(trip);
+            }
+        }
+        return trip;
     }
 
     @RequestMapping(method = RequestMethod.DELETE)
     @ResponseBody
-    public Trip delete(@RequestBody Trip trip) {
-        logger.debug(String.format("Deleting The Trip %s", trip));
-        return service.delete(trip);
+    public Trip delete(@RequestBody Trip trip,@AuthenticationPrincipal User user) {
+        logger.debug(String.format("Deleting The Trip {trip:%s,user:%s}", trip,user));
+
+        if(user == null){
+            logger.debug("There Is No User Logged In. The trip is not being deleted. Returning The Trip As Is");
+            return trip;
+        }
+
+        String role = role(user);
+
+        logger.debug(String.format("{role:%s}",role));
+
+        switch (role){
+            case ADMIN:{
+                logger.debug("An Admin Is Logged In. Deleting The Trip And Returning The Deleted Trip");
+                return service.delete(trip);
+            }
+        }
+
+        logger.debug("Almost At The End Of The Method. Not Deleting The Trip. Returning It As Is");
+        return trip;
     }
 
     @RequestMapping(method = RequestMethod.PUT)
     @ResponseBody
-    public Trip put(@RequestBody Trip trip){
-        logger.debug(String.format("Putting Trip %s ",trip));
-        return service.update(trip);
+    public Trip put(@RequestBody Trip trip,@AuthenticationPrincipal User user){
+        logger.debug(String.format("Putting The Trip {trip:%s,user:%s}", trip,user));
+
+        if(user == null){
+            logger.debug("There Is No User Logged In. Will Not Update The Trip. Returning The Trip Unsaved");
+            return trip;
+        }
+
+        String role = role(user);
+        logger.debug(String.format("{role:%s}",role));
+        switch(role){
+            case ADMIN:{
+                logger.debug("Logged In As An Admin. Updating The Trip As Is");
+                return service.update(trip);
+            }
+            case COMPANY_USER:{
+                trip.setCompanyIdAndCompanyName(user,logger);
+                return service.update(trip);
+            }
+            case WORLD:{
+                ObjectId id = user.getId();
+                String name = user.getFirstName() + " "+user.getSurname();
+
+                logger.debug(String.format("Logged In As World Setting The Trip Client Details To The Logged In User Details {name:%s,id:%s}",name,id));
+                trip.setClientId(id);
+                trip.setClientName(name);
+                return service.update(trip);
+            }
+        }
+        return trip;
     }
 
     @RequestMapping(method = RequestMethod.GET,value = "/one/{id}")

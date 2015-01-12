@@ -3,6 +3,7 @@ package com.real.apps.shuttle.controller;
 import com.google.gson.Gson;
 import com.real.apps.shuttle.config.MvcConfiguration;
 import com.real.apps.shuttle.model.Trip;
+import com.real.apps.shuttle.model.User;
 import com.real.apps.shuttle.repository.RepositoryConfig;
 import com.real.apps.shuttle.service.ServiceConfig;
 import com.real.apps.shuttle.service.TripService;
@@ -18,6 +19,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -26,12 +28,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.servlet.Filter;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.real.apps.shuttle.controller.UserDetailsUtils.admin;
-import static com.real.apps.shuttle.controller.UserDetailsUtils.companyUser;
-import static com.real.apps.shuttle.controller.UserDetailsUtils.world;
+import static com.real.apps.shuttle.controller.UserDetailsUtils.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -47,7 +48,6 @@ public class TripControllerTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
     private MockMvc mockMvc;
-    private MockMvc mockMvcWithSecurity;
     private final String VIEW_PAGE = TripController.VIEW_NAME;
     @Autowired
     private TripController controller;
@@ -57,22 +57,27 @@ public class TripControllerTest {
     private TripService service;
     @Autowired
     private TripService tripService;
-    private  final int skip = 0, limit = 2;
-
+    private final int skip = 0, limit = 2;
+    @Autowired
+    private Filter springSecurityFilterChain;
+    @Autowired
+    private MongoOperations mongoTemplate;
 
     @Before
     public void init() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).alwaysDo(print()).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).addFilters(springSecurityFilterChain).alwaysDo(print()).build();
     }
 
     @After
-    public void cleanUp(){
+    public void cleanUp() {
         controller.setService(tripService);
     }
 
     @Test
     public void shouldRenderTripPage() throws Exception {
-        mockMvc.perform(get("/" + VIEW_PAGE)).andDo(print()).andExpect(view().name(VIEW_PAGE)).andExpect(status().isOk());
+        mockMvc.perform(get("/" + VIEW_PAGE).with(user(world(ObjectId.get()))))
+                .andExpect(view().name(VIEW_PAGE))
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -95,26 +100,123 @@ public class TripControllerTest {
     }
 
     @Test
-    public void shouldCallServiceInsertAndReturnTheInsertedTrip() throws Exception {
-        String source = "Test Source To Insert";
+    public void shouldSetTheTripClientIdAndNameToLoggedInUserCallServiceInsertAndReturnTheInsertedTripWhenWorldIsLoggedIn() throws Exception {
+        String name = "Test Client Name To Insert";
+        String surname = "Test Client Surname To Insert";
+
+        ObjectId id = ObjectId.get();
+
         final Trip trip = new Trip();
-        trip.setSource(source);
-
-        controller.setService(service);
-
-        context.checking(new Expectations() {
-            {
-                oneOf(service).insert(with(any(Trip.class)));
-                will(returnValue(trip));
-            }
-        });
+        User user = world(id);
+        user.setFirstName(name);
+        user.setId(id);
+        user.setSurname(surname);
 
         String tripString = new Gson().toJson(trip);
-        mockMvc.perform(post("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(tripString)).andDo(print()).andExpect(jsonPath("$.source").value(source));
+        mockMvc.perform(post("/" + VIEW_PAGE).with(user(user)).contentType(MediaType.APPLICATION_JSON).content(tripString)).
+                andExpect(jsonPath("$.clientId._time").value(id.getTimestamp()))
+                .andExpect(jsonPath("$.clientName").value(name + " " + surname));
+        mongoTemplate.dropCollection("trip");
     }
 
     @Test
-    public void shouldCallServiceDeleteAndReturnTheDeletedTrip() throws Exception {
+    public void shouldSetTheTripCompanyIdAndNameToTheLoggedInCompanyWhenACompanyUserIsLoggedIn() throws Exception {
+        String companyName = "Test Company Name To Be Set On Trip";
+        ObjectId id        = ObjectId.get();
+
+        User user = companyUser(id);
+        user.setCompanyName(companyName);
+
+        Trip trip = new Trip();
+        String jsonTrip = new Gson().toJson(trip);
+
+        mockMvc.perform(post("/"+VIEW_PAGE).with(user(user)).contentType(MediaType.APPLICATION_JSON).content(jsonTrip)).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.companyName").value(companyName)).
+                andExpect(jsonPath("$.companyId._time").value(id.getTimestamp()));
+        mongoTemplate.dropCollection("trip");
+    }
+
+    @Test
+    public void shouldCallServiceInsertWhenAdminIsLoggedIn() throws Exception {
+        final Trip trip = new Trip();
+        String source = "Test Source To Be Inserted";
+        trip.setSource(source);
+        String json = new Gson().toJson(trip);
+
+        context.checking(new Expectations(){{
+            oneOf(service).insert(with(any(Trip.class)));
+            will(returnValue(trip));
+        }});
+
+        controller.setService(service);
+
+        mockMvc.perform(post("/"+VIEW_PAGE).with(user(admin(ObjectId.get()))).contentType(MediaType.APPLICATION_JSON).content(json)).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.source").value(source));
+        context.assertIsSatisfied();
+    }
+
+    @Test
+    public void shouldSetTheTripClientIdAndNameToLoggedInUserCallServiceUpdateAndReturnTheInsertedTripWhenWorldIsLoggedIn() throws Exception {
+        String name = "Test Client Name To Insert";
+        String surname = "Test Client Surname To Insert";
+
+        ObjectId id = ObjectId.get();
+
+        final Trip trip = new Trip();
+        User user = world(id);
+        user.setFirstName(name);
+        user.setId(id);
+        user.setSurname(surname);
+
+        String tripString = new Gson().toJson(trip);
+        mockMvc.perform(put("/" + VIEW_PAGE).with(user(user)).contentType(MediaType.APPLICATION_JSON).content(tripString)).
+                andExpect(jsonPath("$.clientId._time").value(id.getTimestamp()))
+                .andExpect(jsonPath("$.clientName").value(name + " " + surname));
+        mongoTemplate.dropCollection("trip");
+    }
+
+    @Test
+    public void shouldSetTheTripCompanyIdAndNameToTheLoggedInCompanyAndCallUpdateWhenACompanyUserIsLoggedIn() throws Exception {
+        String companyName = "Test Company Name To Be Set On Trip";
+        ObjectId id        = ObjectId.get();
+
+        User user = companyUser(id);
+        user.setCompanyName(companyName);
+
+        Trip trip = new Trip();
+        String jsonTrip = new Gson().toJson(trip);
+
+        mockMvc.perform(put("/"+VIEW_PAGE).with(user(user)).contentType(MediaType.APPLICATION_JSON).content(jsonTrip)).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.companyName").value(companyName)).
+                andExpect(jsonPath("$.companyId._time").value(id.getTimestamp()));
+        mongoTemplate.dropCollection("trip");
+    }
+
+    @Test
+    public void shouldCallServiceUpdateWhenAdminIsLoggedIn() throws Exception {
+        final Trip trip = new Trip();
+        String source = "Test Source To Be Inserted";
+        trip.setSource(source);
+        String json = new Gson().toJson(trip);
+
+        context.checking(new Expectations(){{
+            oneOf(service).update(with(any(Trip.class)));
+            will(returnValue(trip));
+        }});
+
+        controller.setService(service);
+
+        mockMvc.perform(put("/"+VIEW_PAGE).with(user(admin(ObjectId.get()))).contentType(MediaType.APPLICATION_JSON).content(json)).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.source").value(source));
+        context.assertIsSatisfied();
+    }
+
+    @Test
+    public void shouldCallServiceDeleteAndReturnTheDeletedTripOnlyWhenAnAdminIsLoggedIn() throws Exception {
         String source = "Test Source To Delete";
         final Trip trip = new Trip();
         trip.setSource(source);
@@ -127,26 +229,36 @@ public class TripControllerTest {
             }
         });
 
-        mockMvc.perform(delete("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(tripString)).andDo(print()).
+        mockMvc.perform(delete("/" + VIEW_PAGE).with(user(admin(ObjectId.get()))).contentType(MediaType.APPLICATION_JSON).content(tripString)).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.source").value(source));
     }
 
     @Test
-    public void shouldCallServiceUpdateAndReturnTheUpdatedTrip() throws Exception {
-        String source = "Test Source To Update";
+    public void shouldNotDeleteTripWhenNonAdminIsLogged() throws Exception {
+        String source = "Test Source To Delete";
         final Trip trip = new Trip();
         trip.setSource(source);
+        String tripString = new Gson().toJson(trip);
         controller.setService(service);
 
-        context.checking(new Expectations() {{
-            oneOf(service).update(with(any(Trip.class)));
-            will(returnValue(trip));
-        }});
-        String tripString = new Gson().toJson(trip);
-        mockMvc.perform(put("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(tripString)).andDo(print()).
+        context.checking(new Expectations() {
+            {
+                never(service).delete(with(any(Trip.class)));
+                will(returnValue(trip));
+            }
+        });
+
+        ObjectId id = ObjectId.get();
+
+        mockMvc.perform(delete("/" + VIEW_PAGE).with(user(companyUser(id))).contentType(MediaType.APPLICATION_JSON).content(tripString)).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.source").value(source));
+
+        mockMvc.perform(delete("/" + VIEW_PAGE).with(user(world(id))).contentType(MediaType.APPLICATION_JSON).content(tripString)).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$.source").value(source));
+
     }
 
     @Test
@@ -162,7 +274,7 @@ public class TripControllerTest {
             will(returnValue(trip));
         }});
 
-        mockMvc.perform(get("/"+VIEW_PAGE+"/one/"+id)).andDo(print()).
+        mockMvc.perform(get("/" + VIEW_PAGE + "/one/" + id).with(user(admin(ObjectId.get())))).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.id._time").value(id.getTimestamp()));
     }
@@ -176,12 +288,12 @@ public class TripControllerTest {
 
         controller.setService(service);
 
-        context.checking(new Expectations(){{
-            oneOf(service).pageByCompanyId(id,skip,limit);
+        context.checking(new Expectations() {{
+            oneOf(service).pageByCompanyId(id, skip, limit);
             will(returnValue(page));
         }});
 
-        mockMvc.perform(get(String.format("/%s/%d/%d",VIEW_PAGE,skip,limit)).with(user(companyUser(id)))).
+        mockMvc.perform(get(String.format("/%s/%d/%d", VIEW_PAGE, skip, limit)).with(user(companyUser(id)))).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.content[0].companyId._time").value(id.getTimestamp()));
 
@@ -197,15 +309,14 @@ public class TripControllerTest {
 
         controller.setService(service);
 
-        context.checking(new Expectations(){{
-            oneOf(service).pageByUserId(id,skip,limit);
+        context.checking(new Expectations() {{
+            oneOf(service).pageByUserId(id, skip, limit);
             will(returnValue(page));
         }});
 
-        mockMvc.perform(get(String.format("/%s/%d/%d",VIEW_PAGE,skip,limit)).with(user(world(id)))).
+        mockMvc.perform(get(String.format("/%s/%d/%d", VIEW_PAGE, skip, limit)).with(user(world(id)))).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.content[0].clientId._time").value(id.getTimestamp()));
-
         context.assertIsSatisfied();
     }
 
