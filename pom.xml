@@ -182,6 +182,11 @@
                     <webApp>
                         <contextPath>/shuttle</contextPath>
                     </webApp>
+                    <connectors>
+                        <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
+                            <port>9080</port>
+                        </connector>
+                    </connectors>
                     <scanIntervalSeconds>1</scanIntervalSeconds>
                     <stopKey>stop</stopKey>
                     <stopPort>8081</stopPort>
