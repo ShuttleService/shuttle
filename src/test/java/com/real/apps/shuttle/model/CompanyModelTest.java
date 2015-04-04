@@ -3,6 +3,9 @@ package com.real.apps.shuttle.model;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 import org.junit.Test;
+
+import java.math.BigDecimal;
+
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
 

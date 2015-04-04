@@ -1,5 +1,6 @@
 package com.real.apps.shuttle.model;
 
+import com.real.apps.shuttle.valueObject.Money;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -18,7 +19,7 @@ public class Trip extends CompanyModel {
     @Indexed
     private ObjectId clientId;
     private int pricePerKm;
-    private int price;
+    private Money price;
     private String vehicleName;
     private String driverName;
     private ObjectId vehicleId;
@@ -51,11 +52,11 @@ public class Trip extends CompanyModel {
         this.pricePerKm = pricePerKm;
     }
 
-    public int getPrice() {
+    public Money getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(Money price) {
         this.price = price;
     }
 
@@ -134,7 +135,7 @@ public class Trip extends CompanyModel {
     @Override
     public String toString() {
 
-        return String.format("{source:%s,id:%s,clientName:%s,destination:%s,pricePerKm:%d,price:%d,vehicleName:%s,vehicleId:%s,driverName:%s,driverId:%s,distance:%d," +
+        return String.format("{source:%s,id:%s,clientName:%s,destination:%s,pricePerKm:%d,price:%s,vehicleName:%s,vehicleId:%s,driverName:%s,driverId:%s,distance:%d," +
                         "clientCellNumber:%s,clientId:%s}", source, id, clientName, destination,pricePerKm, price, vehicleName,vehicleId,driverName,driverId,distance,clientCellNumber,clientId);
     }
     @Override
