@@ -5,4 +5,9 @@ package com.real.apps.shuttle.valueObject;
  */
 public class Currency {
     private String currencyCode;
+
+    @Override
+    public String toString() {
+        return String.format("{CurrencyCode:%s}", currencyCode);
+    }
 }

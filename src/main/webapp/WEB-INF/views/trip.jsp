@@ -36,15 +36,28 @@
                             <input type="number" class="form-control col-xs-4" placeholder="Distance" minlength="1"
                                    name="distance" ng-model="trip.distance" ng-change="price()" required>
                         </div>
-                        <div class="form-group col-xs-6">
-                            <label class="control-label">Price Per Km</label>
-                            <input type="number" class="form-control col-xs-4" placeholder="Price Per Km" minlength="1"
-                                   name="pricePerKm" ng-model="trip.pricePerKm" ng-change="price()" required>
+                        <div class="panel col-xs-12 panel-default">
+                            <div class="panel-heading">
+                                Price Per Kilo Meter
+                            </div>
+                            <div class="panel-body colxs-12">
+                                <div class="form-group col-xs-6">
+                                    <label class="control-label">Currency</label>
+                                    <select class="form-control" ng-options="currency for currency in currencyCodes"
+                                            ng-model="trip.price.currency.currencyCode"
+                                            required></select>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <label class="control-label">Amount Per Kilo Meter</label>
+                                    <input type="number" class="form-control" placeholder="Price Per Km" minlength="1"
+                                           name="pricePerKm" ng-model="trip.pricePerKm" ng-change="price()" required>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group col-xs-6">
-                            <label class="control-label">Price</label>
+                            <label class="control-label">Total Price {{trip.price.currency.currencyCode}}</label>
                             <input type="number" class="form-control" placeholder="Price" minlength="1" name="price"
-                                   ng-model="trip.price" required readonly>
+                                   ng-model="trip.price.amount" required readonly>
                         </div>
                         <div class="form-group col-xs-6">
                             <label class="control-label">Vehicle</label>
@@ -100,8 +113,8 @@
             <td>{{trip.source}}</td>
             <td>{{trip.destination}}</td>
             <td>{{trip.distance}}</td>
-            <td>{{trip.pricePerKm | currency}}</td>
-            <td>{{trip.price | currency}}</td>
+            <td>{{trip.price.currency.currencyCode +' '+ trip.pricePerKm}}</td>
+            <td>{{trip.price.currency.currencyCode + ' '+ trip.price.amount}}</td>
             <td>{{trip.vehicleName}}</td>
             <td>{{trip.driverName}}</td>
             <td>{{trip.companyName}}</td>

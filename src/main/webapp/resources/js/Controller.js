@@ -3,7 +3,7 @@
  */
 
 angular.module('controllers', ['services']).
-    controller('SharedController', function ($rootScope, $scope, $log,AgentService,CompanyService, DriverService,UserService,VehicleService, RESULT_SIZE) {
+    controller('SharedController', function ($rootScope, $scope, $log, AgentService, CompanyService, DriverService, UserService, VehicleService, RESULT_SIZE) {
         $rootScope.sharedState = {};
         var params = {skip: 0, limit: RESULT_SIZE};
 
@@ -27,9 +27,9 @@ angular.module('controllers', ['services']).
             $rootScope.sharedState.agentPage = AgentService.get(params);
         };
 
-        $scope.findRoles = function(){
+        $scope.findRoles = function () {
             $log.debug('Calling User Service Find Roles To Get Roles And Set Them On The $rootScope Shared State ');
-            $rootScope.sharedState.roles = UserService.query({subPath1:'role'});
+            $rootScope.sharedState.roles = UserService.query({subPath1: 'role'});
         };
 
         $scope.init = function () {
@@ -54,7 +54,7 @@ angular.module('controllers', ['services']).
         };
 
         $scope.saveClick = function () {
-            if($scope.company) {
+            if ($scope.company) {
                 $scope.driver.companyId = $scope.company.id;
                 $scope.driver.companyName = $scope.company.tradingAs;
             }
@@ -82,11 +82,12 @@ angular.module('controllers', ['services']).
     }).
 
     controller('TripController', function ($scope, TripService, FormSubmissionUtilService, $log, RESULT_SIZE) {
-        $scope.trip = {};
+        $scope.trip = {price: {currency: {}}};
         $scope.prestineTrip = angular.copy($scope.trip);
         $scope.new = true;
         $scope.skip = 0;
         $scope.limit = RESULT_SIZE;
+        $scope.currencyCodes = ['R'];
 
         $scope.canSave = function () {
             return FormSubmissionUtilService.canSave($scope.addForm);
@@ -125,7 +126,7 @@ angular.module('controllers', ['services']).
 
         $scope.price = function () {
             console.log('Calculating The Price .');
-            $scope.trip.price = $scope.trip.pricePerKm * $scope.trip.distance;
+            $scope.trip.price.amount = $scope.trip.pricePerKm * $scope.trip.distance;
         };
 
         $scope.list = function () {
@@ -242,7 +243,7 @@ angular.module('controllers', ['services']).
         $scope.prestineUser = angular.copy($scope.user);
         $scope.confirmPasswordPrestine = angular.copy($scope.confirmPassword);
         $scope.new = true;
-        $scope.roles = [{role:'ROLE_admin'}, {role:'ROLE_agent'}, {role:'ROLE_world'},{role:'ROLE_companyUser'}];
+        $scope.roles = [{role: 'ROLE_admin'}, {role: 'ROLE_agent'}, {role: 'ROLE_world'}, {role: 'ROLE_companyUser'}];
         $scope.saveClick = function () {
             $log.debug('Clicked Submit Button. This Be The Authorities Submitted ' + $scope.user.authority);
             $scope.user.username = $scope.user.email;
@@ -267,7 +268,7 @@ angular.module('controllers', ['services']).
             $log.debug('This Be The Authorities Submitted With The User ' + $scope.user.authorities);
 
             UserService.save($scope.user, function (data) {
-                $log.info('Submitted To The Rest Service With The Role '+$scope.user.authorities+'Got Back Id '+data.id);
+                $log.info('Submitted To The Rest Service With The Role ' + $scope.user.authorities + 'Got Back Id ' + data.id);
                 $scope.list();
             });
 
@@ -314,7 +315,7 @@ angular.module('controllers', ['services']).
 
         $scope.saveClick = function () {
             $log.debug('Posting The Vehicle ' + $scope.vehicle);
-            if( $scope.company) {
+            if ($scope.company) {
                 var companyName = $scope.company.tradingAs;
                 var companyId = $scope.company.id;
                 $log.debug('Setting The Vehicle Company Name To ' + companyName + ' And The Company Id To ' + companyId);
@@ -357,7 +358,7 @@ angular.module('controllers', ['services']).
             });
         };
 
-        $scope.reset = function(){
+        $scope.reset = function () {
             $scope.agent = $scope.pristineAgent;
         };
 

@@ -7,4 +7,9 @@ package com.real.apps.shuttle.valueObject;
 public class Money {
     private double amount;
     private Currency currency;
+
+    @Override
+    public String toString() {
+        return String.format("{amount:%d, Currency:%}", amount, currency);
+    }
 }

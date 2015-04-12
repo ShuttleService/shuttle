@@ -11,7 +11,7 @@ describe('Testing The Trip Controller', function () {
 
     beforeEach(module('controllers'));
 
-    beforeEach(inject(function (_$rootScope_, _$controller_, _TripService_, _FormSubmissionUtilService_,_RESULT_SIZE_) {
+    beforeEach(inject(function (_$rootScope_, _$controller_, _TripService_, _FormSubmissionUtilService_, _RESULT_SIZE_) {
 
         $scope = _$rootScope_.$new();
         TripService = _TripService_;
@@ -34,7 +34,7 @@ describe('Testing The Trip Controller', function () {
 
         expect(controller).toBeDefined();
 
-        var page = {content:['', 1, "3"]};
+        var page = {content: ['', 1, "3"]};
 
         spyOn(TripService, 'get').andReturn(page);
         var skip = 3;
@@ -72,12 +72,15 @@ describe('Testing The Trip Controller', function () {
         expect(FormSubmissionUtilService.canSave).toHaveBeenCalledWith($scope.addForm);
     });
 
-    it('saveClick Should Set The Company Id And Company Name To The Values On The $scope.company',function(){
-        var company = {id:'Test Company Id To Be Assigned The trip.companyId',tradingAs:'Test Company Name To Be Assigned To trip.companyName'};
+    it('saveClick Should Set The Company Id And Company Name To The Values On The $scope.company', function () {
+        var company = {
+            id: 'Test Company Id To Be Assigned The trip.companyId',
+            tradingAs: 'Test Company Name To Be Assigned To trip.companyName'
+        };
         $scope.company = company;
 
-        $controller('TripController',{
-            $scope:$scope
+        $controller('TripController', {
+            $scope: $scope
         });
 
         $scope.saveClick();
@@ -86,32 +89,39 @@ describe('Testing The Trip Controller', function () {
         expect($scope.trip.companyName).toEqual(company.tradingAs);
     });
 
-    it('saveClick Should Set The Driver Id And Driver Name To The Values On $scope.driver',function(){
-        var driver = {id:'Test Driver Id To Be Assigned The trip.driverId',firstName:'Test Driver Name To Be Assigned To The trip.driverName',surname:
-            'Test Driver Surname To Be Assigned To The trip.driver.name '};
+    it('saveClick Should Set The Driver Id And Driver Name To The Values On $scope.driver', function () {
+        var driver = {
+            id: 'Test Driver Id To Be Assigned The trip.driverId',
+            firstName: 'Test Driver Name To Be Assigned To The trip.driverName',
+            surname: 'Test Driver Surname To Be Assigned To The trip.driver.name '
+        };
         $scope.driver = driver;
 
-        $controller('TripController',{
-            $scope:$scope
+        $controller('TripController', {
+            $scope: $scope
         });
 
         $scope.saveClick();
         expect($scope.trip.driverId).toEqual(driver.id);
-        expect($scope.trip.driverName).toEqual(driver.firstName+' '+driver.surname);
+        expect($scope.trip.driverName).toEqual(driver.firstName + ' ' + driver.surname);
     });
 
-    it('saveClick Should Set The Vehicle Id And Vehicle Name To Values on $scope.vehicle',function(){
-        var vehicle = {id:'Test Vehicle Id To Be Assigned To trip.vehicleId',make:'Test Vehicle Make To Be Assigned To trip.vehicleMake',model:'Test Vehicle Model To Be Assigned To Vehicle Name',
-            licenseNumber:'Test Vehicle License Number To Be Assigned to trip.vehicleLicenseNumber'};
+    it('saveClick Should Set The Vehicle Id And Vehicle Name To Values on $scope.vehicle', function () {
+        var vehicle = {
+            id: 'Test Vehicle Id To Be Assigned To trip.vehicleId',
+            make: 'Test Vehicle Make To Be Assigned To trip.vehicleMake',
+            model: 'Test Vehicle Model To Be Assigned To Vehicle Name',
+            licenseNumber: 'Test Vehicle License Number To Be Assigned to trip.vehicleLicenseNumber'
+        };
         $scope.vehicle = vehicle;
 
-        $controller('TripController',{
-            $scope:$scope
+        $controller('TripController', {
+            $scope: $scope
         });
 
         $scope.saveClick();
         expect($scope.trip.vehicleId).toEqual(vehicle.id);
-        expect($scope.trip.vehicleName).toEqual(vehicle.make+' '+vehicle.model+' '+vehicle.licenseNumber);
+        expect($scope.trip.vehicleName).toEqual(vehicle.make + ' ' + vehicle.model + ' ' + vehicle.licenseNumber);
 
     });
 
@@ -128,16 +138,16 @@ describe('Testing The Trip Controller', function () {
         $scope.trip = trip;
 
         spyOn(TripService, 'save').andReturn(savedTrip);
-        spyOn($scope,'list');
+        spyOn($scope, 'list');
         expect($scope.saveClick).toBeDefined();
 
         $scope.saveClick();
 
-        expect(TripService.save).toHaveBeenCalledWith(trip,jasmine.any(Function));
+        expect(TripService.save).toHaveBeenCalledWith(trip, jasmine.any(Function));
         expect($scope.list).toHaveBeenCalled();
     });
 
-    it('Should Calculate The Product Of price Per Km And The Distance And Set The Price On The ', function () {
+    it('Should Calculate The Price Per Km And The Distance And Set The Price On The Scope', function () {
 
         $controller('TripController', {
             $scope: $scope
@@ -145,7 +155,6 @@ describe('Testing The Trip Controller', function () {
 
         expect($scope.price).toBeDefined();
 
-        $scope.trip = {};
         var pricePerKm = 11;
         var distance = 13;
 
@@ -154,7 +163,7 @@ describe('Testing The Trip Controller', function () {
 
         $scope.price();
 
-        expect($scope.trip.price).toEqual(distance * pricePerKm);
+        expect($scope.trip.price.amount).toEqual(distance * pricePerKm);
     });
 
     it('Should Call List On The Service With The Given skip and limit and Save The Page On The Scope', function () {
@@ -182,15 +191,28 @@ describe('Testing The Trip Controller', function () {
         expect($scope.limit).toEqual(RESULT_SIZE);
     });
 
-    it('Should Revert The Trip To The Prestine State',function(){
-        $controller('TripController',{
-            $scope:$scope
+    it('Should Revert The Trip To The Prestine State', function () {
+        $controller('TripController', {
+            $scope: $scope
         });
 
         var prestine = $scope.trip;
-        $scope.trip = {name:'Test Trip To Be Reverted'};
+        $scope.trip = {name: 'Test Trip To Be Reverted'};
         expect($scope.trip).toBeDefined();
         $scope.reset();
         expect($scope.trip).toEqual(prestine);
+    });
+
+    it('Should Set The List Of Currencies On The Scope. Should this be on the Front End?', function () {
+        $controller('TripController', {$scope: $scope});
+        expect($scope.currencyCodes.length).toEqual(1);
+    });
+
+    it('Should Define The Currency on the Trip Price', function () {
+
+        $controller('TripController', {
+            $scope: $scope
+        });
+        expect($scope.trip.price.currency).toBeDefined();
     });
 });
