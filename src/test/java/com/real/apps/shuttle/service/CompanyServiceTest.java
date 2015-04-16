@@ -1,6 +1,6 @@
 package com.real.apps.shuttle.service;
 
-import com.real.apps.shuttle.model.Company;
+import com.real.apps.shuttle.domain.model.Company;
 import com.real.apps.shuttle.repository.CompanyRepository;
 import com.real.apps.shuttle.repository.RepositoryConfig;
 import org.bson.types.ObjectId;

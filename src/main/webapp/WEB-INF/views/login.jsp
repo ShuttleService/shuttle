@@ -22,26 +22,31 @@
         <div class="col-xs-12">
 
             <c:if test="${param.error != null}">
-              <p class="well has-error danger">
-                <strong class="str">Access Denied</strong>
-              </p>
+                <p class="well has-error danger">
+                    <strong class="str">Access Denied</strong>
+                </p>
             </c:if>
-          <c:if test="${param.logout != null}">
-            <p class="well">
-              You Are Now Logged Out.
-            </p>
-          </c:if>
-          <span class="col-xs-5"></span>
+            <c:if test="${param.logout != null}">
+                <p class="well">
+                    You Are Now Logged Out.
+                </p>
+            </c:if>
+            <span class="col-xs-5"></span>
+
             <form class="form-signin col-xs-2" method="POST" name="login" action="<c:url value="/login"/>">
                 <div class="form-group">
-                   <input path="userName" id="userName" name="username" class="form-control" placeholder="User Name" required/>
+                    <input path="userName" id="userName" name="username" class="form-control" placeholder="User Name"
+                           required/>
                 </div>
                 <div class="form-group">
-                    <input path="password" type="password" name="password" class="form-control" id="password" placeholder="Password" required/>
+                    <input path="password" type="password" name="password" class="form-control" id="password"
+                           placeholder="Password" required/>
                 </div>
                 <input type="hidden" name="${_csrf_parameterName}" value="${_csrf_token}">
-                <input type="submit" class="btn btn-primary" value="Login">
-                <button class="btn btn-default" data-target="#add" data-toggle="modal" onclick="event.preventDefault()">Sign Up</button>
+                <input type="submit" class="btn btn-primary" id="login" value="Login">
+                <button class="btn btn-default" id="signUp" data-target="#add" data-toggle="modal"
+                        onclick="event.preventDefault()">Sign Up
+                </button>
             </form>
 
             <span class="col-xs-5" ng-controller="SharedController"></span>

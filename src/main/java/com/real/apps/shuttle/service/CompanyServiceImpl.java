@@ -1,6 +1,6 @@
 package com.real.apps.shuttle.service;
 
-import com.real.apps.shuttle.model.Company;
+import com.real.apps.shuttle.domain.model.Company;
 import com.real.apps.shuttle.repository.CompanyRepository;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;

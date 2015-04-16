@@ -2,9 +2,8 @@ package com.real.apps.shuttle.controller;
 
 import static com.real.apps.shuttle.miscellaneous.Role.*;
 
-import com.real.apps.shuttle.model.Agent;
-import com.real.apps.shuttle.model.Company;
-import com.real.apps.shuttle.model.User;
+import com.real.apps.shuttle.domain.model.Company;
+import com.real.apps.shuttle.domain.model.User;
 import com.real.apps.shuttle.service.CompanyService;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
@@ -15,7 +14,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.jws.soap.SOAPBinding;
 import java.util.ArrayList;
 import java.util.Arrays;
 

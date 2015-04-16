@@ -1,10 +1,8 @@
 package com.real.apps.shuttle.service;
 
-import com.real.apps.shuttle.model.User;
+import com.real.apps.shuttle.domain.model.User;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
-
-import java.util.List;
 
 /**
  * Created by zorodzayi on 14/10/22.

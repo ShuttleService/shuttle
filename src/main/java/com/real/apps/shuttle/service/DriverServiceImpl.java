@@ -1,6 +1,6 @@
 package com.real.apps.shuttle.service;
 
-import com.real.apps.shuttle.model.Driver;
+import com.real.apps.shuttle.domain.model.Driver;
 import com.real.apps.shuttle.repository.DriverRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;

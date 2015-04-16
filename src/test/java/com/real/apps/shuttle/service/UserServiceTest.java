@@ -1,6 +1,6 @@
 package com.real.apps.shuttle.service;
 
-import com.real.apps.shuttle.model.User;
+import com.real.apps.shuttle.domain.model.User;
 import com.real.apps.shuttle.repository.RepositoryConfig;
 import com.real.apps.shuttle.repository.UserRepository;
 import org.bson.types.ObjectId;
@@ -16,8 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;

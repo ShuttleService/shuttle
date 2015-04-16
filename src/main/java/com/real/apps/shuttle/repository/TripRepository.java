@@ -1,6 +1,6 @@
 package com.real.apps.shuttle.repository;
 
-import com.real.apps.shuttle.model.Trip;
+import com.real.apps.shuttle.domain.model.Trip;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

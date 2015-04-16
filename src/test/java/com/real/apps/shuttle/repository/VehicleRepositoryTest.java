@@ -1,15 +1,13 @@
 package com.real.apps.shuttle.repository;
 
-import com.real.apps.shuttle.model.Vehicle;
+import com.real.apps.shuttle.domain.model.Vehicle;
 import org.bson.types.ObjectId;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoOperations;

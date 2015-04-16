@@ -2,7 +2,7 @@ package com.real.apps.shuttle.controller;
 
 import com.google.gson.Gson;
 import com.real.apps.shuttle.config.MvcConfiguration;
-import com.real.apps.shuttle.model.Review;
+import com.real.apps.shuttle.domain.model.Review;
 import com.real.apps.shuttle.service.ReviewService;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;

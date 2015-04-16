@@ -12,11 +12,12 @@
     <url>http://maven.apache.org</url>
 
     <properties>
-        <java.version>1.7</java.version>
+        <java.version>1.8</java.version>
         <spring.version>4.1.1.RELEASE</spring.version>
         <spring.security.version>4.0.0.RELEASE</spring.security.version>
-        <cglib.version>2.2.2</cglib.version>
-        <json.path.version>0.9.1</json.path.version>
+        <cglib.version>LATEST</cglib.version>
+        <json.path.version>0.9.0</json.path.version>
+        <groovy.all.version>LATEST</groovy.all.version>
         <spring.data.mongodb.version>1.6.0.RELEASE</spring.data.mongodb.version>
     </properties>
 
@@ -36,13 +37,13 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>LATEST</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.spockframework</groupId>
             <artifactId>spock-core</artifactId>
-            <version>0.7-groovy-2.0</version>
+            <version>LATEST</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -109,11 +110,6 @@
             <artifactId>log4j</artifactId>
             <version>1.2.17</version>
         </dependency>
-        <!-- <dependency>
-             <groupId>org.slf4j</groupId>
-             <artifactId>slf4j-log4j12</artifactId>
-             <version>1.7.5</version>
-         </dependency>-->
 
         <!-- CGLib for @Configuration -->
         <dependency>
@@ -151,24 +147,18 @@
             <artifactId>spring-data-mongodb</artifactId>
             <version>${spring.data.mongodb.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.3.2</version>
+        </dependency>
     </dependencies>
-    <repositories>
-        <repository>
-            <id>spring-snap</id>
-            <url>http://repo.spring.io/snapshot</url>
-        </repository>
-        <repository>
-            <id>spring-milestone</id>
-            <url>http://repo.spring.io/milestone</url>
-        </repository>
-    </repositories>
     <build>
         <finalName>shuttle</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.0.2</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -196,6 +186,52 @@
                     <scanIntervalSeconds>1</scanIntervalSeconds>
                     <stopKey>stop</stopKey>
                     <stopPort>8081</stopPort>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.gmaven</groupId>
+                <artifactId>gmaven-plugin</artifactId>
+                <configuration>
+                    <providerSelection>2.0</providerSelection>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+                <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.gmaven.runtime</groupId>
+                        <artifactId>gmaven-runtime-2.0</artifactId>
+                        <version>LATEST</version>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>org.codehaus.groovy</groupId>
+                                <artifactId>groovy-all</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-all</artifactId>
+                        <version>${groovy.all.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <useFile>false</useFile>
+                    <includes>
+                        <include>**/*Spec.java</include>
+                        <include>**/*Test.java</include>
+                    </includes>
                 </configuration>
             </plugin>
         </plugins>

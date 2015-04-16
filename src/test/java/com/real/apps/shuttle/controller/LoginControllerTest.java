@@ -1,13 +1,12 @@
 package com.real.apps.shuttle.controller;
 
 import com.real.apps.shuttle.config.MvcConfiguration;
-import com.real.apps.shuttle.model.User;
+import com.real.apps.shuttle.domain.model.User;
 import com.real.apps.shuttle.service.LoginService;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;

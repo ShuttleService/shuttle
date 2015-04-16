@@ -1,11 +1,9 @@
 package com.real.apps.shuttle.service;
 
-import com.real.apps.shuttle.model.Agent;
+import com.real.apps.shuttle.domain.model.Agent;
 
 import com.real.apps.shuttle.repository.AgentRepository;
 import com.real.apps.shuttle.repository.RepositoryConfig;
-import com.real.apps.shuttle.service.AgentServiceImpl;
-import com.real.apps.shuttle.service.ServiceConfig;
 import org.bson.types.ObjectId;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;

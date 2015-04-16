@@ -1,6 +1,6 @@
 package com.real.apps.shuttle.repository;
 
-import com.real.apps.shuttle.model.Review;
+import com.real.apps.shuttle.domain.model.Review;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

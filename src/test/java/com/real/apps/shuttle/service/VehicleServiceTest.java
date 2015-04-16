@@ -1,6 +1,6 @@
 package com.real.apps.shuttle.service;
 
-import com.real.apps.shuttle.model.Vehicle;
+import com.real.apps.shuttle.domain.model.Vehicle;
 import com.real.apps.shuttle.repository.RepositoryConfig;
 import com.real.apps.shuttle.repository.VehicleRepository;
 import org.bson.types.ObjectId;

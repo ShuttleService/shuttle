@@ -1,23 +1,18 @@
 package com.real.apps.shuttle.controller;
 
-import com.real.apps.shuttle.model.Agent;
-import com.real.apps.shuttle.model.User;
+import com.real.apps.shuttle.domain.model.Agent;
+import com.real.apps.shuttle.domain.model.User;
 import com.real.apps.shuttle.service.AgentService;
-import com.real.apps.shuttle.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.UnknownHttpStatusCodeException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.real.apps.shuttle.miscellaneous.Role.*;

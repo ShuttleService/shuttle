@@ -1,6 +1,6 @@
 package com.real.apps.shuttle.service;
 
-import com.real.apps.shuttle.model.Driver;
+import com.real.apps.shuttle.domain.model.Driver;
 import com.real.apps.shuttle.repository.DriverRepository;
 import com.real.apps.shuttle.repository.RepositoryConfig;
 import org.bson.types.ObjectId;
@@ -19,7 +19,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Arrays;
 
-import static org.hamcrest.CoreMatchers.any;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 

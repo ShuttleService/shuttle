@@ -1,6 +1,6 @@
 package com.real.apps.shuttle.controller;
 
-import com.real.apps.shuttle.model.Review;
+import com.real.apps.shuttle.domain.model.Review;
 import com.real.apps.shuttle.service.ReviewService;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * Created by zorodzayi on 14/10/11.

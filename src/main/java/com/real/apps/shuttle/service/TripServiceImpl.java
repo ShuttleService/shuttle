@@ -1,6 +1,6 @@
 package com.real.apps.shuttle.service;
 
-import com.real.apps.shuttle.model.Trip;
+import com.real.apps.shuttle.domain.model.Trip;
 import com.real.apps.shuttle.repository.TripRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;

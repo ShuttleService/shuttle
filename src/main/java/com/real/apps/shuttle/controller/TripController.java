@@ -1,7 +1,7 @@
 package com.real.apps.shuttle.controller;
 
-import com.real.apps.shuttle.model.Trip;
-import com.real.apps.shuttle.model.User;
+import com.real.apps.shuttle.domain.model.Trip;
+import com.real.apps.shuttle.domain.model.User;
 import com.real.apps.shuttle.service.TripService;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;

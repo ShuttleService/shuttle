@@ -1,10 +1,8 @@
 package com.real.apps.shuttle.controller;
 
-import com.real.apps.shuttle.model.User;
+import com.real.apps.shuttle.domain.model.User;
 import org.bson.types.ObjectId;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
-import javax.jws.soap.SOAPBinding;
 
 import static com.real.apps.shuttle.miscellaneous.Role.*;
 import java.util.Arrays;

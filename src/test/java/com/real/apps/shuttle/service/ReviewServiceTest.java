@@ -1,6 +1,6 @@
 package com.real.apps.shuttle.service;
 
-import com.real.apps.shuttle.model.Review;
+import com.real.apps.shuttle.domain.model.Review;
 import com.real.apps.shuttle.repository.RepositoryConfig;
 import com.real.apps.shuttle.repository.ReviewRepository;
 import org.jmock.Expectations;

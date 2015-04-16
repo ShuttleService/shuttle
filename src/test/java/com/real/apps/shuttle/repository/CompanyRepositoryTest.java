@@ -1,6 +1,6 @@
 package com.real.apps.shuttle.repository;
 
-import com.real.apps.shuttle.model.Company;
+import com.real.apps.shuttle.domain.model.Company;
 import org.bson.types.ObjectId;
 import org.junit.After;
 import org.junit.Test;

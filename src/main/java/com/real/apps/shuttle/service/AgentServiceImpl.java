@@ -1,6 +1,6 @@
 package com.real.apps.shuttle.service;
 
-import com.real.apps.shuttle.model.Agent;
+import com.real.apps.shuttle.domain.model.Agent;
 import com.real.apps.shuttle.repository.AgentRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,8 +2,8 @@ package com.real.apps.shuttle.controller;
 
 import com.google.gson.Gson;
 import com.real.apps.shuttle.config.MvcConfiguration;
-import com.real.apps.shuttle.model.Driver;
-import com.real.apps.shuttle.model.User;
+import com.real.apps.shuttle.domain.model.Driver;
+import com.real.apps.shuttle.domain.model.User;
 import com.real.apps.shuttle.service.DriverService;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;

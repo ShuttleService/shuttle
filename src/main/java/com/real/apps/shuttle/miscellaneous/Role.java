@@ -1,6 +1,6 @@
 package com.real.apps.shuttle.miscellaneous;
 
-import com.real.apps.shuttle.model.User;
+import com.real.apps.shuttle.domain.model.User;
 
 /**
  * Created by zorodzayi on 15/01/07.

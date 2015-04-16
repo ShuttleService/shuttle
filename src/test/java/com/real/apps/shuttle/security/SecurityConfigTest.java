@@ -1,7 +1,7 @@
 package com.real.apps.shuttle.security;
 
 import com.real.apps.shuttle.config.MvcConfiguration;
-import com.real.apps.shuttle.model.User;
+import com.real.apps.shuttle.domain.model.User;
 import com.real.apps.shuttle.repository.UserRepository;
 import org.bson.types.ObjectId;
 import org.junit.Before;

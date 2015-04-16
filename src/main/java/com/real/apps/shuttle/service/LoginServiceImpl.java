@@ -1,6 +1,6 @@
 package com.real.apps.shuttle.service;
 
-import com.real.apps.shuttle.model.User;
+import com.real.apps.shuttle.domain.model.User;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 

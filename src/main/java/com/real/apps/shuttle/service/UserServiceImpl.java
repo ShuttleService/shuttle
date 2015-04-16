@@ -1,7 +1,7 @@
 package com.real.apps.shuttle.service;
 
 import com.real.apps.shuttle.miscellaneous.Role;
-import com.real.apps.shuttle.model.User;
+import com.real.apps.shuttle.domain.model.User;
 import com.real.apps.shuttle.repository.UserRepository;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;

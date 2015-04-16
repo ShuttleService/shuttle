@@ -1,6 +1,6 @@
 package com.real.apps.shuttle.service;
 
-import com.real.apps.shuttle.model.Review;
+import com.real.apps.shuttle.domain.model.Review;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 
