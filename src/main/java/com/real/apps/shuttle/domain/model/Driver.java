@@ -18,7 +18,7 @@ public class Driver extends CompanyModel {
     private String email;
     private String driversLicenseNumber;
     private String driversLicenseClass;
-    private BookingRange bookingRange;
+    private BookedRange bookingRange;
 
     public String getFirstName() {
         return firstName;
@@ -68,19 +68,19 @@ public class Driver extends CompanyModel {
         this.driversLicenseClass = driversLicenseClass;
     }
 
-    public BookingRange getBookingRange() {
+    public BookedRange getBookingRange() {
         return bookingRange;
     }
 
-    public void setBookingRange(BookingRange bookingRange) {
+    public void setBookingRange(BookedRange bookingRange) {
         this.bookingRange = bookingRange;
     }
 
     @Override
     public String toString() {
 
-        return String.format("{id:%s,firstName:%s,surname:%s,email:%s,driversLicenseNumber:%s,driversLicenseClass:%s,companyId:%s,CompanyName:%s,BookingRange}", id, firstName,
-                surname, email, driversLicenseNumber, driversLicenseClass, companyId, companyName,bookingRange);
+        return String.format("{id:%s,firstName:%s,surname:%s,email:%s,driversLicenseNumber:%s,driversLicenseClass:%s,companyId:%s,CompanyName:%s,BookedRange}", id, firstName,
+                surname, email, driversLicenseNumber, driversLicenseClass, companyId, companyName, bookingRange);
     }
 
     @Override
