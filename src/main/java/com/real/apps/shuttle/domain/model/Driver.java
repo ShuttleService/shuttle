@@ -4,6 +4,8 @@ import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Set;
+
 /**
  * Created by zorodzayi on 14/10/10.
  */
@@ -18,7 +20,7 @@ public class Driver extends CompanyModel {
     private String email;
     private String driversLicenseNumber;
     private String driversLicenseClass;
-    private BookedRange bookingRange;
+    private Set<BookedRange> bookedRanges;
 
     public String getFirstName() {
         return firstName;
@@ -68,19 +70,19 @@ public class Driver extends CompanyModel {
         this.driversLicenseClass = driversLicenseClass;
     }
 
-    public BookedRange getBookingRange() {
-        return bookingRange;
+    public Set<BookedRange> getBookedRanges() {
+        return bookedRanges;
     }
 
-    public void setBookingRange(BookedRange bookingRange) {
-        this.bookingRange = bookingRange;
+    public void setBookedRanges(Set<BookedRange> bookedRanges) {
+        this.bookedRanges = bookedRanges;
     }
 
     @Override
     public String toString() {
 
         return String.format("{id:%s,firstName:%s,surname:%s,email:%s,driversLicenseNumber:%s,driversLicenseClass:%s,companyId:%s,CompanyName:%s,BookedRange}", id, firstName,
-                surname, email, driversLicenseNumber, driversLicenseClass, companyId, companyName, bookingRange);
+                surname, email, driversLicenseNumber, driversLicenseClass, companyId, companyName, bookedRanges);
     }
 
     @Override

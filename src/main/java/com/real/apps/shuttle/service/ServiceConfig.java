@@ -10,7 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * Created by zorodzayi on 14/10/31.
  */
 @Configuration
-@ComponentScan(basePackages = "com.real.apps.shuttle.service")
+@ComponentScan(basePackages = {"com.real.apps.shuttle.service","com.real.apps.shuttle.domain.model.service"})
 public class ServiceConfig {
   @Bean
   public PasswordEncoder passwordEncoder(){

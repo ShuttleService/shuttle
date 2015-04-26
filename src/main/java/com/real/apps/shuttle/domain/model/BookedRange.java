@@ -56,7 +56,7 @@ public class BookedRange {
 
     @Override
     public String toString() {
-        return String.format("{from:%,to:%s}", from, to);
+        return String.format("{from:%s,to:%s}", from, to);
     }
 
     public Date getFrom() {
