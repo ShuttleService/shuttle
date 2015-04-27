@@ -1,7 +1,7 @@
 package com.real.apps.shuttle.controller;
 
-import com.real.apps.shuttle.miscellaneous.Role;
 import com.real.apps.shuttle.domain.model.User;
+import com.real.apps.shuttle.miscellaneous.Role;
 import com.real.apps.shuttle.service.UserService;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import static com.real.apps.shuttle.miscellaneous.Role.*;
@@ -88,57 +89,73 @@ public class UserController {
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public User post(@RequestBody User newUser,@AuthenticationPrincipal User user) {
-        logger.debug(String.format("Posting User %s. {LoggedInUser:%s}",user,user));
-        if(user == null){
+    public User post(@RequestBody User newUser, @AuthenticationPrincipal User user) {
+        logger.debug(String.format("Posting User %s.\n {LoggedInUser:%s}", user, user));
+        if (user == null) {
             logger.debug(String.format("No User Is Logged In. Assuming Adding user for the first time. Going ahead with the insert"));
             return service.insert(newUser);
         }
 
         String role = Role.role(user);
 
-        switch (role){
-            case ADMIN:{
+        switch (role) {
+            case ADMIN: {
                 logger.debug(String.format("Admin User Logged In. Inserting User As Is"));
+                return service.insert(newUser);
+            }
+
+            case ANONYMOUS: {
+                logger.debug(String.format("There is no use logged in. Setting the role to world user "));
+                SimpleGrantedAuthority authority = new SimpleGrantedAuthority(Role.WORLD);
+                Collection<SimpleGrantedAuthority> authorities = Arrays.asList(authority);
+                newUser.setAuthorities(authorities);
+                return service.insert(newUser);
+            }
+
+            case COMPANY_USER:{
+                logger.debug("Company user is logged in. Setting the rile to company user");
+                SimpleGrantedAuthority authority = new SimpleGrantedAuthority(Role.COMPANY_USER);
+                Collection<SimpleGrantedAuthority> authorities = Arrays.asList(authority);
+                newUser.setAuthorities(authorities);
                 return service.insert(newUser);
             }
         }
 
         logger.debug("At The End Of The Method. Not Inserting The User. Returning The User As Is.");
-        return user;
+        return newUser;
     }
 
     @RequestMapping(value = "/role")
     @ResponseBody
     public List<SimpleGrantedAuthority> role(@AuthenticationPrincipal User user) {
-        logger.debug(String.format("Find Roles For User %s",user));
+        logger.debug(String.format("Find Roles For User %s", user));
         List<SimpleGrantedAuthority> roles = new ArrayList<>();
 
-        if(user != null){
+        if (user != null) {
             logger.debug("There is a logged in user.");
             String role = user.getAuthorities() != null && !user.getAuthorities().isEmpty() ? user.getAuthorities().iterator().next().getAuthority() : "";
-            logger.debug(String.format("Logged in user {role:%s}",role));
+            logger.debug(String.format("Logged in user {role:%s}", role));
 
-            if(role != null ){
+            if (role != null) {
                 logger.debug("Logged in user has role");
-                switch(role){
-                    case ADMIN:{
+                switch (role) {
+                    case ADMIN: {
                         logger.debug("Adding Admin Role");
                         roles.add(new SimpleGrantedAuthority(ADMIN));
                         logger.debug("Adding Agent Role");
                         roles.add(new SimpleGrantedAuthority(AGENT));
                         //Falling through. I want to add all the roles for the admin
                     }
-                    case  COMPANY_USER:{
+                    case COMPANY_USER: {
                         logger.debug("Adding Company User");
                         roles.add(new SimpleGrantedAuthority(COMPANY_USER));
                         break;
                     }
                 }
-            }else {
+            } else {
                 logger.debug("Logged in user has no role. Weird but happened. ");
             }
-        }else {
+        } else {
             logger.debug("There is no user here. Return World");
         }
         roles.add(new SimpleGrantedAuthority(WORLD));

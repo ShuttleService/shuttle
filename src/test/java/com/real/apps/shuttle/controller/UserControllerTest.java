@@ -3,6 +3,7 @@ package com.real.apps.shuttle.controller;
 import com.google.gson.Gson;
 import com.real.apps.shuttle.config.MvcConfiguration;
 import com.real.apps.shuttle.domain.model.User;
+import com.real.apps.shuttle.miscellaneous.Role;
 import com.real.apps.shuttle.service.UserService;
 import org.bson.types.ObjectId;
 import org.jmock.Expectations;
@@ -13,6 +14,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -30,6 +33,9 @@ import java.util.List;
 
 import static com.real.apps.shuttle.controller.UserDetailsUtils.*;
 import static com.real.apps.shuttle.miscellaneous.Role.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -126,6 +132,41 @@ public class UserControllerTest {
     }
 
     @Test
+    public void whenUserIsAnonymousShouldSetTheRoleToWorldBeforeInserting() throws Exception {
+        final User user = new User();
+        assertThat(user.getAuthorities().size(), is(0));
+
+        UserService service = Mockito.mock(UserService.class);
+
+        String jsonUser = new Gson().toJson(user);
+        controller.setService(service);
+
+        ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
+
+        mockMvc.perform(post(String.format("/%s", VIEW_PAGE)).with(user(anonymous(ObjectId.get()))).contentType(MediaType.APPLICATION_JSON).content(jsonUser)).
+                andExpect(status().isOk());
+        verify(service).insert(captor.capture());
+        assertThat(Role.WORLD, is(captor.getValue().getAuthorities().iterator().next().getAuthority()));
+    }
+
+    @Test
+    public void shouldOnlyCreateCompanyUserWhenCompanyUserIsLoggedIn() throws Exception {
+        User user = new User();
+        assertThat(user.getAuthorities().size(), is(0));
+
+        UserService service = Mockito.mock(UserService.class);
+        String jsonUser = new Gson().toJson(user);
+        controller.setService(service);
+
+        ArgumentCaptor<User> argumentCaptor = ArgumentCaptor.forClass(User.class);
+        mockMvc.perform(post(String.format("/%s", VIEW_PAGE)).with(user(companyUser(ObjectId.get()))).contentType(MediaType.APPLICATION_JSON).content(jsonUser)).
+                andExpect(status().isOk());
+
+        verify(service).insert(argumentCaptor.capture());
+        assertThat(Role.COMPANY_USER, is(argumentCaptor.getValue().getAuthorities().iterator().next().getAuthority()));
+    }
+
+    @Test
     public void shouldNotCallServiceInsertWhenWorldIsLoggedInAsAWorldShouldNotCreateOtherUsers() throws Exception {
         final User user = new User();
         final ObjectId id = ObjectId.get();
@@ -140,10 +181,9 @@ public class UserControllerTest {
 
         controller.setService(service);
 
-        mockMvc.perform(post(String.format("/%s",VIEW_PAGE)).with(user(world(ObjectId.get()))).contentType(MediaType.APPLICATION_JSON).content(jsonUser)).
+        mockMvc.perform(post(String.format("/%s", VIEW_PAGE)).with(user(world(ObjectId.get()))).contentType(MediaType.APPLICATION_JSON).content(jsonUser)).
                 andExpect(status().isOk()).andExpect(jsonPath("$.id._time").value(id.getTimestamp()));
     }
-
 
 
     @Test

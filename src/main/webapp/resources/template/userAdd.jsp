@@ -1,3 +1,6 @@
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
+<%@taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <div class="modal fade" id="add">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -42,15 +45,19 @@
                         <input type="password" placeholder="Confirm Password" class="form-control" ng-minlength="6"
                                name="confirmPassword" ng-model="formHolder.confirmPassword" required>
                     </div>
-                    <div class="form-group col-xs-6">
-                        <label class="control-label">Role</label>
-                        <select placeholder="Role" class="form-control"
-                               name="authorities" ng-model="user.authority"  ng-options="role.role for role in sharedState.roles" required></select>
-                    </div>
-                  <div class="form-group col-xs-6">
-                    <label class="control-label">Company</label>
-                    <select class="form-control" name="company" ng-model="user.company" ng-options="company.tradingAs for company in sharedState.companyPage.content"></select>
-                  </div>
+                    <security:authorize access="hasAnyRole('ROLE_admin')">
+                        <div class="form-group col-xs-6">
+                            <label class="control-label">Role</label>
+                            <select placeholder="Role" class="form-control"
+                                    name="authorities" ng-model="user.authority"
+                                    ng-options="role.role for role in sharedState.roles" required></select>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label class="control-label">Company</label>
+                            <select class="form-control" name="company" ng-model="user.company"
+                                    ng-options="company.tradingAs for company in sharedState.companyPage.content"></select>
+                        </div>
+                    </security:authorize>
                     <div class="form-group col-xs-6">
                         <label class="control-label">Cell Number</label>
                         <input type="tel" class="form-control" placeholder="Cell Number" ng-minlength="10"
@@ -63,7 +70,8 @@
                     </div>
                     <div class="form-group col-xs-6 text-center">
                         <label class="control-label">Street Address</label>
-                        <input type="text" class="form-control" placeholder="Street Address" ng-minlength="2" name="streetAddress" ng-model="user.streetAddress" required>
+                        <input type="text" class="form-control" placeholder="Street Address" ng-minlength="2"
+                               name="streetAddress" ng-model="user.streetAddress" required>
                     </div>
                     <div class="form-group col-xs-6">
                         <label class="control-label">Suburb</label>

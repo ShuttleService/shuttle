@@ -30,7 +30,6 @@
                     </button>
                     <a class="navbar-brand" href="#"><tiles:getAsString name="title"/></a>
                 </div>
-
                 <div class="collapse navbar-collapse" id="menu">
                     <ul class="nav navbar-nav">
                         <security:authorize access="hasAnyRole('ROLE_admin','ROLE_companyUser','ROLE_world')">
@@ -45,7 +44,7 @@
                         <security:authorize access="hasAnyRole('ROLE_admin','ROLE_companyUser')">
                             <li><a href="<spring:url value='user' />">Users</a></li>
                         </security:authorize>
-                        
+
                         <li><a href="<spring:url value="review"/>">Reviews</a></li>
 
                         <security:authorize access="hasAnyRole('ROLE_admin','ROLE_agent')">
@@ -68,13 +67,9 @@
                             </li>
                         </security:authorize>
                         <li class="pull-right"><a href="<spring:url value="logout"/>">Logout</a></li>
-
-
                     </ul>
-
                 </div>
             </div>
-
         </nav>
     </div>
     <div class="pull-right">
@@ -85,7 +80,6 @@
             <tiles:insertAttribute name="body"/>
         </div>
     </div>
-
 </div>
 </body>
 </html>

@@ -5,7 +5,7 @@ import com.real.apps.shuttle.domain.model.BookedRange
 /**
  * Created by zorodzayi on 15/04/18.
  */
-class BookedRangeServiceTest extends spock.lang.Specification {
+class BookedRangeServiceSpec extends spock.lang.Specification {
 
     private Date now = new Date()
     private Date earlier

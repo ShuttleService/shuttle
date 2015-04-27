@@ -1,7 +1,7 @@
+package com.real.apps.shuttle.domain.model.service
+
 import com.real.apps.shuttle.domain.model.BookedRange
 import com.real.apps.shuttle.domain.model.Driver
-import com.real.apps.shuttle.domain.model.service.BookedRangeService
-import com.real.apps.shuttle.domain.model.service.DriverDomainServiceImpl
 import com.real.apps.shuttle.repository.DriverRepository
 import org.bson.types.ObjectId
 import org.springframework.data.domain.Page
@@ -10,15 +10,40 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 
 /**
- * Created by zorodzayi on 15/04/26.
+ * Created by zorodzayi on 15/04/18.
  */
-class DriverServiceSpec extends spock.lang.Specification {
-    private DriverDomainServiceImpl service;
+class DriverDomainServiceSpec extends spock.lang.Specification {
+
+    private DriverDomainService service = new DriverDomainServiceImpl();
+    private Date now = new Date();
+    private Date earlier;
+    private Date later;
     private Date from = new Date()
     private Date to = new Date()
 
     def setup() {
         service = new DriverDomainServiceImpl();
+        Calendar calendar = Calendar.getInstance()
+        calendar.setTime(now)
+        calendar.add(Calendar.MILLISECOND, -1)
+        earlier = calendar.getTime();
+        calendar.add(Calendar.MILLISECOND, 2)
+        later = calendar.getTime()
+    }
+
+
+    def 'Should Return The Drivers Outside The BookedRange'() {
+
+        given: 'A driver with no booked range'
+
+        Driver driver = new Driver()
+        BookedRange bookedRange = new BookedRange(now, later)
+
+        when: 'A booking is attempted'
+        boolean successfullyBooked = service.book(driver, bookedRange);
+
+        then:
+        successfullyBooked
     }
 
     def 'Should Find Drivers That Are Bookable By Checking That Each Driver Is Bookable'() {
@@ -42,7 +67,7 @@ class DriverServiceSpec extends spock.lang.Specification {
         DriverRepository repository = Mock()
         ObjectId id = ObjectId.get()
         Pageable pageable = new PageRequest(0, 10)
-        Page<Driver> page = new PageImpl<>(Arrays.asList(drivers));
+        Page<Driver> page = new PageImpl<>(Arrays.asList(drivers))
         repository.findByCompanyId(id, pageable) >> page
         BookedRangeService bookedRangeService = Mock()
         bookedRangeService.availableForBooking(driver2BookedRanges, bookedRange) >> expected
