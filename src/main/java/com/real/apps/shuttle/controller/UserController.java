@@ -92,7 +92,9 @@ public class UserController {
     public User post(@RequestBody User newUser, @AuthenticationPrincipal User user) {
         logger.debug(String.format("Posting User %s.\n {LoggedInUser:%s}", user, user));
         if (user == null) {
-            logger.debug(String.format("No User Is Logged In. Assuming Adding user for the first time. Going ahead with the insert"));
+            logger.debug(String.format("No User Is Logged In. Assuming Adding user for the first time. Setting the role to world"));
+
+            newUser.getAuthorities().add(new SimpleGrantedAuthority(Role.WORLD));
             return service.insert(newUser);
         }
 
@@ -106,17 +108,13 @@ public class UserController {
 
             case ANONYMOUS: {
                 logger.debug(String.format("There is no use logged in. Setting the role to world user "));
-                SimpleGrantedAuthority authority = new SimpleGrantedAuthority(Role.WORLD);
-                Collection<SimpleGrantedAuthority> authorities = Arrays.asList(authority);
-                newUser.setAuthorities(authorities);
+                newUser.getAuthorities().add(new SimpleGrantedAuthority(Role.WORLD));
                 return service.insert(newUser);
             }
 
-            case COMPANY_USER:{
+            case COMPANY_USER: {
                 logger.debug("Company user is logged in. Setting the rile to company user");
-                SimpleGrantedAuthority authority = new SimpleGrantedAuthority(Role.COMPANY_USER);
-                Collection<SimpleGrantedAuthority> authorities = Arrays.asList(authority);
-                newUser.setAuthorities(authorities);
+                newUser.getAuthorities().add(new SimpleGrantedAuthority(Role.COMPANY_USER));
                 return service.insert(newUser);
             }
         }

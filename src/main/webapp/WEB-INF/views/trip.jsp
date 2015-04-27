@@ -1,5 +1,6 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <div ng-controller="TripController">
     <div class="modal fade" id="add">
         <div class="modal-dialog">
@@ -31,34 +32,38 @@
                             <input type="text" class="form-control" placeholder="Destination" ng-minlength="4"
                                    name="destination" ng-model="trip.destination" required>
                         </div>
-                        <div class="form-group col-xs-6">
-                            <label class="control-label">Distance</label>
-                            <input type="number" class="form-control col-xs-4" placeholder="Distance" minlength="1"
-                                   name="distance" ng-model="trip.distance" ng-change="price()" required>
-                        </div>
-                        <div class="panel col-xs-12 panel-default">
-                            <div class="panel-heading">
-                                Price Per Kilo Meter
+                        <security:authorize access="hasAnyRole('ROLE_admin','ROLE_companyUser')">
+                            <div class="form-group col-xs-6">
+                                <label class="control-label">Distance</label>
+                                <input type="number" class="form-control col-xs-4" placeholder="Distance" minlength="1"
+                                       name="distance" ng-model="trip.distance" ng-change="price()" required>
                             </div>
-                            <div class="panel-body colxs-12">
-                                <div class="form-group col-xs-6">
-                                    <label class="control-label">Currency</label>
-                                    <select class="form-control" ng-options="currency for currency in currencyCodes"
-                                            ng-model="trip.price.currency.currencyCode"
-                                            required></select>
+                            <div class="panel col-xs-12 panel-default">
+                                <div class="panel-heading">
+                                    Price Per Kilo Meter
                                 </div>
-                                <div class="form-group col-xs-6">
-                                    <label class="control-label">Amount Per Kilo Meter</label>
-                                    <input type="number" class="form-control" placeholder="Price Per Km" minlength="1"
-                                           name="pricePerKm" ng-model="trip.pricePerKm" ng-change="price()" required>
+                                <div class="panel-body colxs-12">
+                                    <div class="form-group col-xs-6">
+                                        <label class="control-label">Currency</label>
+                                        <select class="form-control" ng-options="currency for currency in currencyCodes"
+                                                ng-model="trip.price.currency.currencyCode"
+                                                required></select>
+                                    </div>
+                                    <div class="form-group col-xs-6">
+                                        <label class="control-label">Amount Per Kilo Meter</label>
+                                        <input type="number" class="form-control" placeholder="Price Per Km"
+                                               minlength="1"
+                                               name="pricePerKm" ng-model="trip.pricePerKm" ng-change="price()"
+                                               required>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group col-xs-6">
-                            <label class="control-label">Total Price {{trip.price.currency.currencyCode}}</label>
-                            <input type="number" class="form-control" placeholder="Price" minlength="1" name="price"
-                                   ng-model="trip.price.amount" required readonly>
-                        </div>
+                            <div class="form-group col-xs-6">
+                                <label class="control-label">Total Price {{trip.price.currency.currencyCode}}</label>
+                                <input type="number" class="form-control" placeholder="Price" minlength="1" name="price"
+                                       ng-model="trip.price.amount" required readonly>
+                            </div>
+                        </security:authorize>
                         <div class="form-group col-xs-6">
                             <label class="control-label">Vehicle</label>
                             <select class="form-control" placeholder="Vehicle" name="vehicle"

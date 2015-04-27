@@ -27,6 +27,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.jws.soap.SOAPBinding;
 import javax.servlet.Filter;
 import java.util.Arrays;
 import java.util.List;
@@ -35,6 +36,7 @@ import static com.real.apps.shuttle.controller.UserDetailsUtils.*;
 import static com.real.apps.shuttle.miscellaneous.Role.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.calls;
 import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -147,6 +149,26 @@ public class UserControllerTest {
                 andExpect(status().isOk());
         verify(service).insert(captor.capture());
         assertThat(Role.WORLD, is(captor.getValue().getAuthorities().iterator().next().getAuthority()));
+    }
+
+    @Test
+    public void shoudSetRoleWorldWhenNoUserIsLoggedIn() throws Exception {
+        User user = new User();
+        assertThat(user.getAuthorities().size(), is(0));
+
+        UserService service = Mockito.mock(UserService.class);
+        controller.setService(service);
+
+        String jsonUser = new Gson().toJson(user);
+
+        ArgumentCaptor<User> argumentCaptor = ArgumentCaptor.forClass(User.class);
+
+        mockMvc.perform(post(String.format("/%s", VIEW_PAGE)).contentType(MediaType.APPLICATION_JSON).content(jsonUser))
+                .andExpect(status().isOk());
+
+        verify(service).insert(argumentCaptor.capture());
+        assertThat(Role.WORLD, is(argumentCaptor.getValue().getAuthorities().iterator().next().getAuthority()));
+
     }
 
     @Test
