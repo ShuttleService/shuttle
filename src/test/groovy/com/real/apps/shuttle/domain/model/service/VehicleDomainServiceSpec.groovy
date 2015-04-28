@@ -32,7 +32,7 @@ class VehicleDomainServiceSpec extends spock.lang.Specification {
         Set<BookedRange> vehicle2BookedRanges = new HashSet<>(Arrays.asList(vehicle2BookedRange, vehicle2BookedRange1))
         Vehicle vehicle2 = new Vehicle(bookedRanges: vehicle2BookedRanges)
 
-        Set<Vehicle> vehicles = new HashSet<>(Arrays.asList(vehicle, vehicle1, vehicle2))
+        List<Vehicle> vehicles = Arrays.asList(vehicle, vehicle1, vehicle2)
 
         and: 'A Booked Range '
         BookedRange bookedRange = new BookedRange(from, to)
@@ -41,11 +41,17 @@ class VehicleDomainServiceSpec extends spock.lang.Specification {
         Pageable pageable = new PageRequest(0, 10)
         VehicleRepository repository = Stub()
         ObjectId id = ObjectId.get()
-        Page<Vehicle> page = new PageImpl<>(Arrays.asList(vehicles))
-
-        repository.findByCompanyId(id, pageable) >> page
+        Page<Vehicle> page = new PageImpl<>(vehicles)
         BookedRangeService bookedRangeService = Stub()
+
+        and: 'We Get the following page from the repository'
+        repository.findByCompanyId(id, pageable) >> page
+
+        and: 'Checking for availability on the booked ranges yield the following results'
         bookedRangeService.availableForBooking(null, bookedRange) >> true
+        bookedRangeService.availableForBooking(vehicle1BookedRanges, bookedRange) >> false
+        bookedRangeService.availableForBooking(vehicle2BookedRanges, bookedRange) >> true
+
         and: 'A Service With The Mocked Repository And BookedRange Service'
         service = new VehicleDomainServiceImpl(repository: repository, bookedRangeService: bookedRangeService)
 
@@ -54,11 +60,10 @@ class VehicleDomainServiceSpec extends spock.lang.Specification {
 
         then:
 
-       // 1 * repository.findByCompanyId(id, pageable)
-      //  1 * bookedRangeService.availableForBooking(null, bookedRange)
-        //1 * bookedRangeService.availableForBooking(vehicle1BookedRanges, bookedRange)
-        //1 * bookedRangeService.availableForBooking(vehicle2BookedRanges, bookedRange)
-        actual[0] == vehicle
+        actual.size() == 2
+        actual.contains(vehicle)
+        actual.contains(vehicle2)
+        !actual.contains(vehicle1)
 
     }
 }

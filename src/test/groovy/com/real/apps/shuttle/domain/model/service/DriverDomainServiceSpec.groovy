@@ -3,23 +3,26 @@ package com.real.apps.shuttle.domain.model.service
 import com.real.apps.shuttle.domain.model.BookedRange
 import com.real.apps.shuttle.domain.model.Driver
 import com.real.apps.shuttle.repository.DriverRepository
+import org.apache.log4j.Logger
 import org.bson.types.ObjectId
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 
+
 /**
  * Created by zorodzayi on 15/04/18.
  */
 class DriverDomainServiceSpec extends spock.lang.Specification {
 
-    private DriverDomainService service = new DriverDomainServiceImpl();
+    private DriverDomainServiceImpl service = new DriverDomainServiceImpl();
     private Date now = new Date();
     private Date earlier;
     private Date later;
     private Date from = new Date()
     private Date to = new Date()
+    private Logger logger = Logger.getLogger(DriverDomainServiceSpec.class)
 
     def setup() {
         service = new DriverDomainServiceImpl();
@@ -51,9 +54,11 @@ class DriverDomainServiceSpec extends spock.lang.Specification {
 
         Driver driver = new Driver()
         Driver driver1 = new Driver();
-        BookedRange available = new BookedRange(from, to)
+
         BookedRange bookedRange = new BookedRange(from, to)
-        Set<Driver> expected = new HashSet<>(Arrays.asList(driver))
+        Set<Driver> expected = new HashSet<>()
+        expected << driver
+        expected << driver1
 
         Set<BookedRange> driver1BookedRanges = new HashSet<BookedRange>(Arrays.asList(new BookedRange(from, to)))
         driver1.setBookedRanges(driver1BookedRanges)
@@ -63,14 +68,23 @@ class DriverDomainServiceSpec extends spock.lang.Specification {
         Set<BookedRange> driver2BookedRanges = new HashSet<BookedRange>(Arrays.asList(new BookedRange(from, to), new BookedRange(from, to)))
         driver2.setBookedRanges(driver2BookedRanges)
 
-        Set<Driver> drivers = new HashSet<>(Arrays.asList(driver, driver1))
-        DriverRepository repository = Mock()
+        List<Driver> drivers = new ArrayList<>()
+
+        drivers << driver
+        drivers << driver1
+        drivers << driver2
+
+        DriverRepository repository = Stub()
         ObjectId id = ObjectId.get()
         Pageable pageable = new PageRequest(0, 10)
-        Page<Driver> page = new PageImpl<>(Arrays.asList(drivers))
+        Page<Driver> page = new PageImpl<>(drivers)
         repository.findByCompanyId(id, pageable) >> page
-        BookedRangeService bookedRangeService = Mock()
-        bookedRangeService.availableForBooking(driver2BookedRanges, bookedRange) >> expected
+        logger.debug(page.getTotalElements())
+        BookedRangeService bookedRangeService = Stub()
+        bookedRangeService.availableForBooking(null, bookedRange) >> true
+        bookedRangeService.availableForBooking(driver1BookedRanges, bookedRange) >> true
+        bookedRangeService.availableForBooking(driver2BookedRanges, bookedRange) >> false
+
 
         service.bookedRangeService(bookedRangeService)
         service.repository(repository)
@@ -81,11 +95,13 @@ class DriverDomainServiceSpec extends spock.lang.Specification {
 
         then:
 
-        1 * bookedRangeService.availableForBooking(null, bookedRange)
+        /*1 * bookedRangeService.availableForBooking(null, bookedRange)
         1 * bookedRangeService.availableForBooking(driver1BookedRanges, bookedRange)
         1 * bookedRangeService.availableForBooking(driver2BookedRanges, bookedRange)
-        1 * repository.findByCompanyId(id, pageable)
-        result == expected
-        result[0] == available
+        repository.findByCompanyId(id, pageable)*/
+        result.size() == expected.size()
+        result.contains(driver)
+        result.contains(driver1)
+        !result.contains(driver2)
     }
 }

@@ -36,11 +36,12 @@ public class DriverDomainServiceImpl implements DriverDomainService {
         Set<Driver> bookable = new HashSet<>();
         Page<Driver> page = repository.findByCompanyId(companyId, pageable);
 
-        logger.debug(String.format("{Page Returned From Repository %s}", page));
+        logger.debug(String.format("{Page Returned From Repository %s, containing %d drivers, Content Size:%d }", page, page.getTotalElements(), page.getContent().size()));
 
         for (Driver driver : page.getContent()) {
 
             if (bookedRangeService.availableForBooking(driver.getBookedRanges(), bookedRange)) {
+                logger.debug(String.format("Adding driver %s to the bookable list ", driver.getFirstName()));
                 bookable.add(driver);
             }
         }
