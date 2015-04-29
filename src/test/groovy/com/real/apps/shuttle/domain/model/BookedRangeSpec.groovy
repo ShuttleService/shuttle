@@ -1,5 +1,9 @@
 package com.real.apps.shuttle.domain.model
 
+import org.apache.commons.lang3.time.DateUtils
+import org.apache.log4j.Logger
+
+
 /**
  * Created by zorodzayi on 15/04/14.
  */
@@ -9,6 +13,7 @@ class BookedRangeSpec extends spock.lang.Specification {
     Date earlier;
     Date later;
     Date latest;
+    final static Logger LOGGER = Logger.getLogger(BookedRangeSpec.class)
 
     def setup() {
         Calendar calendar = Calendar.getInstance();
@@ -242,4 +247,80 @@ class BookedRangeSpec extends spock.lang.Specification {
         !equal
     }
 
+    def 'Booked Ranges Should Be Equal When Their From Dates Are Withing A Minute Of Each Other'() {
+
+        given: 'Two From Dates That Are Within A Minute Of Each Other'
+
+        Date date = new Date();
+        date = DateUtils.setSeconds(date, 0);
+        Date fiftyNineSecondsLater = DateUtils.setSeconds(date, 59);
+        LOGGER.debug(String.format("The From Dates {earlier:%s,59 Seconds Later:%s}", date, fiftyNineSecondsLater))
+
+        and: 'Two BookedRanges With From Dates Within A Minute Of Each Other'
+        BookedRange bookedRange = new BookedRange(date, latest);
+        BookedRange another = new BookedRange(fiftyNineSecondsLater, latest);
+
+        when: 'We Compare Them For Equality'
+        boolean equal = bookedRange.equals(another)
+        boolean equal1 = another.equals(bookedRange)
+        boolean equalToItself = another.equals(another)
+        boolean equalToItself1 = bookedRange.equals(bookedRange)
+
+        then:
+        equal
+        equal1
+        equalToItself
+        equalToItself1
+    }
+
+    def 'Booked Ranges Should Be Equal When Their To Dates Are Within A Minute Of Each Other'() {
+        given: 'Two Dates That Are Within A Minute Of Each Other '
+        Date date = new Date()
+        date = DateUtils.setSeconds(date, 0)
+        Date fiftyNineSecondsLater = DateUtils.setSeconds(date, 59);
+        LOGGER.debug(String.format("The To Dates {earlier:%s, 59 Seconds Later:%s}", date, fiftyNineSecondsLater))
+
+        and: 'Two Booked Ranges With To Dates Within A Minute Of Each Other'
+        BookedRange bookedRange = new BookedRange(earlier, date)
+        BookedRange another = new BookedRange(earlier, fiftyNineSecondsLater)
+
+        when: 'We Compare Them For Equality'
+        boolean equal = bookedRange.equals(another)
+        boolean equal1 = another.equals(bookedRange)
+        boolean equalToItself = another.equals(another)
+        boolean equalToItself1 = bookedRange.equals(bookedRange)
+
+        then:
+        equal
+        equal1
+        equalToItself
+        equalToItself1
+    }
+
+    def """Booked Ranges Should Be Equal When Their To Dates Are Within A Minute Of Each Other And When Their
+     From Dates Are Also A Minute Of Each Other"""() {
+        given: '2 From Dates Within A Minute Of Each Other'
+        Date from = DateUtils.setSeconds(earlier, 0)
+        Date from1 = DateUtils.setSeconds(earlier, 59)
+
+        and: '2 From Dates With A Minute Of Each Other'
+        Date to = DateUtils.setSeconds(later, 0)
+        Date to1 = DateUtils.setSeconds(later, 59)
+
+        and: 'Two Booked Ranges Whose From Are Within A Minute Of Each Other And Their To Are Withi A Minute Of Each Other'
+        BookedRange bookedRange = new BookedRange(from, to)
+        BookedRange another = new BookedRange(from1, to1)
+
+        when: 'We Compare Them For Equality'
+        boolean equal = bookedRange.equals(another)
+        boolean equal1 = another.equals(bookedRange)
+        boolean equalToItself = bookedRange.equals(bookedRange)
+        boolean equalToItself1 = another.equals(another)
+
+        then:
+        equal
+        equal1
+        equalToItself
+        equalToItself1
+    }
 }
