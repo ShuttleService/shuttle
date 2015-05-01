@@ -2,9 +2,12 @@ package com.real.apps.shuttle.controller;
 
 import com.google.gson.Gson;
 import com.real.apps.shuttle.config.MvcConfiguration;
+import com.real.apps.shuttle.domain.model.BookedRange;
 import com.real.apps.shuttle.domain.model.Driver;
 import com.real.apps.shuttle.domain.model.User;
+import com.real.apps.shuttle.domain.model.service.DriverDomainService;
 import com.real.apps.shuttle.service.DriverService;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 import org.jmock.Expectations;
@@ -15,9 +18,13 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
@@ -28,10 +35,14 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.Filter;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static com.real.apps.shuttle.controller.UserDetailsUtils.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -63,16 +74,27 @@ public class DriverControllerTest {
     private MongoOperations mongoTemplate;
     @Autowired
     private Filter springSecurityFilterChain;
+    private final ObjectId companyId = ObjectId.get();
+    private final Date from = new Date();
+    private final Date to = DateUtils.addMinutes(from, 6);
+    private BookedRange bookedRange = new BookedRange(from, to);
+    private final Pageable pageable = new PageRequest(skip, limit);
+    private DriverDomainService domainService = Mockito.mock(DriverDomainService.class);
+    private ArgumentCaptor<BookedRange> bookedRangeArgumentCaptor = ArgumentCaptor.forClass(BookedRange.class);
+    private ArgumentCaptor<Pageable> pageableArgumentCaptor = ArgumentCaptor.forClass(Pageable.class);
+    private ArgumentCaptor<ObjectId> objectIdArgumentCaptor = ArgumentCaptor.forClass(ObjectId.class);
 
     @Before
     public void init() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).addFilter(springSecurityFilterChain).alwaysDo(print()).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).
+                addFilter(springSecurityFilterChain).alwaysDo(print()).build();
     }
 
     @After
-    public void cleanUp(){
+    public void cleanUp() {
         controller.setService(driverService);
     }
+
     @Test
     public void shouldRenderDriverPage() throws Exception {
         mockMvc.perform(get("/" + VIEW_PAGE).with(user(companyUser(ObjectId.get()))))
@@ -243,14 +265,14 @@ public class DriverControllerTest {
 
         controller.setService(service);
 
-        context.checking(new Expectations(){
+        context.checking(new Expectations() {
             {
-                oneOf(service).pageByCompanyId(id,skip,limit);
+                oneOf(service).pageByCompanyId(id, skip, limit);
                 will(returnValue(page));
             }
         });
 
-        mockMvc.perform(get(String.format("/%s/%d/%d",VIEW_PAGE,skip,limit)).with(user(companyUser(id)))).
+        mockMvc.perform(get(String.format("/%s/%d/%d", VIEW_PAGE, skip, limit)).with(user(companyUser(id)))).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.content[0].companyId._time").value(id.getTimestamp()));
 
@@ -266,18 +288,55 @@ public class DriverControllerTest {
 
         controller.setService(service);
 
-        context.checking(new Expectations(){
+        context.checking(new Expectations() {
             {
-                oneOf(service).page(skip,limit);
+                oneOf(service).page(skip, limit);
                 will(returnValue(page));
             }
         });
 
-        mockMvc.perform(get(String.format("/%s/%d/%d",VIEW_PAGE,skip,limit)).with(user(world(id)))).
+        mockMvc.perform(get(String.format("/%s/%d/%d", VIEW_PAGE, skip, limit)).with(user(world(id)))).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.content[0].companyId._time").value(id.getTimestamp()));
 
         context.assertIsSatisfied();
+    }
+
+    @Test
+    public void shouldReturnAnEmptyListOfDriversWhenNoUserIsLoggedIn() throws Exception {
+        String jsonString = new Gson().toJson(bookedRange);
+        controller.domainService = domainService;
+        mockMvc.perform(get(String.format("/%s/bookable/%d/%d", VIEW_PAGE, skip, limit)).
+                contentType(MediaType.APPLICATION_JSON).content(jsonString)).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$").isArray()).
+                andExpect(jsonPath("$[0]").doesNotExist());
+
+        verify(domainService, times(0)).bookableDrivers(anyObject(), anyObject(), anyObject());
+    }
+
+    @Test
+    public void shouldFindOnlyBookableDriversForAGivenCompanyWhenACompanyUserIsLoggedIn() throws Exception {
+        Driver driver = new Driver();
+        driver.setCompanyId(companyId);
+
+        final Set<Driver> bookableDrivers = new HashSet<>(Arrays.asList(driver));
+
+        when(domainService.bookableDrivers(companyId, pageable, bookedRange)).thenReturn(bookableDrivers);
+        controller.domainService = domainService;
+
+        String jsonString = new Gson().toJson(bookedRange);
+
+        mockMvc.perform(get(String.format("/%s/bookable/%d/%d", VIEW_PAGE, skip, limit)).with(user(companyUser(companyId)))
+                .contentType(MediaType.APPLICATION_JSON).content(jsonString)).
+                andExpect(status().isOk()).andExpect(jsonPath("$").isArray()).
+                andExpect(jsonPath("$[0].companyId._time").value(companyId.getTimestamp()));
+
+        verify(domainService).bookableDrivers(objectIdArgumentCaptor.capture(), pageableArgumentCaptor.capture(), bookedRangeArgumentCaptor.capture());
+
+        assertThat(companyId, is(objectIdArgumentCaptor.getValue()));
+        assertThat(bookedRange, is(bookedRangeArgumentCaptor.getValue()));
+        assertThat(pageable, is(pageableArgumentCaptor.getValue()));
     }
 
 }

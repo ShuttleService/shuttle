@@ -1,18 +1,25 @@
 package com.real.apps.shuttle.controller;
 
+import com.real.apps.shuttle.domain.model.BookedRange;
 import com.real.apps.shuttle.domain.model.Driver;
 import com.real.apps.shuttle.domain.model.User;
+import com.real.apps.shuttle.domain.model.service.DriverDomainService;
+import com.real.apps.shuttle.miscellaneous.Role;
 import com.real.apps.shuttle.service.DriverService;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import static com.real.apps.shuttle.miscellaneous.Role.*;
 
@@ -24,6 +31,7 @@ import static com.real.apps.shuttle.miscellaneous.Role.*;
 public class DriverController {
     @Autowired
     private DriverService service;
+    DriverDomainService domainService;
     public static final String VIEW_NAME = "driver";
     private Logger logger = Logger.getLogger(DriverController.class);
 
@@ -81,12 +89,12 @@ public class DriverController {
                 logger.debug("Logged In As Admin. Updating The Driver As Is And Returning The Updated Driver");
                 return service.insert(driver);
             }
-            case COMPANY_USER:{
+            case COMPANY_USER: {
                 String companyName = user.getCompanyName();
-                ObjectId companyId   = user.getCompanyId();
+                ObjectId companyId = user.getCompanyId();
                 driver.setCompanyName(companyName);
                 driver.setCompanyId(companyId);
-                logger.debug(String.format("Logged In As A Company User. Setting The Driver Company Name And Id To That Of The Logged In User {CompanyName:%s,CompanyId:%s}, Updating And Returning The Updated Driver.",companyName,companyId));
+                logger.debug(String.format("Logged In As A Company User. Setting The Driver Company Name And Id To That Of The Logged In User {CompanyName:%s,CompanyId:%s}, Updating And Returning The Updated Driver.", companyName, companyId));
                 return service.insert(driver);
             }
         }
@@ -149,6 +157,26 @@ public class DriverController {
         }
 
         return driver;
+    }
+
+    @RequestMapping("/bookable/{skip}/{limit}")
+    @ResponseBody
+    public Set<Driver> bookable(@PathVariable("skip") int skip, @PathVariable("limit") int limit,
+                                @RequestBody BookedRange bookedRange, @AuthenticationPrincipal User user) {
+        logger.debug(String.format("Finding Bookable Drivers {BookedRange:%s, LoggedInUser:%s, skip:%d,limit:%d}", bookedRange, user, skip, limit));
+
+        if (user == null) {
+            return new HashSet<>();
+        }
+
+        String role = Role.role(user);
+
+        logger.debug(String.format("Finding Bookable Drivers For. Logged In User Role : %s ", role));
+        switch (role) {
+            case COMPANY_USER:
+                return domainService.bookableDrivers(user.getCompanyId(), new PageRequest(skip, limit), bookedRange);
+        }
+        return new HashSet<>();
     }
 
     @ResponseBody

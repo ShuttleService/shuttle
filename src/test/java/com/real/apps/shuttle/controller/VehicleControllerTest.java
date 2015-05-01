@@ -210,6 +210,7 @@ public class VehicleControllerTest {
         final ObjectId companyId = ObjectId.get();
 
         final Vehicle vehicle = new Vehicle();
+        vehicle.setCompanyId(companyId);
         Date from = new Date();
         Date to = new Date();
 
@@ -232,7 +233,9 @@ public class VehicleControllerTest {
         mockMvc.perform(get(String.format("/%s/bookable/%d/%d/", VIEW_PAGE, skip, limit)).with(user(companyUser(companyId))).
                 contentType(MediaType.APPLICATION_JSON).content(jsonBookedRange)).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$").isArray());
+                andExpect(jsonPath("$").isArray()).
+                andExpect(jsonPath("$[0].companyId._time").value(companyId.getTimestamp())).
+                andExpect(jsonPath("$[0].id._time").value(id.getTimestamp()));
 
         verify(domainService).bookable(objectIdArgumentCaptor.capture(), pageableArgumentCaptor.capture(), bookedRangeArgumentCaptor.capture());
 

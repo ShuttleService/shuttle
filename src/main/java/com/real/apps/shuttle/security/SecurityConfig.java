@@ -7,15 +7,15 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * Created by zorodzayi on 14/11/11.
  */
 @Configuration
-@EnableWebMvcSecurity
+@EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @EnableGlobalAuthentication
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -43,15 +43,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/home").hasAnyRole(ROLE_ADMIN, ROLE_AGENT, ROLE_COMPANY_USER, ROLE_WORLD)
                 .antMatchers("/").hasAnyRole(ROLE_ADMIN, ROLE_AGENT, ROLE_COMPANY_USER, ROLE_WORLD)
                 .antMatchers("/admin").hasAnyRole(ROLE_ADMIN)
-                .antMatchers("/agent").hasAnyRole(ROLE_ADMIN,ROLE_AGENT)
+                .antMatchers("/agent").hasAnyRole(ROLE_ADMIN, ROLE_AGENT)
                 .antMatchers("/agent/*/*").hasAnyRole(ROLE_ADMIN, ROLE_AGENT)
                 .antMatchers("/vehicle").hasAnyRole(ROLE_ADMIN, ROLE_COMPANY_USER)
                 .antMatchers("/driver").hasAnyRole(ROLE_ADMIN, ROLE_COMPANY_USER)
                 .antMatchers("/driver/*/*").hasAnyRole(ROLE_ADMIN, ROLE_COMPANY_USER, ROLE_WORLD)
                 .antMatchers("/company").hasAnyRole(ROLE_ADMIN, ROLE_AGENT)
                 .antMatchers("/company/*/*").hasAnyRole(ROLE_ADMIN, ROLE_AGENT, ROLE_COMPANY_USER, ROLE_WORLD)
-                .antMatchers("/user").hasAnyRole(ROLE_ADMIN,ROLE_AGENT,ROLE_COMPANY_USER,ROLE_WORLD,ROLE_ANONYMOUS).
-                antMatchers("/user/*/*").hasAnyRole(ROLE_ADMIN,ROLE_AGENT,ROLE_COMPANY_USER,ROLE_WORLD)
+                .antMatchers("/user").hasAnyRole(ROLE_ADMIN, ROLE_AGENT, ROLE_COMPANY_USER, ROLE_WORLD, ROLE_ANONYMOUS).
+                antMatchers("/user/*/*").hasAnyRole(ROLE_ADMIN, ROLE_AGENT, ROLE_COMPANY_USER, ROLE_WORLD)
                 .antMatchers("/trip").hasAnyRole(ROLE_ADMIN, ROLE_WORLD, ROLE_COMPANY_USER)
                 .antMatchers("/trip/*/*").hasAnyRole(ROLE_ADMIN, ROLE_COMPANY_USER, ROLE_WORLD)
                 .and()
