@@ -60,6 +60,7 @@ describe('Driver Service Test', function () {
         expect(actual[0].name).toEqual(bookableDrivers[0].name);
     });
 
+
     afterEach(function () {
 
         $httpBackend.verifyNoOutstandingExpectation();

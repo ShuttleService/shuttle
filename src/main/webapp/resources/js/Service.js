@@ -57,7 +57,7 @@ angular.module('services', ['ngResource']).
     })
 
     .factory('VehicleService', function ($resource, CONTEXT_ROOT) {
-        return $resource(CONTEXT_ROOT + '/vehicle/:pathVariable/:bookedRangeFrom/:bookedRangeTo/:_id/:skip/:limit', {
+        return $resource(CONTEXT_ROOT + '/vehicle/:pathVariable/:bookableFrom/:bookableTo/:_id/:skip/:limit', {
             pathVariable: '@pathVariable',
             _id: '@_id',
             skip: '@skip',

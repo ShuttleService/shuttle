@@ -9,10 +9,12 @@ describe('Testing The Driver Controller', function () {
     var FormSubmissionUtilService;
     var RESULT_SIZE;
     var CompanyService;
+    var skip = 10;
+    var limit = 100;
 
     beforeEach(module('controllers'));
 
-    beforeEach(inject(function (_$controller_, _DriverService_,_CompanyService_, $rootScope, _FormSubmissionUtilService_, _RESULT_SIZE_) {
+    beforeEach(inject(function (_$controller_, _DriverService_, _CompanyService_, $rootScope, _FormSubmissionUtilService_, _RESULT_SIZE_) {
 
         $controller = _$controller_;
         DriverService = _DriverService_;
@@ -29,12 +31,15 @@ describe('Testing The Driver Controller', function () {
         expect(RESULT_SIZE).toBeDefined();
     }));
 
-    it('saveClick Should Set The CompanyId And The CompanyName The Company Object On The Scope',function(){
-        var company = {id:'Test Company Id To Be Set On Driver.companyId',tradingAs:'Test Company Trading As To Be Set On The Driver.companyName'};
+    it('saveClick Should Set The CompanyId And The CompanyName The Company Object On The Scope', function () {
+        var company = {
+            id: 'Test Company Id To Be Set On Driver.companyId',
+            tradingAs: 'Test Company Trading As To Be Set On The Driver.companyName'
+        };
         $scope.company = company;
 
-        $controller('DriverController',{
-            $scope:$scope
+        $controller('DriverController', {
+            $scope: $scope
         });
         $scope.saveClick();
         expect($scope.driver.companyId).toEqual(company.id);
@@ -42,7 +47,7 @@ describe('Testing The Driver Controller', function () {
     });
 
     it('List Should Call Get On The Service Using Parameters On The Scope And Set The Resulting Drivers On The Scope', function () {
-        var page = {content:[1, 2, 3]};
+        var page = {content: [1, 2, 3]};
 
         spyOn(DriverService, 'get').andReturn(page);
 
@@ -51,9 +56,6 @@ describe('Testing The Driver Controller', function () {
         });
 
         expect(controller).toBeDefined();
-
-        var skip = 1;
-        var limit = 3;
 
         var params = {skip: skip, limit: limit};
         $scope.skip = skip;
@@ -112,8 +114,7 @@ describe('Testing The Driver Controller', function () {
         $controller('DriverController', {
             $scope: $scope
         });
-        var skip = 10;
-        var limit = 100;
+
         var page = {size: limit};
         var params = {skip: skip, limit: limit};
         spyOn(DriverService, 'get').andReturn(page);
@@ -146,6 +147,38 @@ describe('Testing The Driver Controller', function () {
         $scope.driver = {name: 'Test Driver To Be Reverted'};
         $scope.reset();
         expect($scope.driver).toEqual(prestine);
+    });
+
+    it('Should Call Service query, Get Bookable Drivers And Set Them On The $scope', function () {
+        $controller('DriverController', {
+            $scope: $scope
+        });
+
+        var from = new Date();
+        var to = new Date();
+        var bookable = ['Bookable Driver 1', 'Bookable Driver 2'];
+
+        $scope.bookableFrom = from;
+        $scope.bookableTo = to;
+        $scope.skip = skip;
+        $scope.limit = limit;
+
+        expect($scope.bookableList).toBeDefined();
+        expect($scope.bookable).toBeUndefined();
+
+        spyOn(DriverService, 'query').andReturn(bookable);
+
+        $scope.bookableList();
+
+        expect(DriverService.query).toHaveBeenCalledWith({
+            bookableFrom: from,
+            bookableTo: to,
+            skip: skip,
+            limit: limit
+        });
+
+        expect($scope.bookable).toBeDefined();
+        expect($scope.bookable).toEqual(bookable);
     });
 
 });

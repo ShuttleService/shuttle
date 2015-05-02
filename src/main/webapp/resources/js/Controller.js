@@ -78,6 +78,16 @@ angular.module('controllers', ['services']).
             $scope.driver = angular.copy($scope.prestineDriver);
         };
 
+        $scope.bookableList = function () {
+            $log.debug('Finding Bookable Drivers ');
+            $scope.bookable = DriverService.query({
+                bookableFrom: $scope.bookableFrom,
+                bookableTo: $scope.bookableTo,
+                skip: $scope.skip,
+                limit: $scope.limit
+            });
+        }
+
         $scope.list();
     }).
 
@@ -331,6 +341,18 @@ angular.module('controllers', ['services']).
             $log.debug('Reverting The Vehicle To It\'s Prestine State');
             $scope.vehicle = angular.copy($scope.prestineVehicle);
         };
+
+        $scope.bookableList = function () {
+
+            $log.debug('Finding Bookable Vehicles');
+
+            $scope.bookable = VehicleService.query({
+                bookableFrom: $scope.bookableFrom,
+                bookableTo: $scope.bookableTo,
+                skip: $scope.skip,
+                limit: $scope.limit
+            });
+        }
 
         $scope.list();
     }).
