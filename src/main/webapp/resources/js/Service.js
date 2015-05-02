@@ -7,7 +7,13 @@ angular.module('services', ['ngResource']).
 
     factory('DriverService', function ($resource, CONTEXT_ROOT) {
 
-        return $resource(CONTEXT_ROOT + '/driver/:skip/:limit', {skip: '@skip', limit: '@limit'});
+        return $resource(CONTEXT_ROOT + '/driver/:pathVariable/:bookingRangeFrom/:bookingRangeTo/:skip/:limit', {
+            pathVariable: '@pathVariable',
+            bookingRangeFrom: '@bookingRangeFrom',
+            bookingRangeTo: '@bookingRangeTo',
+            skip: '@skip',
+            limit: '@limit'
+        });
     }).
 
     factory('TripService', function ($resource, CONTEXT_ROOT) {
@@ -22,7 +28,11 @@ angular.module('services', ['ngResource']).
 
     factory('CompanyService', function ($resource, CONTEXT_ROOT) {
 
-        return $resource(CONTEXT_ROOT + '/company/:_id/:skip/:limit', {_id: '@_id', skip: '@skip', limit: '@limit'}, {put: {method: 'put'}});
+        return $resource(CONTEXT_ROOT + '/company/:_id/:skip/:limit', {
+            _id: '@_id',
+            skip: '@skip',
+            limit: '@limit'
+        }, {put: {method: 'put'}});
     }).
 
     factory('FormSubmissionUtilService', function ($log) {
@@ -30,22 +40,33 @@ angular.module('services', ['ngResource']).
         return {
 
             canSave: function (form) {
-                $log.debug('Testing Validity For Form : '+form+'{pristine:'+form.$pristine+',dirty:'+form.$dirty+',valid:'+form.$valid+',invalid:'+form.$invalid+'}');
+                $log.debug('Testing Validity For Form : ' + form + '{pristine:' + form.$pristine + ',dirty:' + form.$dirty + ',valid:' + form.$valid + ',invalid:' + form.$invalid + '}');
                 return form.$valid === true && form.$dirty === true;
             }
         }
     }).
 
-    factory('UserService',function($resource,CONTEXT_ROOT){
+    factory('UserService', function ($resource, CONTEXT_ROOT) {
 
-       return $resource(CONTEXT_ROOT+'/user/:subPath1/:_id/:skip/:limit',{subPath1: '@subPath1',_id:'@_id',skip:'@skip',limit:'@limit'},{put:{method:'PUT'}});
+        return $resource(CONTEXT_ROOT + '/user/:subPath1/:_id/:skip/:limit', {
+            subPath1: '@subPath1',
+            _id: '@_id',
+            skip: '@skip',
+            limit: '@limit'
+        }, {put: {method: 'PUT'}});
     })
 
-    .factory('VehicleService',function($resource,CONTEXT_ROOT){
-        return $resource(CONTEXT_ROOT+'/vehicle/:_id/:skip/:limit',{_id:'@_id',skip:'@skip',limit:'@limit'});
+    .factory('VehicleService', function ($resource, CONTEXT_ROOT) {
+        return $resource(CONTEXT_ROOT + '/vehicle/:pathVariable/:bookedRangeFrom/:bookedRangeTo/:_id/:skip/:limit', {
+            pathVariable: '@pathVariable',
+            _id: '@_id',
+            skip: '@skip',
+            limit: '@limit',
+            params: '@params',
+        });
     }).
 
-    factory('AgentService',function($resource,CONTEXT_ROOT,$log){
+    factory('AgentService', function ($resource, CONTEXT_ROOT, $log) {
         $log.debug('Performing Some Agent Service Staff');
-        return $resource(CONTEXT_ROOT+'/agent/:_id/:skip/:limit',{_id:'@_id',skip:'@skip',limit:'@limit'});
+        return $resource(CONTEXT_ROOT + '/agent/:_id/:skip/:limit', {_id: '@_id', skip: '@skip', limit: '@limit'});
     });

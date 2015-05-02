@@ -1,6 +1,7 @@
 package com.real.apps.shuttle.domain.model;
 
 import org.apache.commons.lang3.Validate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -13,7 +14,9 @@ import static org.apache.commons.lang3.time.DateUtils.truncate;
  * Created by zorodzayi on 15/04/14.
  */
 public class BookedRange {
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private final Date from;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private final Date to;
 
     public BookedRange(Date from, Date to) {
@@ -53,10 +56,8 @@ public class BookedRange {
         if (this == bookedRange) {
             return true;
         }
-        Date from = setSeconds(this.from,0);
-        Date   to = setSeconds(this.to,0);
+        Date to = setSeconds(this.to, 0);
 
-        Date bookedRangeFrom = setSeconds(bookedRange.getFrom(),0);
         if (isSameInstant(truncate(bookedRange.getFrom(), Calendar.MINUTE),
                 truncate(getFrom(), Calendar.MINUTE)) &&
                 isSameInstant(truncate(bookedRange.getTo(), Calendar.MINUTE), truncate(to, Calendar.MINUTE))) {

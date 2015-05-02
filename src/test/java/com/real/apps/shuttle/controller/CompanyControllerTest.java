@@ -13,6 +13,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import static org.hamcrest.MatcherAssert.*;
+import static org.junit.Assert.*;
+
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -65,6 +69,11 @@ public class CompanyControllerTest {
     @Before
     public void init() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).addFilter(springSecurityFilterChain).alwaysDo(print()).build();
+    }
+
+    @Test
+    public void shouldInjectAllDependencies() {
+        assertNotNull(companyService);
     }
 
     @After

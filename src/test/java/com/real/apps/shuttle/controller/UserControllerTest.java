@@ -27,7 +27,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.jws.soap.SOAPBinding;
 import javax.servlet.Filter;
 import java.util.Arrays;
 import java.util.List;
@@ -36,7 +35,6 @@ import static com.real.apps.shuttle.controller.UserDetailsUtils.*;
 import static com.real.apps.shuttle.miscellaneous.Role.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.calls;
 import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -206,7 +204,6 @@ public class UserControllerTest {
         mockMvc.perform(post(String.format("/%s", VIEW_PAGE)).with(user(world(ObjectId.get()))).contentType(MediaType.APPLICATION_JSON).content(jsonUser)).
                 andExpect(status().isOk()).andExpect(jsonPath("$.id._time").value(id.getTimestamp()));
     }
-
 
     @Test
     public void shouldFindUsersForTheCompanyWhenACompanyUserIsLoggedOn() throws Exception {

@@ -7,6 +7,7 @@ describe('Driver Service Test', function () {
     var $httpBackend;
     var DriverService;
     var CONTEXT_ROOT;
+    var skip = 1, limit = 2;
 
     beforeEach(module('services'));
 
@@ -28,14 +29,35 @@ describe('Driver Service Test', function () {
     it('Should Call The Spring List Rest Service', function () {
         var driver1 = 'Driver 1';
         var driver2 = 'Driver 2';
-        var drivers = [driver1,driver2];
+        var drivers = [driver1, driver2];
 
-        var skip = 1, limit = 2;
         $httpBackend.whenGET(CONTEXT_ROOT + '/driver/' + skip + '/' + limit).respond(drivers);
         var result = DriverService.query({skip: skip, limit: limit});
         $httpBackend.flush();
         expect(result[0]).toEqual(driver1);
         expect(result[1]).toEqual(driver2);
+    });
+
+    it('Should Get A Set Of All Bookable Drivers For Given From And To Booking Range', function () {
+        var bookableDrivers = [{name: 'Test Bookable Driver Available For Booking'}];
+        var from = new Date(2015, 04, 05).toISOString();
+        var to = new Date(2015, 04, 06).toISOString();
+        var pathVariable = 'bookable';
+        var url = CONTEXT_ROOT + '/driver/' + pathVariable + '/' + from + '/' + to + '/' + skip + '/' + limit;
+
+        $httpBackend.expectGET(url).respond(bookableDrivers);
+
+        var actual = DriverService.query({
+            pathVariable: pathVariable,
+            bookingRangeFrom: from,
+            bookingRangeTo: to,
+            skip: skip,
+            limit: limit
+        });
+
+        $httpBackend.flush();
+
+        expect(actual[0].name).toEqual(bookableDrivers[0].name);
     });
 
     afterEach(function () {

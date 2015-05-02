@@ -13,10 +13,10 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <spring.version>4.1.1.RELEASE</spring.version>
+        <spring.version>4.1.6.RELEASE</spring.version>
         <spring.security.version>4.0.0.RELEASE</spring.security.version>
         <cglib.version>LATEST</cglib.version>
-        <json.path.version>0.9.0</json.path.version>
+        <json.path.version>0.9.1</json.path.version>
         <groovy.all.version>LATEST</groovy.all.version>
         <spring.data.mongodb.version>1.6.0.RELEASE</spring.data.mongodb.version>
     </properties>
@@ -109,12 +109,12 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.2.4</version>
+            <version>LATEST</version>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <version>1.2.17</version>
+            <version>LATEST</version>
         </dependency>
 
         <!-- CGLib for @Configuration -->
@@ -157,6 +157,11 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.3.2</version>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>LATEST</version>
         </dependency>
     </dependencies>
     <build>
@@ -229,7 +234,6 @@
                     </dependency>
                 </dependencies>
             </plugin>
-
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>

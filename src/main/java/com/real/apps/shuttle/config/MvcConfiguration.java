@@ -41,10 +41,12 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter {
 
     @Override
     public void configureMessageConverters(java.util.List<org.springframework.http.converter.HttpMessageConverter<?>> converters) {
-        Gson gson = new GsonBuilder().registerTypeAdapter(SimpleGrantedAuthority.class,new SimpleGrantedAuthorityInstanceCreator()).create();
+        Gson gson = new GsonBuilder().registerTypeAdapter(SimpleGrantedAuthority.class, new SimpleGrantedAuthorityInstanceCreator()).create();
         GsonHttpMessageConverter messageConverter = new GsonHttpMessageConverter();
         messageConverter.setGson(gson);
+
         converters.add(messageConverter);
     }
+
 
 }

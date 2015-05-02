@@ -12,11 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,6 +34,7 @@ public class VehicleController {
     public static final String VIEW_PAGE = "vehicle";
     @Autowired
     private VehicleService service;
+    @Autowired
     VehicleDomainService domainService;
     private Logger logger = Logger.getLogger(VehicleController.class);
 
@@ -76,10 +79,11 @@ public class VehicleController {
         return emptyPage;
     }
 
-    @RequestMapping(value = "/bookable/{skip}/{limit}")
+    @RequestMapping(value = "/bookable/{from}/{to}/{skip}/{limit}")
     @ResponseBody
-    public Set<Vehicle> bookable(@PathVariable("skip") int skip, @PathVariable("limit") int limit, @RequestBody BookedRange bookedRange,
-                                 @AuthenticationPrincipal User user) {
+    public Set<Vehicle> bookable(@PathVariable("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date from, @PathVariable("to")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date to, @PathVariable("skip") int skip, @PathVariable("limit") int limit, @AuthenticationPrincipal User user) {
+        BookedRange bookedRange = new BookedRange(from, to);
         logger.debug(String.format("Finding Bookable Vehicles {BookedRange:%s,skip:%d,limit:%d,\nuser:%s}", bookedRange, skip, limit, user));
         if (user == null) {
             return new HashSet<>();

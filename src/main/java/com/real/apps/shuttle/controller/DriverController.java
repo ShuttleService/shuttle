@@ -12,12 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -159,10 +161,13 @@ public class DriverController {
         return driver;
     }
 
-    @RequestMapping("/bookable/{skip}/{limit}")
+    @RequestMapping("/bookable/{from}/{to}/{skip}/{limit}")
     @ResponseBody
-    public Set<Driver> bookable(@PathVariable("skip") int skip, @PathVariable("limit") int limit,
-                                @RequestBody BookedRange bookedRange, @AuthenticationPrincipal User user) {
+    public Set<Driver> bookable(@PathVariable("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date from,
+                                @PathVariable("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date to, @PathVariable("skip") int skip,
+                                @PathVariable("limit") int limit, @AuthenticationPrincipal User user) {
+        BookedRange bookedRange = new BookedRange(from, to);
+
         logger.debug(String.format("Finding Bookable Drivers {BookedRange:%s, LoggedInUser:%s, skip:%d,limit:%d}", bookedRange, user, skip, limit));
 
         if (user == null) {

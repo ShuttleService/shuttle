@@ -13,6 +13,7 @@ import org.bson.types.ObjectId;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnitRuleMockery;
+import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -41,8 +42,6 @@ import static com.real.apps.shuttle.controller.UserDetailsUtils.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -304,10 +303,10 @@ public class DriverControllerTest {
 
     @Test
     public void shouldReturnAnEmptyListOfDriversWhenNoUserIsLoggedIn() throws Exception {
-        String jsonString = new Gson().toJson(bookedRange);
+        String fromDate = new DateTime(from).toDateTimeISO().toString();
+        String toDate = new DateTime(to).toDateTimeISO().toString();
         controller.domainService = domainService;
-        mockMvc.perform(get(String.format("/%s/bookable/%d/%d", VIEW_PAGE, skip, limit)).
-                contentType(MediaType.APPLICATION_JSON).content(jsonString)).
+        mockMvc.perform(get(String.format("/%s/bookable/%s/%s/%d/%d", VIEW_PAGE, fromDate, toDate, skip, limit))).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$").isArray()).
                 andExpect(jsonPath("$[0]").doesNotExist());
@@ -325,10 +324,11 @@ public class DriverControllerTest {
         when(domainService.bookableDrivers(companyId, pageable, bookedRange)).thenReturn(bookableDrivers);
         controller.domainService = domainService;
 
-        String jsonString = new Gson().toJson(bookedRange);
+        String fromString = new DateTime(from).toDateTimeISO().toString();
+        String toString = new DateTime(to).toDateTimeISO().toString();
 
-        mockMvc.perform(get(String.format("/%s/bookable/%d/%d", VIEW_PAGE, skip, limit)).with(user(companyUser(companyId)))
-                .contentType(MediaType.APPLICATION_JSON).content(jsonString)).
+        mockMvc.perform(get(String.format("/%s/bookable/%s/%s/%d/%d", VIEW_PAGE, fromString, toString, skip, limit)).
+                with(user(companyUser(companyId)))).
                 andExpect(status().isOk()).andExpect(jsonPath("$").isArray()).
                 andExpect(jsonPath("$[0].companyId._time").value(companyId.getTimestamp()));
 
