@@ -157,11 +157,13 @@ describe('Testing The Driver Controller', function () {
         var from = new Date();
         var to = new Date();
         var bookable = ['Bookable Driver 1', 'Bookable Driver 2'];
+        var companyId = 'Test Company Id';
 
         $scope.bookableFrom = from;
         $scope.bookableTo = to;
         $scope.skip = skip;
         $scope.limit = limit;
+        $scope.companyId = companyId;
 
         expect($scope.bookableList).toBeDefined();
         expect($scope.bookable).toBeUndefined();
@@ -171,6 +173,7 @@ describe('Testing The Driver Controller', function () {
         $scope.bookableList();
 
         expect(DriverService.query).toHaveBeenCalledWith({
+            companyId: companyId,
             bookableFrom: from,
             bookableTo: to,
             skip: skip,

@@ -40,13 +40,13 @@ describe('Vehicle Service Test', function () {
         var to = new Date().toISOString();
         console.log("From Date " + from + " ,To Date " + to);
         var pathVariable = 'bookable';
-
-        var url = CONTEXT_ROOT + '/vehicle/' + pathVariable + '/' + from + '/' + to + '/' + skip + '/' + limit;
+        var companyId = 'TestCompanyId';
+        var url = CONTEXT_ROOT + '/vehicle/' + pathVariable + '/' +companyId+'/'+ from + '/' + to + '/' + skip + '/' + limit;
         var bookableDrivers = [{name: 'Test Driver Name'}];
 
         $httpBackend.expectGET(url).respond(bookableDrivers);
         var actual = VehicleService.query({
-            pathVariable: pathVariable, bookableFrom: from, bookableTo: to, skip: skip, limit: limit
+            pathVariable: pathVariable,companyId:companyId,bookableFrom: from, bookableTo: to, skip: skip, limit: limit
         });
 
         $httpBackend.flush();

@@ -98,11 +98,13 @@ describe('Vehicle Controller Test', function () {
         function () {
             var from = new Date();
             var to = new Date();
+            var companyId = 'Test Company Id';
 
             $scope.bookableFrom = from;
             $scope.bookableTo = to;
             $scope.skip = skip;
             $scope.limit = limit;
+            $scope.companyId = companyId;
 
             var bookable = ['Bookable Vehicle 1', 'Bookable Vehicle 2'];
 
@@ -114,6 +116,7 @@ describe('Vehicle Controller Test', function () {
             $scope.bookableList();
 
             expect(VehicleService.query).toHaveBeenCalledWith({
+                companyId:companyId,
                 bookableFrom: from,
                 bookableTo: to,
                 skip: skip,

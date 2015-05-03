@@ -81,6 +81,7 @@ angular.module('controllers', ['services']).
         $scope.bookableList = function () {
             $log.debug('Finding Bookable Drivers ');
             $scope.bookable = DriverService.query({
+                companyId: $scope.companyId,
                 bookableFrom: $scope.bookableFrom,
                 bookableTo: $scope.bookableTo,
                 skip: $scope.skip,
@@ -347,6 +348,7 @@ angular.module('controllers', ['services']).
             $log.debug('Finding Bookable Vehicles');
 
             $scope.bookable = VehicleService.query({
+                companyId: $scope.companyId,
                 bookableFrom: $scope.bookableFrom,
                 bookableTo: $scope.bookableTo,
                 skip: $scope.skip,

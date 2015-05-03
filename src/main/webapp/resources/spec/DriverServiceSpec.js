@@ -43,12 +43,15 @@ describe('Driver Service Test', function () {
         var from = new Date(2015, 04, 05).toISOString();
         var to = new Date(2015, 04, 06).toISOString();
         var pathVariable = 'bookable';
-        var url = CONTEXT_ROOT + '/driver/' + pathVariable + '/' + from + '/' + to + '/' + skip + '/' + limit;
+        var companyId = 'TestCompanyID';
+
+        var url = CONTEXT_ROOT + '/driver/' + pathVariable + '/' + companyId + '/' + from + '/' + to + '/' + skip + '/' + limit;
 
         $httpBackend.expectGET(url).respond(bookableDrivers);
 
         var actual = DriverService.query({
             pathVariable: pathVariable,
+            companyId:companyId,
             bookingRangeFrom: from,
             bookingRangeTo: to,
             skip: skip,
@@ -62,7 +65,6 @@ describe('Driver Service Test', function () {
 
 
     afterEach(function () {
-
         $httpBackend.verifyNoOutstandingExpectation();
         $httpBackend.verifyNoOutstandingRequest();
     });

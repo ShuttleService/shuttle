@@ -7,8 +7,9 @@ angular.module('services', ['ngResource']).
 
     factory('DriverService', function ($resource, CONTEXT_ROOT) {
 
-        return $resource(CONTEXT_ROOT + '/driver/:pathVariable/:bookingRangeFrom/:bookingRangeTo/:skip/:limit', {
+        return $resource(CONTEXT_ROOT + '/driver/:pathVariable/:companyId/:bookingRangeFrom/:bookingRangeTo/:skip/:limit', {
             pathVariable: '@pathVariable',
+            companyId:'@companyId',
             bookingRangeFrom: '@bookingRangeFrom',
             bookingRangeTo: '@bookingRangeTo',
             skip: '@skip',
@@ -57,8 +58,9 @@ angular.module('services', ['ngResource']).
     })
 
     .factory('VehicleService', function ($resource, CONTEXT_ROOT) {
-        return $resource(CONTEXT_ROOT + '/vehicle/:pathVariable/:bookableFrom/:bookableTo/:_id/:skip/:limit', {
+        return $resource(CONTEXT_ROOT + '/vehicle/:pathVariable/:companyId/:bookableFrom/:bookableTo/:_id/:skip/:limit', {
             pathVariable: '@pathVariable',
+            companyId:'@companyId',
             _id: '@_id',
             skip: '@skip',
             limit: '@limit',
