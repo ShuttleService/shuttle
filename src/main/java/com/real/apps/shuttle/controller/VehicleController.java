@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -79,21 +80,30 @@ public class VehicleController {
         return emptyPage;
     }
 
-    @RequestMapping(value = "/bookable/{from}/{to}/{skip}/{limit}")
+    @RequestMapping(value = "/bookable/{companyId}/{from}/{to}/{skip}/{limit}")
     @ResponseBody
     public Set<Vehicle> bookable(@PathVariable("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date from, @PathVariable("to")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date to, @PathVariable("skip") int skip, @PathVariable("limit") int limit, @AuthenticationPrincipal User user) {
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date to,@PathVariable("companyId") ObjectId companyId,@PathVariable("skip") int skip, @PathVariable("limit") int limit,
+                                 @AuthenticationPrincipal User user) {
         BookedRange bookedRange = new BookedRange(from, to);
-        logger.debug(String.format("Finding Bookable Vehicles {BookedRange:%s,skip:%d,limit:%d,\nuser:%s}", bookedRange, skip, limit, user));
+        logger.debug(String.format("Finding Bookable Vehicles {BookedRange:%s,skip:%d,limit:%d,CompanyId:%s\nuser:%s}", bookedRange, skip, limit,
+                companyId, user));
         if (user == null) {
             return new HashSet<>();
         }
 
-        String role = Role.role(user);
-
+        final String role = Role.role(user);
+        final Pageable pageable = new PageRequest(skip, limit);
         switch (role) {
+
             case COMPANY_USER: {
-                return domainService.bookable(user.getCompanyId(), new PageRequest(skip, limit), bookedRange);
+                logger.debug(String.format("Finding Bookable Vehicles for Company:%s, Logged In As Company User",user.getCompanyName()));
+                return domainService.bookable(user.getCompanyId(),pageable, bookedRange);
+            }
+
+            case WORLD:{
+                logger.debug(String.format("Finding Bookable Vehicles For CompanyId:%s. Logged In As World",companyId));
+                return domainService.bookable(companyId,pageable,bookedRange);
             }
         }
         return new HashSet<>();

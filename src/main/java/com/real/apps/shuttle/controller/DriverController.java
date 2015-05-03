@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -161,13 +162,13 @@ public class DriverController {
         return driver;
     }
 
-    @RequestMapping("/bookable/{from}/{to}/{skip}/{limit}")
+    @RequestMapping("/bookable/{companyId}/{from}/{to}/{skip}/{limit}")
     @ResponseBody
-    public Set<Driver> bookable(@PathVariable("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date from,
+    public Set<Driver> bookable(@PathVariable("companyId") ObjectId companyId, @PathVariable("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date from,
                                 @PathVariable("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date to, @PathVariable("skip") int skip,
                                 @PathVariable("limit") int limit, @AuthenticationPrincipal User user) {
-        BookedRange bookedRange = new BookedRange(from, to);
-
+        final BookedRange bookedRange = new BookedRange(from, to);
+        final Pageable pageable = new PageRequest(skip, limit);
         logger.debug(String.format("Finding Bookable Drivers {BookedRange:%s, LoggedInUser:%s, skip:%d,limit:%d}", bookedRange, user, skip, limit));
 
         if (user == null) {
@@ -179,8 +180,14 @@ public class DriverController {
         logger.debug(String.format("Finding Bookable Drivers For. Logged In User Role : %s ", role));
         switch (role) {
             case COMPANY_USER:
-                return domainService.bookableDrivers(user.getCompanyId(), new PageRequest(skip, limit), bookedRange);
+                logger.debug(String.format("Finding Bookable Drivers For Company:%s. Logged In As Company User ", user.getCompanyName()));
+                return domainService.bookableDrivers(user.getCompanyId(), pageable, bookedRange);
+            case WORLD: {
+                logger.debug(String.format("Finding Bookable Drivers For Company:%s. Looged In As World", companyId));
+                return domainService.bookableDrivers(companyId, pageable, bookedRange);
+            }
         }
+
         return new HashSet<>();
     }
 

@@ -74,8 +74,11 @@ public class DriverControllerTest {
     @Autowired
     private Filter springSecurityFilterChain;
     private final ObjectId companyId = ObjectId.get();
+    private final ObjectId id = ObjectId.get();
     private final Date from = new Date();
     private final Date to = DateUtils.addMinutes(from, 6);
+    private final String fromString = new DateTime(from).toDateTimeISO().toString();
+    private final String toString = new DateTime(to).toDateTimeISO().toString();
     private BookedRange bookedRange = new BookedRange(from, to);
     private final Pageable pageable = new PageRequest(skip, limit);
     private DriverDomainService domainService = Mockito.mock(DriverDomainService.class);
@@ -303,10 +306,8 @@ public class DriverControllerTest {
 
     @Test
     public void shouldReturnAnEmptyListOfDriversWhenNoUserIsLoggedIn() throws Exception {
-        String fromDate = new DateTime(from).toDateTimeISO().toString();
-        String toDate = new DateTime(to).toDateTimeISO().toString();
         controller.domainService = domainService;
-        mockMvc.perform(get(String.format("/%s/bookable/%s/%s/%d/%d", VIEW_PAGE, fromDate, toDate, skip, limit))).
+        mockMvc.perform(get(String.format("/%s/bookable/%s/%s/%s/%d/%d", VIEW_PAGE,idd ,fromString, toString, skip, limit))).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$").isArray()).
                 andExpect(jsonPath("$[0]").doesNotExist());
@@ -324,10 +325,7 @@ public class DriverControllerTest {
         when(domainService.bookableDrivers(companyId, pageable, bookedRange)).thenReturn(bookableDrivers);
         controller.domainService = domainService;
 
-        String fromString = new DateTime(from).toDateTimeISO().toString();
-        String toString = new DateTime(to).toDateTimeISO().toString();
-
-        mockMvc.perform(get(String.format("/%s/bookable/%s/%s/%d/%d", VIEW_PAGE, fromString, toString, skip, limit)).
+        mockMvc.perform(get(String.format("/%s/bookable/%s/%s/%s/%d/%d", VIEW_PAGE,id, fromString, toString, skip, limit)).
                 with(user(companyUser(companyId)))).
                 andExpect(status().isOk()).andExpect(jsonPath("$").isArray()).
                 andExpect(jsonPath("$[0].companyId._time").value(companyId.getTimestamp()));
@@ -337,6 +335,29 @@ public class DriverControllerTest {
         assertThat(companyId, is(objectIdArgumentCaptor.getValue()));
         assertThat(bookedRange, is(bookedRangeArgumentCaptor.getValue()));
         assertThat(pageable, is(pageableArgumentCaptor.getValue()));
+    }
+
+    @Test
+    public void shouldReturnBookableDriversForTheGivenCompanyIdWhenAWorldIsLoggedIn() throws Exception {
+        final Driver driver = new Driver();
+        driver.setCompanyId(companyId);
+
+        final Set<Driver> bookableDrivers = new HashSet<>(Arrays.asList(driver));
+        when(domainService.bookableDrivers(companyId, pageable, bookedRange)).thenReturn(bookableDrivers);
+
+        controller.domainService = domainService;
+
+        mockMvc.perform(get(String.format("/%s/bookable/%s/%s/%s/%d/%d", VIEW_PAGE, companyId, fromString, toString, skip, limit)).
+                with(user(world(id)))).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$").isArray()).
+                andExpect(jsonPath("$[0].companyId._time").value(companyId.getTimestamp()));
+
+        verify(domainService).bookableDrivers(objectIdArgumentCaptor.capture(), pageableArgumentCaptor.capture(), bookedRangeArgumentCaptor.capture());
+        assertThat(companyId, is(objectIdArgumentCaptor.getValue()));
+        assertThat(bookedRange, is(bookedRangeArgumentCaptor.getValue()));
+        assertThat(pageable, is(pageableArgumentCaptor.getValue()));
+
     }
 
 }
