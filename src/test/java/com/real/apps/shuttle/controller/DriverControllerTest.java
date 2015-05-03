@@ -307,7 +307,7 @@ public class DriverControllerTest {
     @Test
     public void shouldReturnAnEmptyListOfDriversWhenNoUserIsLoggedIn() throws Exception {
         controller.domainService = domainService;
-        mockMvc.perform(get(String.format("/%s/bookable/%s/%s/%s/%d/%d", VIEW_PAGE,idd ,fromString, toString, skip, limit))).
+        mockMvc.perform(get(String.format("/%s/bookable/%s/%s/%s/%d/%d", VIEW_PAGE,id ,fromString, toString, skip, limit))).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$").isArray()).
                 andExpect(jsonPath("$[0]").doesNotExist());
