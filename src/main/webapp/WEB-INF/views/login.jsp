@@ -23,7 +23,7 @@
 
             <c:if test="${param.error != null}">
                 <p class="well has-error danger">
-                    <strong class="str">Access Denied</strong>
+                    <strong id="msg" class="str">Access Denied</strong>
                 </p>
             </c:if>
             <c:if test="${param.logout != null}">

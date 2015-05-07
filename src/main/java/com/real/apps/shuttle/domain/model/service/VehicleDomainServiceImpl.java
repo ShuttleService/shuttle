@@ -29,18 +29,31 @@ public class VehicleDomainServiceImpl implements VehicleDomainService {
     public Set<Vehicle> bookable(ObjectId companyId, Pageable pageable, BookedRange bookedRange) {
         logger.debug(String.format("Finding Bookable Vehicles {companyId:%s,pageable:%s,bookedRange:%s}", companyId, pageable, bookedRange));
         Page<Vehicle> page = repository.findByCompanyId(companyId, pageable);
-        logger.debug(String.format("{Page:%s, Total Elements:%d, Content Size:%d}", page,page.getTotalElements(),page.getContent().size()));
+        logger.debug(String.format("{Page:%s, Total Elements:%d, Content Size:%d}", page, page.getTotalElements(), page.getContent().size()));
 
         Set<Vehicle> bookable = new HashSet<>();
 
         for (Vehicle vehicle : page.getContent()) {
 
             if (bookedRangeService.availableForBooking(vehicle.getBookedRanges(), bookedRange)) {
-                logger.debug(String.format("Vehicle %s is available for booking ",vehicle));
+                logger.debug(String.format("Vehicle %s is available for booking ", vehicle));
                 bookable.add(vehicle);
             }
         }
 
         return bookable;
     }
+
+    @Override
+    public boolean book(Vehicle vehicle, BookedRange bookedRange) {
+        boolean bookable = bookedRangeService.availableForBooking(vehicle.getBookedRanges(), bookedRange);
+
+        if (bookable) {
+            vehicle.getBookedRanges().add(bookedRange);
+            repository.save(vehicle);
+            return true;
+        }
+        return false;
+    }
+
 }

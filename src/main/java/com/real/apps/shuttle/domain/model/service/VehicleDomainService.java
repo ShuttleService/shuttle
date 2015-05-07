@@ -11,5 +11,7 @@ import java.util.Set;
  * Created by zorodzayi on 15/04/26.
  */
 public interface VehicleDomainService {
-    Set<Vehicle> bookable(ObjectId companyId,Pageable pageable,BookedRange bookedRange);
+    Set<Vehicle> bookable(ObjectId companyId, Pageable pageable, BookedRange bookedRange);
+
+    boolean book(Vehicle vehicle, BookedRange bookedRange);
 }

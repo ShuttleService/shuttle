@@ -4,13 +4,14 @@ import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
  * Created by zorodzayi on 14/10/10.
  */
 @Document
-public class Vehicle extends CompanyModel{
+public class Vehicle extends CompanyModel {
     private ObjectId id;
     @Indexed(unique = true)
     private String licenseNumber;
@@ -20,8 +21,8 @@ public class Vehicle extends CompanyModel{
     private String model;
     private int year;
     private int seats;
-    private  String type;
-    private Set<BookedRange> bookedRanges;
+    private String type;
+    private Set<BookedRange> bookedRanges = new HashSet<>();
 
     public ObjectId getId() {
         return id;
@@ -90,7 +91,7 @@ public class Vehicle extends CompanyModel{
     @Override
     public String toString() {
         return String.format("{id:%s,Make:%s,Model%s,YearModel:%d,Type:%s,Seats:%d,licenseNumber:%s,companyId:%s,companyName:%s,bookedRanges:%s}",
-                id,make,model,year,type,seats,licenseNumber,companyId,companyName,bookedRanges);
+                id, make, model, year, type, seats, licenseNumber, companyId, companyName, bookedRanges);
     }
 
 
@@ -103,11 +104,11 @@ public class Vehicle extends CompanyModel{
             return false;
         }
 
-        if(!(object instanceof Vehicle)){
+        if (!(object instanceof Vehicle)) {
             return false;
         }
 
-        Vehicle vehicle = (Vehicle)object;
+        Vehicle vehicle = (Vehicle) object;
 
         return id.equals(vehicle.getId());
 
