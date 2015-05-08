@@ -31,6 +31,7 @@ public class DriverDomainServiceImpl implements DriverDomainService {
         LOGGER.info("Driver Bookable " + bookable);
 
         if (bookable) {
+            driver = repository.findOne(driver.getId());
             driver.getBookedRanges().add(bookedRange);
             repository.save(driver);
             return true;

@@ -74,8 +74,9 @@ public class DriverDomainServiceTest {
         driver = repository.findOne(driver.getId());
         assertThat(driver.getBookedRanges().size(), is(1));
 
-        boolean booked = service.book(driver, new BookedRange(to,later));
+        boolean booked = service.book(driver, new BookedRange(to, later));
         assertThat(booked, is(true));
+        driver = repository.findOne(driver.getId());
         assertThat(driver.getBookedRanges().size(), is(2));
 
     }
