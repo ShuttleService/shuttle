@@ -4,17 +4,17 @@
 describe('Testing The Login Functionality ', function () {
 
     beforeEach(function () {
-        browser.get('shuttle');
+        browser.get('/shuttle/login');
     });
 
     it('Entering An InValid User Name And Password And Clicking The Login Should Login The User', function () {
 
-        element.all(by.id('username')).sendKeys('root');
-        element.all(by.id('password')).sendKeys('Wrong Password');
+        element(by.css('#username')).sendKeys('root');
+        element(by.id('password')).sendKeys('Wrong Password');
 
-        element.all(by.id('btnLogin')).click();
+        element(by.id('login')).click();
 
-        var message = element.all(by.buttonText('msg')).getText();
+        var message = element(by.id('message')).getText();
 
         expect(message).toEqual('Access Denied');
     });

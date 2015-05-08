@@ -23,6 +23,7 @@ class DriverDomainServiceSpec extends spock.lang.Specification {
     private Date from = new Date()
     private Date to = new Date()
     private Logger logger = Logger.getLogger(DriverDomainServiceSpec.class)
+    private BookedRange bookedRange = new BookedRange(from, to)
 
     def setup() {
         service = new DriverDomainServiceImpl();
@@ -32,21 +33,6 @@ class DriverDomainServiceSpec extends spock.lang.Specification {
         earlier = calendar.getTime();
         calendar.add(Calendar.MILLISECOND, 2)
         later = calendar.getTime()
-    }
-
-
-    def 'Should Return The Drivers Outside The BookedRange'() {
-
-        given: 'A driver with no booked range'
-
-        Driver driver = new Driver()
-        BookedRange bookedRange = new BookedRange(now, later)
-
-        when: 'A booking is attempted'
-        boolean successfullyBooked = service.book(driver, bookedRange);
-
-        then:
-        successfullyBooked
     }
 
     def 'Should Find Drivers That Are Bookable By Checking That Each Driver Is Bookable'() {
@@ -79,7 +65,9 @@ class DriverDomainServiceSpec extends spock.lang.Specification {
         Pageable pageable = new PageRequest(0, 10)
         Page<Driver> page = new PageImpl<>(drivers)
         repository.findByCompanyId(id, pageable) >> page
+
         logger.debug(page.getTotalElements())
+
         BookedRangeService bookedRangeService = Stub()
         bookedRangeService.availableForBooking(null, bookedRange) >> true
         bookedRangeService.availableForBooking(driver1BookedRanges, bookedRange) >> true
@@ -103,5 +91,47 @@ class DriverDomainServiceSpec extends spock.lang.Specification {
         result.contains(driver)
         result.contains(driver1)
         !result.contains(driver2)
+    }
+
+    def 'Booking A Driver Who Is Bookable For The Given BookedRange Should Result In A Successful Booking'() {
+        given: 'A Set Of BookedRanges'
+        Set<BookedRange> bookedRanges = new HashSet<>()
+        bookedRanges << bookedRange
+
+        and: 'A Driver With The Booked Ranges'
+        Driver driver = new Driver(bookedRanges: bookedRanges)
+
+        and: 'A Mock BookedRangeDomainService That Says The Driver Is Bookable'
+        BookedRangeService bookedRangeService = Stub()
+        service.bookedRangeService = bookedRangeService
+        bookedRangeService.availableForBooking(bookedRanges, bookedRange) >> true
+
+        when: 'A Booking Is Attempted'
+        boolean booked = service.book(driver, bookedRange)
+
+        then:
+        booked
+    }
+
+    def '''Booking A Driver Who Is Not Bookable For The Given BookedRange Should Result In An
+           Unsuccessful Booking '''() {
+        given: 'A Set Of BookedRanges'
+        Set<BookedRange> bookedRanges = new HashSet<>()
+        bookedRanges << bookedRange
+
+        and: 'A Driver With The Booked Ranges'
+        Driver driver = new Driver(bookedRanges: bookedRanges)
+
+        and: 'A Mock BookedRangeService That Says The Driver Is Not Bookable'
+        BookedRangeService bookedRangeService = Mock()
+        service.bookedRangeService = bookedRangeService
+        bookedRangeService.availableForBooking(bookedRanges, bookedRange) >> false
+
+        when: 'A Booking Is Attempted '
+        boolean booked = service.book(driver, bookedRange)
+
+        then : ''
+        !booked
+        1 * bookedRangeService.availableForBooking(bookedRanges, bookedRange)
     }
 }

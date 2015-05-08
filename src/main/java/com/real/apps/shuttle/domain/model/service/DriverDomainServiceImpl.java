@@ -22,26 +22,31 @@ public class DriverDomainServiceImpl implements DriverDomainService {
     BookedRangeService bookedRangeService;
     @Autowired
     DriverRepository repository;
-    Logger logger = Logger.getLogger(DriverDomainService.class);
+    Logger LOGGER = Logger.getLogger(DriverDomainService.class);
 
     @Override
     public boolean book(Driver driver, BookedRange bookedRange) {
-
-        return true;
+        LOGGER.info(String.format("Booking A Driver {Driver:%s,BookedRange:%s ", driver, bookedRange));
+        boolean bookable = bookedRangeService.availableForBooking(driver.getBookedRanges(), bookedRange);
+        LOGGER.info("Driver Bookable " + bookable);
+        if (bookable) {
+            return true;
+        }
+        return false;
     }
 
     @Override
     public Set<Driver> bookableDrivers(ObjectId companyId, Pageable pageable, BookedRange bookedRange) {
-        logger.debug(String.format("Finding The BookableDrivers {companyId:%s, Pageable:%s, BookedRange:%s}", companyId, pageable, bookedRange));
+        LOGGER.debug(String.format("Finding The BookableDrivers {companyId:%s, Pageable:%s, BookedRange:%s}", companyId, pageable, bookedRange));
         Set<Driver> bookable = new HashSet<>();
         Page<Driver> page = repository.findByCompanyId(companyId, pageable);
 
-        logger.debug(String.format("{Page Returned From Repository %s, containing %d drivers, Content Size:%d }", page, page.getTotalElements(), page.getContent().size()));
+        LOGGER.debug(String.format("{Page Returned From Repository %s, containing %d drivers, Content Size:%d }", page, page.getTotalElements(), page.getContent().size()));
 
         for (Driver driver : page.getContent()) {
 
             if (bookedRangeService.availableForBooking(driver.getBookedRanges(), bookedRange)) {
-                logger.debug(String.format("Adding driver %s to the bookable list ", driver.getFirstName()));
+                LOGGER.debug(String.format("Adding driver %s to the bookable list ", driver.getFirstName()));
                 bookable.add(driver);
             }
         }

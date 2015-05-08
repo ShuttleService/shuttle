@@ -81,7 +81,7 @@ public class Driver extends CompanyModel {
     @Override
     public String toString() {
 
-        return String.format("{id:%s,firstName:%s,surname:%s,email:%s,driversLicenseNumber:%s,driversLicenseClass:%s,companyId:%s,CompanyName:%s,BookedRange}", id, firstName,
+        return String.format("{id:%s,firstName:%s,surname:%s,email:%s,driversLicenseNumber:%s,driversLicenseClass:%s,companyId:%s,CompanyName:%s,BookedRanges:%s}", id, firstName,
                 surname, email, driversLicenseNumber, driversLicenseClass, companyId, companyName, bookedRanges);
     }
 

@@ -23,7 +23,7 @@
 
             <c:if test="${param.error != null}">
                 <p class="well has-error danger">
-                    <strong id="msg" class="str">Access Denied</strong>
+                    <strong id="message" class="str">Access Denied</strong>
                 </p>
             </c:if>
             <c:if test="${param.logout != null}">
@@ -35,7 +35,7 @@
 
             <form class="form-signin col-xs-2" method="POST" name="login" action="<c:url value="/login"/>">
                 <div class="form-group">
-                    <input path="userName" id="userName" name="username" class="form-control" placeholder="User Name"
+                    <input path="userName" id="username" name="username" class="form-control" placeholder="User Name"
                            required/>
                 </div>
                 <div class="form-group">
