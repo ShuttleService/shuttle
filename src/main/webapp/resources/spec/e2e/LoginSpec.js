@@ -18,4 +18,17 @@ describe('Testing The Login Functionality ', function () {
 
         expect(message).toEqual('Access Denied');
     });
+
+    it('Entering Valid User Name And Password And Clicking The Login Button Should Login The User And Take Him To The Home Page', function () {
+
+        var tripLink = element.all(by.linkText('Trips');
+
+        expect(tripLink.length).toBe(0);
+
+        element(by.id('username')).sendKeys('root');
+        element(by.id('password')).sendKeys('adminadmin');
+        element(by.id('login')).click();
+
+        expect(tripLink.length).toBe(1);
+    });
 });
