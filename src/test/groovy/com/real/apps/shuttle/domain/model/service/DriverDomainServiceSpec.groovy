@@ -24,9 +24,10 @@ class DriverDomainServiceSpec extends spock.lang.Specification {
     private Date to = new Date()
     private Logger logger = Logger.getLogger(DriverDomainServiceSpec.class)
     private BookedRange bookedRange = new BookedRange(from, to)
+    private DriverRepository repository = Stub()
 
     def setup() {
-        service = new DriverDomainServiceImpl();
+        service.repository = repository
         Calendar calendar = Calendar.getInstance()
         calendar.setTime(now)
         calendar.add(Calendar.MILLISECOND, -1)
@@ -60,7 +61,6 @@ class DriverDomainServiceSpec extends spock.lang.Specification {
         drivers << driver1
         drivers << driver2
 
-        DriverRepository repository = Stub()
         ObjectId id = ObjectId.get()
         Pageable pageable = new PageRequest(0, 10)
         Page<Driver> page = new PageImpl<>(drivers)
@@ -69,13 +69,11 @@ class DriverDomainServiceSpec extends spock.lang.Specification {
         logger.debug(page.getTotalElements())
 
         BookedRangeService bookedRangeService = Stub()
-        bookedRangeService.availableForBooking(null, bookedRange) >> true
+        bookedRangeService.availableForBooking(new HashSet<BookedRange>(), bookedRange) >> true
         bookedRangeService.availableForBooking(driver1BookedRanges, bookedRange) >> true
         bookedRangeService.availableForBooking(driver2BookedRanges, bookedRange) >> false
 
-
         service.bookedRangeService(bookedRangeService)
-        service.repository(repository)
 
         when: 'You Find Bookable Drivers For A Given Company'
 
@@ -83,10 +81,6 @@ class DriverDomainServiceSpec extends spock.lang.Specification {
 
         then:
 
-        /*1 * bookedRangeService.availableForBooking(null, bookedRange)
-        1 * bookedRangeService.availableForBooking(driver1BookedRanges, bookedRange)
-        1 * bookedRangeService.availableForBooking(driver2BookedRanges, bookedRange)
-        repository.findByCompanyId(id, pageable)*/
         result.size() == expected.size()
         result.contains(driver)
         result.contains(driver1)
@@ -130,7 +124,7 @@ class DriverDomainServiceSpec extends spock.lang.Specification {
         when: 'A Booking Is Attempted '
         boolean booked = service.book(driver, bookedRange)
 
-        then : ''
+        then: ''
         !booked
         1 * bookedRangeService.availableForBooking(bookedRanges, bookedRange)
     }

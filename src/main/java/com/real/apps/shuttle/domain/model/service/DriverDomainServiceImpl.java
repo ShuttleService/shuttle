@@ -29,7 +29,10 @@ public class DriverDomainServiceImpl implements DriverDomainService {
         LOGGER.info(String.format("Booking A Driver {Driver:%s,BookedRange:%s ", driver, bookedRange));
         boolean bookable = bookedRangeService.availableForBooking(driver.getBookedRanges(), bookedRange);
         LOGGER.info("Driver Bookable " + bookable);
+
         if (bookable) {
+            driver.getBookedRanges().add(bookedRange);
+            repository.save(driver);
             return true;
         }
         return false;

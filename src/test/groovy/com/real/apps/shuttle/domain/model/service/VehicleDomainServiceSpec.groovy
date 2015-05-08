@@ -20,6 +20,11 @@ class VehicleDomainServiceSpec extends spock.lang.Specification {
     private Date from = new Date()
     private Date to = new Date()
     private BookedRange bookedRange = new BookedRange(from, to)
+    private VehicleRepository repository = Stub()
+
+    def setup() {
+        service.repository = repository
+    }
 
 
     def "Should Check All The Vehicles For A Given Company To See If They Are Bookable "() {
@@ -37,12 +42,9 @@ class VehicleDomainServiceSpec extends spock.lang.Specification {
 
         List<Vehicle> vehicles = Arrays.asList(vehicle, vehicle1, vehicle2)
 
-        and: 'A Booked Range '
-        BookedRange bookedRange = new BookedRange(from, to)
-
         and: 'A Company Id, A Pageable, A Page , A Mock Repository And A Mock BookedRangeService'
         Pageable pageable = new PageRequest(0, 10)
-        VehicleRepository repository = Stub()
+
         ObjectId id = ObjectId.get()
         Page<Vehicle> page = new PageImpl<>(vehicles)
         BookedRangeService bookedRangeService = Stub()
@@ -51,7 +53,7 @@ class VehicleDomainServiceSpec extends spock.lang.Specification {
         repository.findByCompanyId(id, pageable) >> page
 
         and: 'Checking for availability on the booked ranges yield the following results'
-        bookedRangeService.availableForBooking(null, bookedRange) >> true
+        bookedRangeService.availableForBooking(new HashSet<BookedRange>(), bookedRange) >> true
         bookedRangeService.availableForBooking(vehicle1BookedRanges, bookedRange) >> false
         bookedRangeService.availableForBooking(vehicle2BookedRanges, bookedRange) >> true
 
@@ -84,7 +86,7 @@ class VehicleDomainServiceSpec extends spock.lang.Specification {
         bookedRangeService.availableForBooking(bookedRanges, bookedRange) >> false
 
         when: 'A Booking Is Attempted'
-        boolean bookable = service.book(vehicle,bookedRange)
+        boolean bookable = service.book(vehicle, bookedRange)
 
         then:
         !bookable
@@ -106,7 +108,7 @@ class VehicleDomainServiceSpec extends spock.lang.Specification {
         bookedRangeService.availableForBooking(bookedRanges, bookedRange) >> true
 
         when: 'A Booking Is Attempted'
-        boolean booked = service.book(vehicle,bookedRange)
+        boolean booked = service.book(vehicle, bookedRange)
 
         then:
         booked

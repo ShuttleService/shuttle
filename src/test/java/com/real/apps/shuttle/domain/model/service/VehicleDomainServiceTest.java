@@ -53,7 +53,7 @@ public class VehicleDomainServiceTest {
     }
 
     @Test
-    public void aVehicleThatIsNotBookedShouldHaveABookedRangeAfterABooking() {
+    public void bookingAVehicleWhichIsNotBookedShouldAddABookedRangeToIt() {
         Vehicle vehicle = repository.save(new Vehicle());
         assertThat(vehicle.getBookedRanges().size(), is(0));
         boolean booked = service.book(vehicle, bookedRange);
@@ -65,7 +65,7 @@ public class VehicleDomainServiceTest {
     }
 
     @Test
-    public void aVehicleThatIsAlreadyBookedShouldAddAnotherBookingAfterASuccessfulBooking() {
+    public void bookingAVehicleThatIsBookedForADifferentRangeShouldAddANewBookedRange() {
         Vehicle vehicle = repository.save(new Vehicle());
 
         boolean booked = service.book(vehicle, bookedRange);

@@ -34,7 +34,7 @@ public class VehicleDomainServiceImpl implements VehicleDomainService {
         Set<Vehicle> bookable = new HashSet<>();
 
         for (Vehicle vehicle : page.getContent()) {
-
+            logger.info(String.format("Checking To See If {Vehicle:%s} Is Available Fo Booking",vehicle));
             if (bookedRangeService.availableForBooking(vehicle.getBookedRanges(), bookedRange)) {
                 logger.debug(String.format("Vehicle %s is available for booking ", vehicle));
                 bookable.add(vehicle);

@@ -20,15 +20,16 @@ describe('Testing The Login Functionality ', function () {
     });
 
     it('Entering Valid User Name And Password And Clicking The Login Button Should Login The User And Take Him To The Home Page', function () {
+        var menu = element(by.id('menu'));
 
-        var tripLink = element.all(by.linkText('Trips');
-
-        expect(tripLink.length).toBe(0);
+        expect(menu.isPresent()).toBe(false);
 
         element(by.id('username')).sendKeys('root');
         element(by.id('password')).sendKeys('adminadmin');
         element(by.id('login')).click();
 
-        expect(tripLink.length).toBe(1);
+        menu = element(by.id('menu'));
+        expect(menu.isPresent()).toBe(true);
+        expect(menu.isDisplayed()).toBe(true);
     });
 });

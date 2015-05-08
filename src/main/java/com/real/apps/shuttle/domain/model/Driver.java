@@ -4,6 +4,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -20,7 +21,7 @@ public class Driver extends CompanyModel {
     private String email;
     private String driversLicenseNumber;
     private String driversLicenseClass;
-    private Set<BookedRange> bookedRanges;
+    private Set<BookedRange> bookedRanges = new HashSet<>();
 
     public String getFirstName() {
         return firstName;
