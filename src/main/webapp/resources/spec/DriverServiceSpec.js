@@ -51,9 +51,9 @@ describe('Driver Service Test', function () {
 
         var actual = DriverService.query({
             pathVariable: pathVariable,
-            companyId:companyId,
-            bookingRangeFrom: from,
-            bookingRangeTo: to,
+            _companyId:companyId,
+            bookableFrom: from,
+            bookableTo: to,
             skip: skip,
             limit: limit
         });

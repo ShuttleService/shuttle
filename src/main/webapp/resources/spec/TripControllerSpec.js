@@ -6,24 +6,36 @@ describe('Testing The Trip Controller', function () {
     var $scope;
     var TripService;
     var $controller;
+    var DriverService;
+    var VehicleService;
+    var company = {
+        id: 'Test Company Id To Be Assigned The trip.companyId',
+        tradingAs: 'Test Company Name To Be Assigned To trip.companyName'
+    };
+
     var FormSubmissionUtilService;
     var RESULT_SIZE;
 
     beforeEach(module('controllers'));
 
-    beforeEach(inject(function (_$rootScope_, _$controller_, _TripService_, _FormSubmissionUtilService_, _RESULT_SIZE_) {
+    beforeEach(inject(function (_$rootScope_, _$controller_, _TripService_, _FormSubmissionUtilService_, _RESULT_SIZE_, _DriverService_, _VehicleService_) {
 
         $scope = _$rootScope_.$new();
         TripService = _TripService_;
         $controller = _$controller_;
         FormSubmissionUtilService = _FormSubmissionUtilService_;
         RESULT_SIZE = _RESULT_SIZE_;
+        VehicleService = _VehicleService_;
+        DriverService = _DriverService_;
 
         expect($scope).toBeDefined();
         expect(TripService).toBeDefined();
         expect($controller).toBeDefined();
         expect(FormSubmissionUtilService).toBeDefined();
         expect(RESULT_SIZE).toBeDefined();
+        expect(DriverService).toBeDefined();
+        expect(VehicleService).toBeDefined();
+
     }));
 
     it('Should Call Get On Trip Service With Params On The Scope And Set The Result Page On The Scope', function () {
@@ -73,10 +85,7 @@ describe('Testing The Trip Controller', function () {
     });
 
     it('saveClick Should Set The Company Id And Company Name To The Values On The $scope.company', function () {
-        var company = {
-            id: 'Test Company Id To Be Assigned The trip.companyId',
-            tradingAs: 'Test Company Name To Be Assigned To trip.companyName'
-        };
+
         $scope.company = company;
 
         $controller('TripController', {
@@ -215,4 +224,99 @@ describe('Testing The Trip Controller', function () {
         });
         expect($scope.trip.price.currency).toBeDefined();
     });
+
+    it('Should Set A Booked Range On The Trip Given A From Date And A To Date ', function () {
+
+        $controller('TripController', {
+            $scope: $scope
+        });
+
+        expect($scope.trip.bookedRange).toBeUndefined();
+        $scope.from = new Date();
+        $scope.to = {date: 'Fake date'};
+
+        var bookedRange = {from: $scope.from, to: $scope.to};
+
+        $scope.saveClick();
+
+        expect($scope.trip.bookedRange).toEqual(bookedRange);
+
+    });
+
+    it('When The From Date Is Not Set. No Call Should Be Made To Find Bookable Drivers And Bookable Vehicles', function () {
+
+        $controller('TripController', {$scope: $scope});
+        $scope.trip.to = new Date();
+        $scope.trip.companyId = company.id;
+        spyOn(DriverService, 'query');
+        spyOn(VehicleService, 'query');
+
+        $scope.findBookableDriversAndVehicles();
+
+        expect(DriverService.query.wasCalled).toBe(false);
+        expect(VehicleService.query).not.toHaveBeenCalled();
+        expect($scope.bookableDrivers).toEqual({});
+        expect($scope.bookableDrivers).toEqual({});
+
+    });
+
+    it('When The To Date Is Not Set. No Call Should Be Made To Find Bookable Drivers And Bookable Vehicles', function () {
+        $controller('TripController', {$scope: $scope});
+        $scope.trip.from = new Date();
+        $scope.company = company;
+        spyOn(DriverService, 'query');
+        spyOn(VehicleService, 'query');
+
+        $scope.findBookableDriversAndVehicles();
+
+        expect(DriverService.query).not.toHaveBeenCalled();
+        expect(VehicleService.query.wasCalled).toBeFalsy();
+        expect($scope.bookableDrivers).toEqual({});
+        expect($scope.bookableVehicles).toEqual({});
+    });
+
+    it('When The Company Is Not Set. No Call Should Be Made To Find Bookable Drivers And Bookable Vehicles', function () {
+        $controller('TripController', {$scope: $scope});
+        $scope.trip.from = new Date();
+        $scope.trip.to = new Date();
+
+        spyOn(DriverService, 'query');
+        spyOn(VehicleService, 'query');
+
+        $scope.findBookableDriversAndVehicles();
+
+        expect(DriverService.query).not.toHaveBeenCalled();
+        expect(VehicleService.query).not.toHaveBeenCalled();
+        expect($scope.bookableDrivers).toEqual({});
+        expect($scope.bookableVehicles).toEqual({});
+    });
+    it('Should Find A List Of Bookable Drivers When The Company, From And To Are All Set', function () {
+        $controller('TripController', {$scope: $scope});
+        $scope.trip.from = new Date(1978, 09, 07);
+        $scope.trip.to = new Date();
+        $scope.company = company;
+
+        var bookableDrivers = ['Driver 1', 'Driver 2'];
+        var bookableVehicles = ['Vehicle'];
+
+        spyOn(DriverService, 'query').andReturn(bookableDrivers);
+        spyOn(VehicleService, 'query').andReturn(bookableVehicles);
+
+        $scope.findBookableDriversAndVehicles();
+
+        var params = {
+            pathVariable: 'bookable',
+            _companyId: $scope.company.id,
+            bookableFrom: $scope.trip.from,
+            bookableTo: $scope.trip.to,
+            skip: 0,
+            limit:100
+        };
+        expect(DriverService.query).toHaveBeenCalledWith(params);
+        expect(VehicleService.query).toHaveBeenCalledWith(params);
+        expect($scope.bookableDrivers).toEqual(bookableDrivers);
+        expect($scope.bookableVehicles).toEqual(bookableVehicles);
+
+
+    })
 });

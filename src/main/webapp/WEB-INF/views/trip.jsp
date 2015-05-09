@@ -65,24 +65,37 @@
                             </div>
                         </security:authorize>
                         <div class="form-group col-xs-6">
+                            <label class="control-label">Company</label>
+                            <select class="form-control" name="company" ng-model="company"
+                                    ng-change="findBookableDriversAndVehicles()"
+                                    ng-options="company.tradingAs for company in sharedState.companyPage.content"
+                                    required></select>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label class="control-label">From</label>
+                            <input type="date" class="form-control" placeholder="From" minlength="10" name="from"
+                                   ng-model="trip.from"
+                                   ng-change="findBookableDriversAndVehicles()" id="from" required>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label class="control-label">To</label>
+                            <input type="date" class="form-control" placeholder="To" minlength="10" name="to"
+                                   ng-model="trip.to"
+                                   ng-change="findBookableDriversAndVehicles()" id="to" required>
+                        </div>
+                        <div class="form-group col-xs-6">
                             <label class="control-label">Vehicle</label>
                             <select class="form-control" placeholder="Vehicle" name="vehicle"
                                     ng-model="vehicle"
-                                    ng-options="vehicle.make+' '+vehicle.model+' '+vehicle.licenseNumber for vehicle in sharedState.vehiclePage.content "
+                                    ng-options="vehicle.make+' '+vehicle.model+' '+vehicle.licenseNumber for vehicle in bookableVehicles "
                                     required></select>
                         </div>
                         <div class="form-group col-xs-6">
                             <label class="control-label">Driver</label>
                             <select class="form-control" name="driver" ng-model="driver"
-                                    ng-options="driver.firstName+' '+driver.surname for driver in sharedState.driverPage.content"
+                                    ng-options="driver.firstName+' '+driver.surname for driver in bookableDrivers"
                                     required>
                             </select>
-                        </div>
-                        <div class="form-group col-xs-6">
-                            <label class="control-label">Company</label>
-                            <select class="form-control" name="company" ng-model="company"
-                                    ng-options="company.tradingAs for company in sharedState.companyPage.content"
-                                    required></select>
                         </div>
                     </form>
                 </div>

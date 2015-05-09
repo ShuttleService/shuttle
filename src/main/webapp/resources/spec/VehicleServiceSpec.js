@@ -46,7 +46,7 @@ describe('Vehicle Service Test', function () {
 
         $httpBackend.expectGET(url).respond(bookableDrivers);
         var actual = VehicleService.query({
-            pathVariable: pathVariable,companyId:companyId,bookableFrom: from, bookableTo: to, skip: skip, limit: limit
+            pathVariable: pathVariable,_companyId:companyId,bookableFrom: from, bookableTo: to, skip: skip, limit: limit
         });
 
         $httpBackend.flush();

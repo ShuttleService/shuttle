@@ -295,7 +295,7 @@ public class VehicleControllerTest {
 
         when(domainService.bookable(companyId, pageable, bookedRange)).thenReturn(vehicles);
 
-        mockMvc.perform(get(String.format("/%s/bookable/%s/%s/%s/%d/%d", VIEW_PAGE, companyId, from, to, skip, limit)).
+        mockMvc.perform(get(String.format("/%s/bookable/%s/%s/%s/%d/%d", VIEW_PAGE, companyId.toString(), from, to, skip, limit)).
                 with(user(world(id)))).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$").isArray()).

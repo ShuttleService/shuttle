@@ -44,7 +44,7 @@ angular.module('controllers', ['services']).
     }).
     controller('DriverController', function ($scope, $log, DriverService, FormSubmissionUtilService, RESULT_SIZE) {
         $scope.new = true;
-        $scope.driver = {};
+        $scope.driver = {bookedRanges: []};
         $scope.prestineDriver = angular.copy($scope.driver);
         $scope.skip = 0;
         $scope.limit = RESULT_SIZE;
@@ -81,7 +81,8 @@ angular.module('controllers', ['services']).
         $scope.bookableList = function () {
             $log.debug('Finding Bookable Drivers ');
             $scope.bookable = DriverService.query({
-                companyId: $scope.companyId,
+                pathVariable: 'bookable',
+                _companyId: $scope.companyId,
                 bookableFrom: $scope.bookableFrom,
                 bookableTo: $scope.bookableTo,
                 skip: $scope.skip,
@@ -92,13 +93,15 @@ angular.module('controllers', ['services']).
         $scope.list();
     }).
 
-    controller('TripController', function ($scope, TripService, FormSubmissionUtilService, $log, RESULT_SIZE) {
+    controller('TripController', function ($scope, TripService, DriverService, VehicleService, FormSubmissionUtilService, $log, RESULT_SIZE) {
         $scope.trip = {price: {currency: {}}};
         $scope.prestineTrip = angular.copy($scope.trip);
         $scope.new = true;
         $scope.skip = 0;
         $scope.limit = RESULT_SIZE;
         $scope.currencyCodes = ['R'];
+        $scope.bookableDrivers = {};
+        $scope.bookableVehicles = {};
 
         $scope.canSave = function () {
             return FormSubmissionUtilService.canSave($scope.addForm);
@@ -106,6 +109,7 @@ angular.module('controllers', ['services']).
 
         $scope.saveClick = function () {
             console.log('Attempting To Save The Trip');
+            $scope.trip.bookedRange = {from: $scope.from, to: $scope.to};
             if ($scope.company) {
                 var companyId = $scope.company.id;
                 var companyName = $scope.company.tradingAs;
@@ -150,6 +154,29 @@ angular.module('controllers', ['services']).
             $log.debug('Reverting The Trip To Its Prestine State');
             $scope.trip = angular.copy($scope.prestineTrip);
         };
+
+        $scope.findBookableDriversAndVehicles = function () {
+
+            $log.debug('Attempting To Find The Bookable Drivers And The Bookable Vehicles ');
+
+            if ($scope.trip.from && $scope.trip.to && $scope.company) {
+                $log.debug('I Am Going Ahead Finding The Bookable Drivers And The Bookable Vehicles As All From, To And Compay Have Values');
+                var params = {
+                    pathVariable: 'bookable',
+                    _companyId: $scope.company.id,
+                    bookableFrom: $scope.trip.from,
+                    bookableTo: $scope.trip.to,
+                    skip: 0,
+                    limit: 100
+                };
+
+                $scope.bookableDrivers = DriverService.query(params);
+                $scope.bookableVehicles = VehicleService.query(params);
+            } else {
+                $log.debug('I Am Not Finding Any Bookable Driver And / Or Bookable Vehicles As Either From, To Or Company Are Null');
+            }
+        };
+
 
         $scope.list();
     }).
@@ -348,7 +375,8 @@ angular.module('controllers', ['services']).
             $log.debug('Finding Bookable Vehicles');
 
             $scope.bookable = VehicleService.query({
-                companyId: $scope.companyId,
+                pathVariable: 'bookable',
+                _companyId: $scope.companyId,
                 bookableFrom: $scope.bookableFrom,
                 bookableTo: $scope.bookableTo,
                 skip: $scope.skip,

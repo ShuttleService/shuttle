@@ -14,6 +14,7 @@
     <script src="resources/js/Controller.js"></script>
     <link href="resources/vendor/bootstrap-3.2.0/dist/css/bootstrap.css" type="text/css" rel="stylesheet">
     <link href="resources/style.css" type="text/css" rel="stylesheet">
+    <script src="resources/vendor/ui-bootstrap-tpls-0.13.0.min.js.css"></script>
     <title><tiles:getAsString name="title"/></title>
 </head>
 <body>

@@ -116,7 +116,8 @@ describe('Vehicle Controller Test', function () {
             $scope.bookableList();
 
             expect(VehicleService.query).toHaveBeenCalledWith({
-                companyId:companyId,
+                pathVariable: 'bookable',
+                _companyId: companyId,
                 bookableFrom: from,
                 bookableTo: to,
                 skip: skip,

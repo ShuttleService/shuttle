@@ -173,7 +173,8 @@ describe('Testing The Driver Controller', function () {
         $scope.bookableList();
 
         expect(DriverService.query).toHaveBeenCalledWith({
-            companyId: companyId,
+            pathVariable: 'bookable',
+            _companyId: companyId,
             bookableFrom: from,
             bookableTo: to,
             skip: skip,
