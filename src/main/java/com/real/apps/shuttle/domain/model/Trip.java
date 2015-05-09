@@ -27,6 +27,7 @@ public class Trip extends CompanyModel {
     private int distance;
     @Indexed
     private String clientCellNumber;
+    private BookedRange bookedRange;
 
     public String getClientName() {
         return clientName;
@@ -132,24 +133,33 @@ public class Trip extends CompanyModel {
         this.clientId = clientId;
     }
 
+    public BookedRange getBookedRange() {
+        return bookedRange;
+    }
+
+    public void setBookedRange(BookedRange bookedRange) {
+        this.bookedRange = bookedRange;
+    }
+
     @Override
     public String toString() {
-
-        return String.format("{source:%s,id:%s,clientName:%s,destination:%s,pricePerKm:%d,price:%s,vehicleName:%s,vehicleId:%s,driverName:%s,driverId:%s,distance:%d," +
-                        "clientCellNumber:%s,clientId:%s}", source, id, clientName, destination,pricePerKm, price, vehicleName,vehicleId,driverName,driverId,distance,clientCellNumber,clientId);
+        return String.format("{source:%s,id:%s,clientName:%s,destination:%s,pricePerKm:%d,price:%s,vehicleName:%s,vehicleId:%s,driverName:%s," +
+                        "driverId:%s,distance:%d,clientCellNumber:%s,clientId:%s,bookedRange:%s}", source, id, clientName, destination, pricePerKm,
+                price, vehicleName, vehicleId, driverName, driverId, distance, clientCellNumber, clientId, bookedRange);
     }
+
     @Override
-    public boolean equals(Object object){
-        if(this == object){
+    public boolean equals(Object object) {
+        if (this == object) {
             return true;
         }
-        if(id == null){
+        if (id == null) {
             return false;
         }
-        if(!( object instanceof Trip)){
+        if (!(object instanceof Trip)) {
             return false;
         }
-        Trip trip = (Trip)object;
+        Trip trip = (Trip) object;
         return id.equals(trip.getId());
     }
 }

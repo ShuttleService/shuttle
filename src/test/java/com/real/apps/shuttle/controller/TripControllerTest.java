@@ -2,9 +2,13 @@ package com.real.apps.shuttle.controller;
 
 import com.google.gson.Gson;
 import com.real.apps.shuttle.config.MvcConfiguration;
+import com.real.apps.shuttle.domain.model.Driver;
 import com.real.apps.shuttle.domain.model.Trip;
 import com.real.apps.shuttle.domain.model.User;
+import com.real.apps.shuttle.domain.model.Vehicle;
+import com.real.apps.shuttle.repository.DriverRepository;
 import com.real.apps.shuttle.repository.RepositoryConfig;
+import com.real.apps.shuttle.repository.VehicleRepository;
 import com.real.apps.shuttle.service.ServiceConfig;
 import com.real.apps.shuttle.service.TripService;
 import org.bson.types.ObjectId;
@@ -57,11 +61,17 @@ public class TripControllerTest {
     private TripService service;
     @Autowired
     private TripService tripService;
+    @Autowired
+    private DriverRepository driverRepository;
+    @Autowired
+    private VehicleRepository vehicleRepository;
     private final int skip = 0, limit = 2;
     @Autowired
     private Filter springSecurityFilterChain;
     @Autowired
     private MongoOperations mongoTemplate;
+    private Vehicle vehicle = new Vehicle();
+    private Driver driver = new Driver();
 
     @Before
     public void init() {
@@ -71,6 +81,8 @@ public class TripControllerTest {
     @After
     public void cleanUp() {
         controller.setService(tripService);
+        mongoTemplate.dropCollection("driver");
+        mongoTemplate.dropCollection("vehicle");
     }
 
     @Test
@@ -105,8 +117,11 @@ public class TripControllerTest {
         String surname = "Test Client Surname To Insert";
 
         ObjectId id = ObjectId.get();
-
+        driverRepository.save(driver);
+        vehicleRepository.save(vehicle);
         final Trip trip = new Trip();
+        trip.setDriverId(driver.getId());
+        trip.setVehicleId(vehicle.getId());
         User user = world(id);
         user.setFirstName(name);
         user.setId(id);
@@ -122,15 +137,18 @@ public class TripControllerTest {
     @Test
     public void shouldSetTheTripCompanyIdAndNameToTheLoggedInCompanyWhenACompanyUserIsLoggedIn() throws Exception {
         String companyName = "Test Company Name To Be Set On Trip";
-        ObjectId id        = ObjectId.get();
+        ObjectId id = ObjectId.get();
 
         User user = companyUser(id);
         user.setCompanyName(companyName);
-
+        driverRepository.save(driver);
+        vehicleRepository.save(vehicle);
         Trip trip = new Trip();
+        trip.setDriverId(driver.getId());
+        trip.setVehicleId(vehicle.getId());
         String jsonTrip = new Gson().toJson(trip);
 
-        mockMvc.perform(post("/"+VIEW_PAGE).with(user(user)).contentType(MediaType.APPLICATION_JSON).content(jsonTrip)).
+        mockMvc.perform(post("/" + VIEW_PAGE).with(user(user)).contentType(MediaType.APPLICATION_JSON).content(jsonTrip)).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.companyName").value(companyName)).
                 andExpect(jsonPath("$.companyId._time").value(id.getTimestamp()));
@@ -144,14 +162,14 @@ public class TripControllerTest {
         trip.setSource(source);
         String json = new Gson().toJson(trip);
 
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
             oneOf(service).insert(with(any(Trip.class)));
             will(returnValue(trip));
         }});
 
         controller.setService(service);
 
-        mockMvc.perform(post("/"+VIEW_PAGE).with(user(admin(ObjectId.get()))).contentType(MediaType.APPLICATION_JSON).content(json)).
+        mockMvc.perform(post("/" + VIEW_PAGE).with(user(admin(ObjectId.get()))).contentType(MediaType.APPLICATION_JSON).content(json)).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.source").value(source));
         context.assertIsSatisfied();
@@ -180,7 +198,7 @@ public class TripControllerTest {
     @Test
     public void shouldSetTheTripCompanyIdAndNameToTheLoggedInCompanyAndCallUpdateWhenACompanyUserIsLoggedIn() throws Exception {
         String companyName = "Test Company Name To Be Set On Trip";
-        ObjectId id        = ObjectId.get();
+        ObjectId id = ObjectId.get();
 
         User user = companyUser(id);
         user.setCompanyName(companyName);
@@ -188,7 +206,7 @@ public class TripControllerTest {
         Trip trip = new Trip();
         String jsonTrip = new Gson().toJson(trip);
 
-        mockMvc.perform(put("/"+VIEW_PAGE).with(user(user)).contentType(MediaType.APPLICATION_JSON).content(jsonTrip)).
+        mockMvc.perform(put("/" + VIEW_PAGE).with(user(user)).contentType(MediaType.APPLICATION_JSON).content(jsonTrip)).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.companyName").value(companyName)).
                 andExpect(jsonPath("$.companyId._time").value(id.getTimestamp()));
@@ -202,14 +220,14 @@ public class TripControllerTest {
         trip.setSource(source);
         String json = new Gson().toJson(trip);
 
-        context.checking(new Expectations(){{
+        context.checking(new Expectations() {{
             oneOf(service).update(with(any(Trip.class)));
             will(returnValue(trip));
         }});
 
         controller.setService(service);
 
-        mockMvc.perform(put("/"+VIEW_PAGE).with(user(admin(ObjectId.get()))).contentType(MediaType.APPLICATION_JSON).content(json)).
+        mockMvc.perform(put("/" + VIEW_PAGE).with(user(admin(ObjectId.get()))).contentType(MediaType.APPLICATION_JSON).content(json)).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.source").value(source));
         context.assertIsSatisfied();
