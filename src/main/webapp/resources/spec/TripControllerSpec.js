@@ -10,6 +10,7 @@ describe('Testing The Trip Controller', function () {
     var VehicleService;
     var company = {
         id: 'Test Company Id To Be Assigned The trip.companyId',
+        idString: "Test Id String",
         tradingAs: 'Test Company Name To Be Assigned To trip.companyName'
     };
 
@@ -306,11 +307,11 @@ describe('Testing The Trip Controller', function () {
 
         var params = {
             pathVariable: 'bookable',
-            _companyId: $scope.company.id,
-            bookableFrom: $scope.trip.from,
-            bookableTo: $scope.trip.to,
+            _companyId: $scope.company.idString,
+            bookableFrom: $scope.trip.from.toISOString(),
+            bookableTo: $scope.trip.to.toISOString(),
             skip: 0,
-            limit:100
+            limit: 100
         };
         expect(DriverService.query).toHaveBeenCalledWith(params);
         expect(VehicleService.query).toHaveBeenCalledWith(params);

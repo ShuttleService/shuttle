@@ -163,9 +163,9 @@ angular.module('controllers', ['services']).
                 $log.debug('I Am Going Ahead Finding The Bookable Drivers And The Bookable Vehicles As All From, To And Compay Have Values');
                 var params = {
                     pathVariable: 'bookable',
-                    _companyId: $scope.company.id,
-                    bookableFrom: $scope.trip.from,
-                    bookableTo: $scope.trip.to,
+                    _companyId: $scope.company.idString,
+                    bookableFrom: $scope.trip.from.toISOString(),
+                    bookableTo: $scope.trip.to.toISOString(),
                     skip: 0,
                     limit: 100
                 };

@@ -12,6 +12,7 @@ public abstract class CompanyModel {
     protected ObjectId companyId;
     @Indexed
     protected String companyName;
+    private String idString;
 
     public ObjectId getCompanyId() {
         return companyId;
@@ -29,7 +30,14 @@ public abstract class CompanyModel {
         this.companyName = companyName;
     }
 
-    public void setCompanyIdAndCompanyName(CompanyModel model,Logger logger) {
+    public String getIdString() {
+        if (companyId != null) {
+            idString = companyId.toString();
+        }
+        return idString;
+    }
+
+    public void setCompanyIdAndCompanyName(CompanyModel model, Logger logger) {
         ObjectId id = model.getCompanyId();
         String name = model.getCompanyName();
         logger.debug(String.format("Setting The Company Name And Company Id To {CompanyName:%s,CompanyId:%s}", name, id));

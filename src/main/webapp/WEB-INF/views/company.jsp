@@ -70,6 +70,8 @@
                 <th>VAT Number</th>
                 <th>Registration Number</th>
                 <th>Agent</th>
+                    <th>Id</th>
+                <th>Id String</th>
             </tr>
             </thead>
             <tbody>
@@ -81,6 +83,8 @@
                 <td>{{company.vatNumber}}</td>
                 <td>{{company.registrationNumber}}</td>
                 <td>{{company.agentName}}</td>
+                <td>{{company.id}}
+                <td>{{company.idString}}</td>
             </tr>
             </tbody>
         </table>

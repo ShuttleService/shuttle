@@ -3,7 +3,10 @@ package com.real.apps.shuttle.domain.model;
 import org.bson.types.ObjectId;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.*;
+
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -11,7 +14,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class CompanyTest {
     @Test
-    public void shouldBeEqualIfTheyHaveTheSameId(){
+    public void shouldBeEqualIfTheyHaveTheSameId() {
         ObjectId id = new ObjectId();
         Company company = new Company();
         company.setId(id);
@@ -24,7 +27,7 @@ public class CompanyTest {
     }
 
     @Test
-    public void shouldBeFalseForNullId(){
+    public void shouldBeFalseForNullId() {
         Company company = new Company();
         ObjectId id = ObjectId.get();
         Company company1 = new Company();
@@ -35,12 +38,12 @@ public class CompanyTest {
     }
 
     @Test
-    public void shouldBeFalseWhenComparedWithNull(){
+    public void shouldBeFalseWhenComparedWithNull() {
         assertFalse(new Company().equals(null));
     }
 
     @Test
-    public void shouldBeFalseWhenComparedWithAnObjectFromADifferentClass(){
+    public void shouldBeFalseWhenComparedWithAnObjectFromADifferentClass() {
         Company company = new Company();
         ObjectId id = ObjectId.get();
         Trip trip = new Trip();
@@ -48,9 +51,17 @@ public class CompanyTest {
         company.setId(id);
         assertFalse(company.equals(trip));
     }
+
     @Test
-    public void shouldBeEqualToItself(){
+    public void shouldBeEqualToItself() {
         Company company = new Company();
         assertTrue(company.equals(company));
+    }
+
+    @Test
+    public void shouldGetTheIdAsAString() {
+        Company company = new Company();
+        company.setId(ObjectId.get());
+        assertThat(company.getIdString(), is(company.getId().toString()));
     }
 }

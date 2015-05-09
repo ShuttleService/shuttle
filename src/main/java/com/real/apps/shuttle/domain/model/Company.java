@@ -29,6 +29,7 @@ public class Company {
     private String logo;
     @Indexed
     private String agentName;
+    private String idString;
     @Indexed
     private ObjectId agentId;
     private Set<BookedRange> bookedRanges = new HashSet<>();
@@ -125,6 +126,14 @@ public class Company {
     public String toString() {
         return String.format("{id:%s,slug:%s,tradingAs:%s,fullName:%s,description:%s,registrationNumber:%s,vatNumber:%s,agentName:%s,agentID:%s}", id, slug, tradingAs, fullName,
                 description, registrationNumber, vatNumber, agentName, agentId);
+    }
+
+    public String getIdString() {
+        if (id != null) {
+            idString = id.toString();
+            return idString;
+        }
+        return null;
     }
 
     @Override

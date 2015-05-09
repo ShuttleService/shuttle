@@ -34,6 +34,7 @@ import static com.real.apps.shuttle.miscellaneous.Role.*;
 public class DriverController {
     @Autowired
     private DriverService service;
+    @Autowired
     DriverDomainService domainService;
     public static final String VIEW_NAME = "driver";
     private Logger logger = Logger.getLogger(DriverController.class);
@@ -164,7 +165,7 @@ public class DriverController {
 
     @RequestMapping("/bookable/{companyId}/{from}/{to}/{skip}/{limit}")
     @ResponseBody
-    public Set<Driver> bookable(@PathVariable("companyId") ObjectId companyId, @PathVariable("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date from,
+    public Set<Driver> bookable(@PathVariable("companyId") final ObjectId companyId, @PathVariable("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date from,
                                 @PathVariable("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date to, @PathVariable("skip") int skip,
                                 @PathVariable("limit") int limit, @AuthenticationPrincipal User user) {
         final BookedRange bookedRange = new BookedRange(from, to);
@@ -177,13 +178,15 @@ public class DriverController {
 
         String role = Role.role(user);
 
-        logger.debug(String.format("Finding Bookable Drivers For. Logged In User Role : %s ", role));
+        logger.debug(String.format("Finding Bookable Drivers. Logged In User Role : %s ", role));
         switch (role) {
             case COMPANY_USER:
                 logger.debug(String.format("Finding Bookable Drivers For Company:%s. Logged In As Company User ", user.getCompanyName()));
                 return domainService.bookableDrivers(user.getCompanyId(), pageable, bookedRange);
+
+            case ADMIN:
             case WORLD: {
-                logger.debug(String.format("Finding Bookable Drivers For Company:%s. Looged In As World", companyId));
+                logger.debug(String.format("Finding Bookable Drivers For Company:%s. Logged In As World Or Admin", companyId));
                 return domainService.bookableDrivers(companyId, pageable, bookedRange);
             }
         }
@@ -197,7 +200,6 @@ public class DriverController {
         logger.debug(String.format("Getting One With id %s", id));
         return service.findOne(id);
     }
-
 
     public void setService(DriverService service) {
         this.service = service;

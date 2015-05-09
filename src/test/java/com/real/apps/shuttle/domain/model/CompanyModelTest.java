@@ -26,4 +26,14 @@ public class CompanyModelTest {
         assertThat(driver.getCompanyId(), is(id));
         assertThat(driver.getCompanyName(), is(companyName));
     }
+
+    @Test
+    public void shouldGetTheIdAsAString() {
+        CompanyModel model = new CompanyModel() {
+        };
+        model.setCompanyId(ObjectId.get());
+        model.setCompanyName("Test Name");
+
+        assertThat(model.getIdString(), is(model.getCompanyId().toString()));
+    }
 }

@@ -100,7 +100,7 @@ public class VehicleController {
                 logger.debug(String.format("Finding Bookable Vehicles for Company:%s, Logged In As Company User",user.getCompanyName()));
                 return domainService.bookable(user.getCompanyId(),pageable, bookedRange);
             }
-
+            case ADMIN:
             case WORLD:{
                 logger.debug(String.format("Finding Bookable Vehicles For CompanyId:%s. Logged In As World",companyId));
                 return domainService.bookable(companyId,pageable,bookedRange);

@@ -79,6 +79,12 @@ public class VehicleControllerTest {
     final Pageable pageable = new PageRequest(skip, limit);
     private final ObjectId companyId = ObjectId.get();
     private final ObjectId id = ObjectId.get();
+    private ArgumentCaptor<BookedRange> bookedRangeArgumentCaptor = ArgumentCaptor.forClass(BookedRange.class);
+    private ArgumentCaptor<Pageable> pageableArgumentCaptor = ArgumentCaptor.forClass(Pageable.class);
+    private ArgumentCaptor<ObjectId> objectIdArgumentCaptor = ArgumentCaptor.forClass(ObjectId.class);
+    private String fromString = new DateTime(this.from).toDateTimeISO().toString();
+    private String toString = new DateTime(this.to).toDateTimeISO().toString();
+    private ObjectId vehicleCompanyId = ObjectId.get();
 
     @Before
     public void init() {
@@ -239,10 +245,6 @@ public class VehicleControllerTest {
 
         controller.domainService = domainService;
 
-        ArgumentCaptor<BookedRange> bookedRangeArgumentCaptor = ArgumentCaptor.forClass(BookedRange.class);
-        ArgumentCaptor<Pageable> pageableArgumentCaptor = ArgumentCaptor.forClass(Pageable.class);
-        ArgumentCaptor<ObjectId> objectIdArgumentCaptor = ArgumentCaptor.forClass(ObjectId.class);
-
         when(domainService.bookable(companyId, pageable, bookedRange)).thenReturn(vehicles);
 
         mockMvc.perform(get(String.format("/%s/bookable/%s/%s/%s/%d/%d/", VIEW_PAGE, id, fromString, toString, skip, limit)).
@@ -277,25 +279,17 @@ public class VehicleControllerTest {
 
     @Test
     public void shouldReturnBookableVehiclesForTheGivenCompanyIdWhenAWorldUserIsLoggedIn() throws Exception {
-        ObjectId companyId = ObjectId.get();
-        String from = new DateTime(this.from).toDateTimeISO().toString();
-        String to = new DateTime(this.to).toDateTimeISO().toString();
-
         Vehicle vehicle = new Vehicle();
         vehicle.setCompanyId(companyId);
 
         Set<Vehicle> vehicles = new HashSet<>(Arrays.asList(vehicle));
-
-        ArgumentCaptor<ObjectId> objectIdArgumentCaptor = ArgumentCaptor.forClass(ObjectId.class);
-        ArgumentCaptor<BookedRange> bookedRangeArgumentCaptor = ArgumentCaptor.forClass(BookedRange.class);
-        ArgumentCaptor<Pageable> pageableArgumentCaptor = ArgumentCaptor.forClass(Pageable.class);
 
         VehicleDomainService domainService = Mockito.mock(VehicleDomainService.class);
         controller.domainService = domainService;
 
         when(domainService.bookable(companyId, pageable, bookedRange)).thenReturn(vehicles);
 
-        mockMvc.perform(get(String.format("/%s/bookable/%s/%s/%s/%d/%d", VIEW_PAGE, companyId.toString(), from, to, skip, limit)).
+        mockMvc.perform(get(String.format("/%s/bookable/%s/%s/%s/%d/%d", VIEW_PAGE, companyId.toString(), fromString, toString, skip, limit)).
                 with(user(world(id)))).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$").isArray()).
@@ -306,6 +300,31 @@ public class VehicleControllerTest {
         assertThat(bookedRange, is(bookedRangeArgumentCaptor.getValue()));
         assertThat(companyId, is(objectIdArgumentCaptor.getValue()));
         assertThat(pageable, is(pageableArgumentCaptor.getValue()));
+    }
+
+    @Test
+    public void shouldReturnBookableVehiclesForTheGivenCompanyIdWhenAnAdminIsLoggedIn() throws Exception {
+        Vehicle vehicle = new Vehicle();
+        vehicle.setCompanyId(vehicleCompanyId);
+        Set<Vehicle> bookable = new HashSet<>();
+        bookable.add(vehicle);
+
+        VehicleDomainService domainService = Mockito.mock(VehicleDomainService.class);
+        when(domainService.bookable(vehicleCompanyId, pageable, bookedRange)).thenReturn(bookable);
+        controller.domainService = domainService;
+
+        mockMvc.perform(get(String.format("/%s/bookable/%s/%s/%s/%d/%d", VIEW_PAGE, vehicleCompanyId, fromString, toString, skip, limit)).
+                contentType(MediaType.APPLICATION_JSON)
+                .with(user(admin(id)))).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$[0].companyId._time").value(vehicleCompanyId.getTimestamp()));
+
+        verify(domainService).bookable(objectIdArgumentCaptor.capture(), pageableArgumentCaptor.capture(), bookedRangeArgumentCaptor.capture());
+
+        assertThat(bookedRange, is(bookedRangeArgumentCaptor.getValue()));
+        assertThat(vehicleCompanyId, is(objectIdArgumentCaptor.getValue()));
+        assertThat(pageable, is(pageableArgumentCaptor.getValue()));
 
     }
+
 }
