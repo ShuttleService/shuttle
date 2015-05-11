@@ -30,7 +30,8 @@
                         </div>
                         <div class="form-group col-xs-6">
                             <label class="control-label">Type</label>
-                            <select class="form-control" placeholder="Type" ng-model="vehicle.type" ng-options="type for type in vehicleTypes"
+                            <select class="form-control" placeholder="Type" ng-model="vehicle.type"
+                                    ng-options="type for type in vehicleTypes"
                                     name="type" required>Vehicle Type</select>
                         </div>
                         <div class="form-group col-xs-6">
@@ -64,6 +65,7 @@
     <table class="table table-striped table-hover">
         <thead>
         <tr>
+            <th>Reference</th>
             <th>Make</th>
             <th>Model</th>
             <th>Type</th>
@@ -75,6 +77,7 @@
         </thead>
         <tbody>
         <tr ng-repeat="vehicle in page.content">
+            <td>{{vehicle.reference}}</td>
             <td>{{vehicle.make}}</td>
             <td>{{vehicle.model}}</td>
             <td>{{vehicle.type}}</td>

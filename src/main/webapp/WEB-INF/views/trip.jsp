@@ -133,6 +133,7 @@
     <table class="table table-striped table-hover">
         <thead>
         <tr>
+            <th>Reference</th>
             <th>Client Name</th>
             <th>Cell Number</th>
             <th>Source</th>
@@ -148,6 +149,7 @@
         </thead>
         <tbody>
         <tr ng-repeat="trip in page.content">
+            <td>{{trip.reference}}</td>
             <td>{{trip.clientName}}</td>
             <td>{{trip.clientCellNumber}}</td>
             <td>{{trip.source}}</td>
@@ -158,7 +160,6 @@
             <td>{{trip.vehicleName}}</td>
             <td>{{trip.driverName}}</td>
             <td>{{trip.companyName}}</td>
-            <td>{{trip.reference}}</td>
         </tr>
         </tbody>
     </table>

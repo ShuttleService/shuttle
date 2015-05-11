@@ -65,16 +65,19 @@
         <table class="table table-hover table-striped">
             <thead>
             <tr>
+                <th>Reference</th>
                 <th>First Name</th>
                 <th>Surname</th>
                 <th>Email Address</th>
                 <th>Driver's License Number</th>
                 <th>Driver's License Class</th>
                 <th>Company</th>
+
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="driver in page.content">
+                <td>{{driver.reference}}</td>
                 <td>{{driver.firstName}}</td>
                 <td>{{driver.surname}}</td>
                 <td>{{driver.email}}</td>

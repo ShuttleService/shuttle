@@ -3,6 +3,7 @@
     <table class="table table-striped table-hover">
         <thead>
         <tr>
+            <th>Reference</th>
             <th>First Name</th>
             <th>Surname</th>
             <th>User Name</th>
@@ -19,6 +20,7 @@
         </tr>
         </thead>
         <tr ng-repeat="user in page.content">
+            <td>{{user.reference}}</td>
             <td>{{user.firstName}}</td>
             <td>{{user.surname}}</td>
             <td>{{user.email}}</td>

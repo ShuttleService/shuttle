@@ -23,7 +23,7 @@
                         <div class="form-group col-xs-6">
                             <label class="control-label">Slug</label>
                             <input type="text" class="form-control" ng-minlength="1" name="slug" placeholder="Slug"
-                                    ng-model="company.slug" required>
+                                   ng-model="company.slug" required>
                         </div>
                         <div class="form-group col-xs-6">
                             <label class="control-label">Registration Number</label>
@@ -42,11 +42,13 @@
                         </div>
                         <div class="form-group col-xs-6">
                             <label class="control-label" for="agent">Agent</label>
-                            <select class="form-control" name="agent" id="agent" ng-model="agent" ng-options="agent.fullName for agent in sharedState.agentPage.content"></select>
+                            <select class="form-control" name="agent" id="agent" ng-model="agent"
+                                    ng-options="agent.fullName for agent in sharedState.agentPage.content"></select>
                         </div>
                         <div class="form-group col-xs-12">
                             <label class="control-label">Description</label>
-                            <textarea class="col-xs-12" ng-minlength="2" name="description" ng-model="company.description" placeholder="Description" required></textarea>
+                            <textarea class="col-xs-12" ng-minlength="2" name="description"
+                                      ng-model="company.description" placeholder="Description" required></textarea>
                         </div>
                     </form>
                 </div>
@@ -63,6 +65,7 @@
         <table class="table table-striped table-hover">
             <thead>
             <tr>
+                <th>Reference</th>
                 <th>Slug</th>
                 <th>Trading As</th>
                 <th>Full Name</th>
@@ -70,12 +73,11 @@
                 <th>VAT Number</th>
                 <th>Registration Number</th>
                 <th>Agent</th>
-                    <th>Id</th>
-                <th>Id String</th>
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="company in page.content">
+                <td>{{company.reference}}</td>
                 <td>{{company.slug}}</td>
                 <td>{{company.tradingAs}}</td>
                 <td>{{company.fullName}}</td>
@@ -83,8 +85,6 @@
                 <td>{{company.vatNumber}}</td>
                 <td>{{company.registrationNumber}}</td>
                 <td>{{company.agentName}}</td>
-                <td>{{company.id}}
-                <td>{{company.idString}}</td>
             </tr>
             </tbody>
         </table>
