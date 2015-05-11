@@ -10,7 +10,7 @@ describe('Testing The Trip Controller', function () {
     var VehicleService;
     var company = {
         id: 'Test Company Id To Be Assigned The trip.companyId',
-        idString: "Test Id String",
+        reference: "Test Id String",
         tradingAs: 'Test Company Name To Be Assigned To trip.companyName'
     };
 
@@ -236,7 +236,7 @@ describe('Testing The Trip Controller', function () {
         $scope.from = new Date();
         $scope.to = {date: 'Fake date'};
 
-        var bookedRange = {from: $scope.trip.from, to: $scope.trip.to};
+        var bookedRange = {from: $scope.from, to: $scope.to};
 
         $scope.saveClick();
 
@@ -247,8 +247,8 @@ describe('Testing The Trip Controller', function () {
     it('When The From Date Is Not Set. No Call Should Be Made To Find Bookable Drivers And Bookable Vehicles', function () {
 
         $controller('TripController', {$scope: $scope});
-        $scope.trip.to = new Date();
-        $scope.trip.companyId = company.id;
+        $scope.to = new Date();
+        $scope.company = company;
         spyOn(DriverService, 'query');
         spyOn(VehicleService, 'query');
 
@@ -263,7 +263,7 @@ describe('Testing The Trip Controller', function () {
 
     it('When The To Date Is Not Set. No Call Should Be Made To Find Bookable Drivers And Bookable Vehicles', function () {
         $controller('TripController', {$scope: $scope});
-        $scope.trip.from = new Date();
+        $scope.from = new Date();
         $scope.company = company;
         spyOn(DriverService, 'query');
         spyOn(VehicleService, 'query');
@@ -278,8 +278,8 @@ describe('Testing The Trip Controller', function () {
 
     it('When The Company Is Not Set. No Call Should Be Made To Find Bookable Drivers And Bookable Vehicles', function () {
         $controller('TripController', {$scope: $scope});
-        $scope.trip.from = new Date();
-        $scope.trip.to = new Date();
+        $scope.from = new Date();
+        $scope.to = new Date();
 
         spyOn(DriverService, 'query');
         spyOn(VehicleService, 'query');
@@ -293,8 +293,8 @@ describe('Testing The Trip Controller', function () {
     });
     it('Should Find A List Of Bookable Drivers When The Company, From And To Are All Set', function () {
         $controller('TripController', {$scope: $scope});
-        $scope.trip.from = new Date(1978, 09, 07);
-        $scope.trip.to = new Date();
+        $scope.from = new Date(1978, 09, 07);
+        $scope.to = new Date();
         $scope.company = company;
 
         var bookableDrivers = ['Driver 1', 'Driver 2'];
@@ -307,12 +307,13 @@ describe('Testing The Trip Controller', function () {
 
         var params = {
             pathVariable: 'bookable',
-            _companyId: $scope.company.idString,
-            bookableFrom: $scope.trip.from.toISOString(),
-            bookableTo: $scope.trip.to.toISOString(),
+            _companyId: $scope.company.reference,
+            bookableFrom: $scope.from.toISOString(),
+            bookableTo: $scope.to.toISOString(),
             skip: 0,
             limit: 100
         };
+
         expect(DriverService.query).toHaveBeenCalledWith(params);
         expect(VehicleService.query).toHaveBeenCalledWith(params);
         expect($scope.bookableDrivers).toEqual(bookableDrivers);

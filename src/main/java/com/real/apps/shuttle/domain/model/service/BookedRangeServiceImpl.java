@@ -21,7 +21,7 @@ public class BookedRangeServiceImpl implements BookedRangeService {
         while (iterator.hasNext()) {
             BookedRange subject = iterator.next();
 
-            if (subject.coincide(bookedRange)) {
+            if (subject != null && subject.coincide(bookedRange)) {
                 return false;
             }
         }

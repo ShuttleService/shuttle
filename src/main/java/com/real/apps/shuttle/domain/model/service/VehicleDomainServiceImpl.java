@@ -46,6 +46,9 @@ public class VehicleDomainServiceImpl implements VehicleDomainService {
 
     @Override
     public boolean book(Vehicle vehicle, BookedRange bookedRange) {
+        if (bookedRange == null) {
+            return false;
+        }
         boolean bookable = bookedRangeService.availableForBooking(vehicle.getBookedRanges(), bookedRange);
 
         if (bookable) {

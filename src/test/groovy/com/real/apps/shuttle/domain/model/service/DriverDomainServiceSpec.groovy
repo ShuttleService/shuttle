@@ -128,4 +128,21 @@ class DriverDomainServiceSpec extends spock.lang.Specification {
         !booked
         1 * bookedRangeService.availableForBooking(bookedRanges, bookedRange)
     }
+
+    def 'Should Not Book A null BookedRange'(){
+        given: 'A Set Of Booked Ranges'
+        Set<BookedRange> bookedRanges = new HashSet<>()
+
+        and: 'A Mocked BookedRangeService'
+        BookedRangeService bookedRangeService = Mock()
+        service.bookedRangeService = bookedRangeService
+
+        when: 'We Attempt To Book A Null Booked Range'
+        boolean bookable = service.book(new Driver(),null)
+
+        then:
+        !bookable
+        0 * bookedRangeService.availableForBooking(_,_)
+
+    }
 }

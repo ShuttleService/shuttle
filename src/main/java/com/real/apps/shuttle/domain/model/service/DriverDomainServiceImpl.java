@@ -27,6 +27,9 @@ public class DriverDomainServiceImpl implements DriverDomainService {
     @Override
     public boolean book(Driver driver, BookedRange bookedRange) {
         LOGGER.info(String.format("Booking A Driver {Driver:%s,BookedRange:%s ", driver, bookedRange));
+        if (bookedRange == null) {
+            return false;
+        }
         boolean bookable = bookedRangeService.availableForBooking(driver.getBookedRanges(), bookedRange);
         LOGGER.info("Driver Bookable " + bookable);
 

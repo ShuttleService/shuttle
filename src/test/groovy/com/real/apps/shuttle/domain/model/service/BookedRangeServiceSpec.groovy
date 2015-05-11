@@ -107,6 +107,19 @@ class BookedRangeServiceSpec extends spock.lang.Specification {
         available
     }
 
+    def 'Should Skip Null Booked Ranges When Checking For Bookable Availability'(){
+
+        given: 'A Booked Range List With A Null Booked Range'
+        Set<BookedRange> set = new HashSet<>()
+        set << null
+
+        when: 'We Check If A Booked Range Is Available For Booking'
+        boolean available = service.availableForBooking(set,new BookedRange(now,later))
+
+        then:
+        available
+    }
+
     def 'Should Be Unavailable For Booking When The BookedRange List Has A BookedRange The Same As The Subject'() {
 
         given: 'A BookedRange List With A Booked Range The Same As The Subject Booked Range'

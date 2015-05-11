@@ -73,35 +73,14 @@
                         </div>
                         <div class="form-group col-xs-6">
                             <label class="control-label">Pick Up Time</label>
-                            <br/>
-                            <datetimepicker min-date="2015-07-30" show-weeks="true" hour-step="1"
-                                            minute-step="5" ng-model="trip.from" show-meridian="true"
-                                            ng-change="findBookableDriversAndVehicles()"
-                                            date-format="dd-MM-yyyy" date-options="{startingDay:1,showWeeks:true}"
-                                            readonly-time="false" required></datetimepicker>
-
-                        </div>
-                        <div class="form-group col-xs-6">
-                            <label class="control-label">Drop Off Time</label>
-                            <br/>
-                            <datetimepicker min-date="2015-07-30" show-weeks="true" hour-step="1"
-                                            minute-step="5" ng-model="trip.to" show-meridian="true"
-                                            ng-change="findBookableDriversAndVehicles()"
-                                            date-format="dd-MM-yyyy" date-options="{startingDay:1,showWeeks:true}"
-                                            readonly-time="false"></datetimepicker>
-                        </div>
-                        <div rg-range-picker="{ date: {from: new Date(),to: new Date() }}"
-                             labels="{date:{from:'From',to:'To'}}"></div>
-                        <div class="form-group col-xs-6">
-                            <label class="control-label">From</label>
-                            <input type="datetime-local" class="form-control" placeholder="From" minlength="10"
+                            <input type="datetime-local" class="form-control" placeholder="From" minlength="16"
                                    name="from"
-                                   ng-change="findBookableDriversAndVehicles()" ng-model="trip.from" id="from" required>
+                                   ng-change="findBookableDriversAndVehicles()" ng-model="from" id="from" required>
                         </div>
                         <div class="form-group col-xs-6">
                             <label class="control-label">To</label>
-                            <input type="date" class="form-control" placeholder="To" minlength="10" name="to"
-                                   ng-model="trip.to"
+                            <input type="datetime-local" class="form-control" placeholder="To" minlength="16" name="to"
+                                   ng-model="to"
                                    ng-change="findBookableDriversAndVehicles()" id="to" required>
                         </div>
                         <div class="form-group col-xs-6">

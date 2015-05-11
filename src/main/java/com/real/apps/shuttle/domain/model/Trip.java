@@ -28,6 +28,11 @@ public class Trip extends Proprietary {
     private String clientCellNumber;
     private BookedRange bookedRange;
 
+    /*{"price":{"currency":{}},"clientName":"Sofi","clientCellNumber":988484848,"source":"Land","destination":"Earth",
+    "bookedRange":{"from":"2015-05-01T12:22:00.000Z","to":"2015-05-16T09:11:00.000Z"},
+    "companyId":{"_time":1431357211,"_machine":-56178087,"_inc":1189193287,"_new":false},"companyName":"Real Shuttle",
+    "driverId":{"_time":1431360003,"_machine":-56182995,"_inc":-1874559372,"_new":false},"driverName":"Violet Majoni",
+    "vehicleName":"Toyota Fortuner CK62NNGP","vehicleId":{"_time":1431357281,"_machine":-56178087,"_inc":1189193302,"_new":false}}*/
     public String getClientName() {
         return clientName;
     }

@@ -10,19 +10,12 @@
     <script src="resources/vendor/bootstrap-3.2.0/dist/js/bootstrap.js"></script>
     <script src="resources/vendor/angular-1.4.0-rc.1/angular.js"></script>
     <script src="resources/vendor/angular-1.4.0-rc.1/angular-resource.js"></script>
-    <script src="resources/vendor/ui-bootstrap-tpls-0.13.0.min.js"></script>
     <link href="resources/vendor/bootstrap-3.2.0/dist/css/bootstrap.css" type="text/plain" rel="stylesheet">
-
-    <script src="resources/vendor/datetimeRangePicker/range-picker.js"></script>
-    <script src="http://zhaber.github.io/datetimepicker/datetimepicker.js"></script>
 
     <script src="resources/js/Service.js"></script>
     <script src="resources/js/Controller.js"></script>
 
-    <link href="http://zhaber.github.io/datetimepicker/datetimepicker.css" type="text/css" rel="stylesheet">
     <link href="resources/style.css" type="text/css" rel="stylesheet">
-    <link href="resources/vendor/datetimeRangePicker/range-picker.sass" type="text/css" rel="stylesheet">
-
 
     <title><tiles:getAsString name="title"/></title>
 </head>

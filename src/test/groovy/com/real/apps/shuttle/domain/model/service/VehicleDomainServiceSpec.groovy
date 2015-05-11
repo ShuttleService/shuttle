@@ -113,4 +113,20 @@ class VehicleDomainServiceSpec extends spock.lang.Specification {
         then:
         booked
     }
+
+    def 'Should Not Attempt A Booking Or Even Find Bookable Vehicles When The Booked Range Is Null'(){
+        given: 'A Booked Range Set'
+        Set<BookedRange> bookedRanges = new HashSet<>()
+
+        and: 'A Mocked BookedService'
+        BookedRangeService bookedRangeService = Mock()
+        service.bookedRangeService = bookedRangeService
+
+        when: 'We Attempt To Book A Vehicle With A Null BookedRange'
+        boolean bookable = service.book(new Vehicle(),null)
+
+        then:
+        !bookable
+        0 * bookedRangeService.availableForBooking(_,_)
+    }
 }
