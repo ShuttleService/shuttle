@@ -58,10 +58,4 @@ public class CompanyTest {
         assertTrue(company.equals(company));
     }
 
-    @Test
-    public void shouldGetTheIdAsAString() {
-        Company company = new Company();
-        company.setId(ObjectId.get());
-        assertThat(company.getIdString(), is(company.getId().toString()));
-    }
 }

@@ -1,26 +1,13 @@
 package com.real.apps.shuttle.domain.model;
 
-import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * Created by zorodzayi on 14/10/11.
  */
 @Document
-public class Review extends CompanyModel{
-    @Id
-    private ObjectId id;
+public class Review extends Proprietary {
     private String[] reviews;
-
-    public ObjectId getId() {
-        return id;
-    }
-
-    public void setId(ObjectId id) {
-        this.id = id;
-    }
-
     public String[] getReviews() {
         return reviews;
     }

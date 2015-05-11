@@ -12,9 +12,7 @@ import java.util.Set;
  * Created by zorodzayi on 14/10/16.
  */
 @Document
-public class Company {
-    @Id
-    private ObjectId id;
+public class Company extends Identifiable {
     @Indexed(unique = true)
     private String slug;
     @Indexed(unique = true)
@@ -40,14 +38,6 @@ public class Company {
 
     public void setBookedRanges(Set<BookedRange> bookedRanges) {
         this.bookedRanges = bookedRanges;
-    }
-
-    public ObjectId getId() {
-        return id;
-    }
-
-    public void setId(ObjectId id) {
-        this.id = id;
     }
 
     public String getSlug() {
@@ -128,13 +118,6 @@ public class Company {
                 description, registrationNumber, vatNumber, agentName, agentId);
     }
 
-    public String getIdString() {
-        if (id != null) {
-            idString = id.toString();
-            return idString;
-        }
-        return null;
-    }
 
     @Override
     public boolean equals(Object object) {

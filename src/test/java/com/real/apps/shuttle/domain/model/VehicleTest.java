@@ -38,6 +38,7 @@ public class VehicleTest {
         company.setId(id);
         assertFalse(vehicle.equals(company));
     }
+
     @Test
     public void shouldBeFalseForANull(){
         assertFalse(new Vehicle().equals(null));

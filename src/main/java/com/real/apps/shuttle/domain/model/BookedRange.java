@@ -6,18 +6,16 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import static org.apache.commons.lang3.time.DateUtils.isSameInstant;
-import static org.apache.commons.lang3.time.DateUtils.setSeconds;
-import static org.apache.commons.lang3.time.DateUtils.truncate;
+import static org.apache.commons.lang3.time.DateUtils.*;
 
 /**
  * Created by zorodzayi on 15/04/14.
  */
 public class BookedRange {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private final Date from;
+    private Date from;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private final Date to;
+    private Date to;
 
     public BookedRange(Date from, Date to) {
         Validate.notNull(from);

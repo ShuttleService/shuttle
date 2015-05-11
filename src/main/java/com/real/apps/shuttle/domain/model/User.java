@@ -14,8 +14,7 @@ import java.util.HashSet;
  * Created by zorodzayi on 14/10/04.
  */
 @Document
-public class User extends CompanyModel implements UserDetails {
-    private ObjectId id;
+public class User extends Proprietary implements UserDetails {
     @Indexed(unique = true)
     private String username;
     private String password;
@@ -57,14 +56,6 @@ public class User extends CompanyModel implements UserDetails {
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
-    }
-
-    public ObjectId getId() {
-        return id;
-    }
-
-    public void setId(ObjectId id) {
-        this.id = id;
     }
 
     @Override
@@ -215,7 +206,7 @@ public class User extends CompanyModel implements UserDetails {
 
         return String.format("{id:%s,username:%s,password:%s,firstName:%s,surname:%s,email:%s,companyName:%s,companyId:%s,cellNumber:%s,dateOfBirth:%s,streetAddress:%s,surburb:%s,town:%s,province:%s,postalCode:%s," +
                         " accountNonExpired:%b,accountNonLocked:%b,credentialsNonExpired:%b,enabled:%b,authorities:%s,agentId:%s,agentName:%s}", id, username, "[PROTECTED]", firstName, surname, email, companyName, companyId, cellNumber, dateOfBirth,
-                streetAddress, suburb, town, province, postalCode, accountNonExpired, accountNonLocked, credentialsNonExpired, email, authorities,agentId,agentName);
+                streetAddress, suburb, town, province, postalCode, accountNonExpired, accountNonLocked, credentialsNonExpired, email, authorities, agentId, agentName);
     }
 
     @Override

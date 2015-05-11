@@ -1,6 +1,5 @@
 package com.real.apps.shuttle.domain.model;
 
-import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -11,8 +10,7 @@ import java.util.Set;
  * Created by zorodzayi on 14/10/10.
  */
 @Document
-public class Driver extends CompanyModel {
-    private ObjectId id;
+public class Driver extends Proprietary {
     @Indexed
     private String firstName;
     @Indexed
@@ -29,14 +27,6 @@ public class Driver extends CompanyModel {
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
-    }
-
-    public ObjectId getId() {
-        return id;
-    }
-
-    public void setId(ObjectId id) {
-        this.id = id;
     }
 
     public String getSurname() {

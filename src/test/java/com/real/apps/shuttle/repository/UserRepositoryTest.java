@@ -3,6 +3,7 @@ package com.real.apps.shuttle.repository;
 import com.real.apps.shuttle.domain.model.User;
 import org.bson.types.ObjectId;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,103 +27,104 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = RepositoryConfig.class)
 public class UserRepositoryTest {
-  @Autowired
-  private UserRepository repository;
-  @Autowired
-  private MongoOperations template;
+    @Autowired
+    private UserRepository repository;
+    @Autowired
+    private MongoOperations template;
 
-  @After
-  public void cleanUp() {
-    template.dropCollection("user");
-  }
+    @After
+    public void cleanUp() {
+        template.dropCollection("user");
+    }
 
-  @Test
-  public void shouldSaveUser() {
-    String firstName = "Test First Name For User To Be Saved";
-    User user = new User();
-    user.setUsername("Test User Name");
-    user.setFirstName(firstName);
-    user = repository.save(user);
-    assertThat(user, notNullValue());
-    Query query = new Query(Criteria.where("firstName").is(firstName));
-    User actual = template.findOne(query, User.class);
-    assertThat(actual.getFirstName(), is(firstName));
-  }
+    @Test
+    public void shouldSaveUser() {
+        String firstName = "Test First Name For User To Be Saved";
+        User user = new User();
+        user.setUsername("Test User Name");
+        user.setFirstName(firstName);
+        user = repository.save(user);
+        assertThat(user, notNullValue());
+        Query query = new Query(Criteria.where("firstName").is(firstName));
+        User actual = template.findOne(query, User.class);
+        assertThat(actual.getFirstName(), is(firstName));
+    }
 
-  @Test
-  public void shouldFindNNumberOfUsers() {
-    int skip = 0;
-    int limit = 2;
-    User user = new User();
-    template.save(user);
-    user.setUsername("Test User Name Different From The First");
-    user.setEmail("Test Email Different From The First");
-    template.save(user);
-    Page<User> page = repository.findAll(new PageRequest(skip, limit));
-    assertThat(page.getSize(), is(limit));
-  }
-  @Test
-  public void shouldFindTheUserWithTheGivenUsername(){
-    final String username = "Test User Name To Be Found In The Database";
-    final String control  = "Test User Name Not To Be Found";
+    @Test
+    public void shouldFindNNumberOfUsers() {
+        int skip = 0;
+        int limit = 2;
+        User user = new User();
+        template.save(user);
+        user.setUsername("Test User Name Different From The First");
+        user.setEmail("Test Email Different From The First");
+        template.save(user);
+        Page<User> page = repository.findAll(new PageRequest(skip, limit));
+        assertThat(page.getSize(), is(limit));
+    }
 
-    User user = new User();
-    user.setUsername(username);
-    user.setEmail("Test Email 1");
+    @Test
+    public void shouldFindTheUserWithTheGivenUsername() {
+        final String username = "Test User Name To Be Found In The Database";
+        final String control = "Test User Name Not To Be Found";
 
-    User user1 = new User();
-    user1.setUsername(control);
-    user1.setEmail("Test Email 2");
+        User user = new User();
+        user.setUsername(username);
+        user.setEmail("Test Email 1");
 
-    repository.save(user);
-    repository.save(user1);
+        User user1 = new User();
+        user1.setUsername(control);
+        user1.setEmail("Test Email 2");
 
-    User actual = repository.findOneByUsername(username);
-    assertThat(actual,is(user));
-  }
+        repository.save(user);
+        repository.save(user1);
 
-  @Test
-  public void shouldFindOnlyUsersWithTheGivenCompanId(){
-    ObjectId id = ObjectId.get();
-    ObjectId control = ObjectId.get();
-    User userToBeFound = new User();
-    userToBeFound.setUsername("Test Username For User To Be Found");
-    userToBeFound.setEmail("Test Email For User To Be Found");
-    userToBeFound.setCompanyId(id);
-    User userToBeFound2 = new User();
-    userToBeFound2.setEmail("Test Email For User To Be Found 2");
-    userToBeFound2.setUsername("Test User Name For User To Be Found 2");
-    userToBeFound2.setCompanyId(id);
-    User userNotToBeFound = new User();
-    userNotToBeFound.setEmail("Test Email For User Not To Be Found");
-    userNotToBeFound.setUsername("Test Username For User Not To Be Found");
-    userNotToBeFound.setCompanyId(control);
+        User actual = repository.findOneByUsername(username);
+        assertThat(actual, is(user));
+    }
 
-    assertNotNull(repository.save(userToBeFound).getId());
-    assertNotNull(repository.save(userToBeFound2).getId());
-    assertNotNull(repository.save(userNotToBeFound).getId());
+    @Test
+    public void shouldFindOnlyUsersWithTheGivenCompanId() {
+        ObjectId id = ObjectId.get();
+        ObjectId control = ObjectId.get();
+        User userToBeFound = new User();
+        userToBeFound.setUsername("Test Username For User To Be Found");
+        userToBeFound.setEmail("Test Email For User To Be Found");
+        userToBeFound.setCompanyId(id);
+        User userToBeFound2 = new User();
+        userToBeFound2.setEmail("Test Email For User To Be Found 2");
+        userToBeFound2.setUsername("Test User Name For User To Be Found 2");
+        userToBeFound2.setCompanyId(id);
+        User userNotToBeFound = new User();
+        userNotToBeFound.setEmail("Test Email For User Not To Be Found");
+        userNotToBeFound.setUsername("Test Username For User Not To Be Found");
+        userNotToBeFound.setCompanyId(control);
 
-    Page<User> actual = repository.findByCompanyId(id,new PageRequest(0,100));
-    assertThat(actual.getTotalElements(),is(2l));
-    assertThat(actual.getContent().get(0).getCompanyId(),is(id));
-    assertThat(actual.getContent().get(1).getCompanyId(),is(id));
-  }
+        assertNotNull(repository.save(userToBeFound).getId());
+        assertNotNull(repository.save(userToBeFound2).getId());
+        assertNotNull(repository.save(userNotToBeFound).getId());
 
-  @Test
-  public void shouldCallRepositoryFindOneAndReturnTheFoundUser(){
-    User user = new User();
-    user.setEmail("Test Email For User To Be Found");
-    user.setUsername(user.getEmail());
+        Page<User> actual = repository.findByCompanyId(id, new PageRequest(0, 100));
+        assertThat(actual.getTotalElements(), is(2l));
+        assertThat(actual.getContent().get(0).getCompanyId(), is(id));
+        assertThat(actual.getContent().get(1).getCompanyId(), is(id));
+    }
 
-    User control = new User();
-    control.setEmail("Test Email For User Not To Be Found");
-    control.setUsername(control.getEmail());
+    @Test
+    public void shouldCallRepositoryFindOneAndReturnTheFoundUser() {
+        User user = new User();
+        user.setEmail("Test Email For User To Be Found");
+        user.setUsername(user.getEmail());
 
-    ObjectId id = repository.save(user).getId();
-    assertNotNull(id);
-    assertNotNull(repository.save(control));
+        User control = new User();
+        control.setEmail("Test Email For User Not To Be Found");
+        control.setUsername(control.getEmail());
 
-    User actual = repository.findOne(id);
-    assertThat(actual,is(user));
-  }
+        ObjectId id = repository.save(user).getId();
+        assertNotNull(id);
+        assertNotNull(repository.save(control));
+
+        User actual = repository.findOne(id);
+        assertThat(actual, is(user));
+    }
 }

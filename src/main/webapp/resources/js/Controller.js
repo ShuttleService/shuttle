@@ -2,7 +2,7 @@
  * Created by zorodzayi on 14/10/09.
  */
 
-angular.module('controllers', ['services']).
+angular.module('controllers', ['services', 'ui.bootstrap', 'ui.bootstrap.datetimepicker']).
     controller('SharedController', function ($rootScope, $scope, $log, AgentService, CompanyService, DriverService, UserService, VehicleService, RESULT_SIZE) {
         $rootScope.sharedState = {};
         var params = {skip: 0, limit: RESULT_SIZE};
@@ -109,7 +109,8 @@ angular.module('controllers', ['services']).
 
         $scope.saveClick = function () {
             console.log('Attempting To Save The Trip');
-            $scope.trip.bookedRange = {from: $scope.from, to: $scope.to};
+            $scope.trip.bookedRange = {from: $scope.trip.from, to: $scope.trip.to};
+            $log.debug("{BookedRange:{from:" + $scope.trip.bookedRange.from + ", to:" + $scope.trip.bookedRange.to);
             if ($scope.company) {
                 var companyId = $scope.company.id;
                 var companyName = $scope.company.tradingAs;
@@ -160,7 +161,7 @@ angular.module('controllers', ['services']).
             $log.debug('Attempting To Find The Bookable Drivers And The Bookable Vehicles ');
 
             if ($scope.trip.from && $scope.trip.to && $scope.company) {
-                $log.debug('I Am Going Ahead Finding The Bookable Drivers And The Bookable Vehicles As All From, To And Compay Have Values');
+                $log.debug('I Am Going Ahead Finding The Bookable Drivers And The Bookable Vehicles As All From, To And Company Have Values');
                 var params = {
                     pathVariable: 'bookable',
                     _companyId: $scope.company.idString,

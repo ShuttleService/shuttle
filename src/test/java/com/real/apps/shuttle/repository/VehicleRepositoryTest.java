@@ -3,6 +3,7 @@ package com.real.apps.shuttle.repository;
 import com.real.apps.shuttle.domain.model.Vehicle;
 import org.bson.types.ObjectId;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
@@ -28,9 +29,11 @@ public class VehicleRepositoryTest {
     private MongoOperations operations;
 
     @After
+    @Before
     public void cleanUp(){
         operations.dropCollection("vehicle");
     }
+
     @Test
     public void shouldSaveVehicleIntoMongo(){
         String make = "Test Vehicle Make To Be Inserted";

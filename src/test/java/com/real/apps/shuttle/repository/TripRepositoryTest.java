@@ -3,9 +3,11 @@ package com.real.apps.shuttle.repository;
 import com.real.apps.shuttle.domain.model.Trip;
 import org.bson.types.ObjectId;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -29,8 +31,9 @@ public class TripRepositoryTest {
     private TripRepository repository;
     @Autowired
     private MongoOperations template;
+
     @After
-    public void cleanUp(){
+    public void cleanUp() {
         template.dropCollection("trip");
     }
 
@@ -54,13 +57,13 @@ public class TripRepositoryTest {
         Trip trip = new Trip();
         template.save(trip);
         template.save(trip);
-        Page<Trip> page = repository.findAll(new PageRequest(skip,limit));
-        assertThat(page.getSize(),is(limit));
+        Page<Trip> page = repository.findAll(new PageRequest(skip, limit));
+        assertThat(page.getSize(), is(limit));
         template.dropCollection("trip");
     }
 
     @Test
-    public void shouldFindOnlyTripsWithTheGivenCompanyId(){
+    public void shouldFindOnlyTripsWithTheGivenCompanyId() {
         ObjectId id = ObjectId.get();
         ObjectId control = ObjectId.get();
         Trip tripToBeFound = new Trip();
@@ -75,14 +78,14 @@ public class TripRepositoryTest {
         assertNotNull(repository.save(tripToBeFound2).getId());
         assertNotNull(repository.save(tripNotToBeFound).getId());
 
-        Page<Trip> actual = repository.findByCompanyId(id,new PageRequest(0,10));
-        assertThat(actual.getTotalElements(),is(2l));
-        assertThat(actual.getContent().get(0).getCompanyId(),is(id));
-        assertThat(actual.getContent().get(1).getCompanyId(),is(id));
+        Page<Trip> actual = repository.findByCompanyId(id, new PageRequest(0, 10));
+        assertThat(actual.getTotalElements(), is(2l));
+        assertThat(actual.getContent().get(0).getCompanyId(), is(id));
+        assertThat(actual.getContent().get(1).getCompanyId(), is(id));
     }
 
     @Test
-    public void shouldOnlyFindTripsWithTheGivenUserId(){
+    public void shouldOnlyFindTripsWithTheGivenUserId() {
         ObjectId id = ObjectId.get();
         ObjectId control = ObjectId.get();
 
@@ -98,9 +101,9 @@ public class TripRepositoryTest {
         assertNotNull(repository.save(tripToBeFound).getId());
         assertNotNull(repository.save(tripToBeFound2).getId());
 
-        Page<Trip> actual = repository.findByClientId(id,new PageRequest(0,10));
-        assertThat(actual.getTotalElements(),is(2l));
-        assertThat(actual.getContent().get(0).getClientId(),is(id));
-        assertThat(actual.getContent().get(1).getClientId(),is(id));
-     }
+        Page<Trip> actual = repository.findByClientId(id, new PageRequest(0, 10));
+        assertThat(actual.getTotalElements(), is(2l));
+        assertThat(actual.getContent().get(0).getClientId(), is(id));
+        assertThat(actual.getContent().get(1).getClientId(), is(id));
+    }
 }

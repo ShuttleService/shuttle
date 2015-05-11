@@ -9,8 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * Created by zorodzayi on 14/10/10.
  */
 @Document
-public class Trip extends CompanyModel {
-    private ObjectId id;
+public class Trip extends Proprietary {
     private String source;
     @Indexed
     private String clientName;
@@ -67,14 +66,6 @@ public class Trip extends CompanyModel {
 
     public void setSource(String source) {
         this.source = source;
-    }
-
-    public ObjectId getId() {
-        return id;
-    }
-
-    public void setId(ObjectId id) {
-        this.id = id;
     }
 
     public int getDistance() {

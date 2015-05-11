@@ -236,7 +236,7 @@ describe('Testing The Trip Controller', function () {
         $scope.from = new Date();
         $scope.to = {date: 'Fake date'};
 
-        var bookedRange = {from: $scope.from, to: $scope.to};
+        var bookedRange = {from: $scope.trip.from, to: $scope.trip.to};
 
         $scope.saveClick();
 
