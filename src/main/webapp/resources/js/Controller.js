@@ -133,7 +133,7 @@ angular.module('controllers', ['services']).
                 $scope.trip.vehicleId = vehicleId;
             }
             if ($scope.new === true) {
-                console.log('About To Post Since This Is A New Trip');
+                console.log('About To Post Since This Is A New Trip ' + JSON.stringify($scope.trip));
                 $scope.savedTrip = TripService.save($scope.trip, function (data) {
                     $scope.list();
                 });

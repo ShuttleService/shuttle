@@ -27,7 +27,6 @@ public class Company extends Identifiable {
     private String logo;
     @Indexed
     private String agentName;
-    private String idString;
     @Indexed
     private ObjectId agentId;
     private Set<BookedRange> bookedRanges = new HashSet<>();

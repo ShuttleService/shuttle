@@ -123,7 +123,6 @@
             <th>Vehicle</th>
             <th>Driver</th>
             <th>Company</th>
-            <th>Reference Number</th>
         </tr>
         </thead>
         <tbody>
