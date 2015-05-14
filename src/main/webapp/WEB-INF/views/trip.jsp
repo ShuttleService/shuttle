@@ -61,7 +61,7 @@
                             <div class="form-group col-xs-6">
                                 <label class="control-label">Total Price {{trip.price.currency.currencyCode}}</label>
                                 <input type="number" class="form-control" placeholder="Price" minlength="1" name="price"
-                                       ng-model="trip.price.amount" required readonly>
+                                       ng-model="trip.price.amount " required readonly>
                             </div>
                         </security:authorize>
                         <div class="form-group col-xs-6">
@@ -133,8 +133,8 @@
             <td>{{trip.source}}</td>
             <td>{{trip.destination}}</td>
             <td>{{trip.distance}}</td>
-            <td>{{trip.price.currency.currencyCode +' '+ trip.pricePerKm}}</td>
-            <td>{{trip.price.currency.currencyCode + ' '+ trip.price.amount}}</td>
+            <td>{{trip.price.currency.currencyCode +' ' }} {{trip.pricePerKm | number:2}}</td>
+            <td>{{trip.price.currency.currencyCode + ' '}} {{trip.price.amount | number:2}}</td>
             <td>{{trip.vehicleName}}</td>
             <td>{{trip.driverName}}</td>
             <td>{{trip.companyName}}</td>

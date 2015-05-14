@@ -5,6 +5,8 @@ import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.math.BigDecimal;
+
 /**
  * Created by zorodzayi on 14/10/10.
  */
@@ -17,13 +19,13 @@ public class Trip extends Proprietary {
     private String destination;
     @Indexed
     private ObjectId clientId;
-    private int pricePerKm;
+    private BigDecimal pricePerKm;
     private Money price;
     private String vehicleName;
     private String driverName;
     private ObjectId vehicleId;
     private ObjectId driverId;
-    private int distance;
+    private BigDecimal distance;
     @Indexed
     private String clientCellNumber;
     private BookedRange bookedRange;
@@ -44,14 +46,6 @@ public class Trip extends Proprietary {
         this.destination = destination;
     }
 
-    public int getPricePerKm() {
-        return pricePerKm;
-    }
-
-    public void setPricePerKm(int pricePerKm) {
-        this.pricePerKm = pricePerKm;
-    }
-
     public Money getPrice() {
         return price;
     }
@@ -68,12 +62,20 @@ public class Trip extends Proprietary {
         this.source = source;
     }
 
-    public int getDistance() {
+    public BigDecimal getDistance() {
         return distance;
     }
 
-    public void setDistance(int distance) {
+    public void setDistance(BigDecimal distance) {
         this.distance = distance;
+    }
+
+    public BigDecimal getPricePerKm() {
+        return pricePerKm;
+    }
+
+    public void setPricePerKm(BigDecimal pricePerKm) {
+        this.pricePerKm = pricePerKm;
     }
 
     public String getClientCellNumber() {

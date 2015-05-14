@@ -2,18 +2,21 @@ package com.real.apps.shuttle.controller;
 
 import com.google.gson.Gson;
 import com.real.apps.shuttle.config.MvcConfiguration;
-import com.real.apps.shuttle.domain.model.*;
+import com.real.apps.shuttle.domain.model.Driver;
+import com.real.apps.shuttle.domain.model.Trip;
+import com.real.apps.shuttle.domain.model.User;
+import com.real.apps.shuttle.domain.model.Vehicle;
 import com.real.apps.shuttle.repository.DriverRepository;
 import com.real.apps.shuttle.repository.RepositoryConfig;
 import com.real.apps.shuttle.repository.VehicleRepository;
 import com.real.apps.shuttle.service.ServiceConfig;
 import com.real.apps.shuttle.service.TripService;
-import org.apache.commons.lang3.time.DateUtils;
+import com.real.apps.shuttle.valueObject.Currency;
+import com.real.apps.shuttle.valueObject.Money;
 import org.bson.types.ObjectId;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnitRuleMockery;
-import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -33,8 +36,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.Filter;
+import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import static com.real.apps.shuttle.controller.UserDetailsUtils.*;
@@ -129,6 +132,27 @@ public class TripControllerTest {
                 content(content)).
                 andExpect(status().isOk());
 
+    }
+
+    @Test
+    public void shouldSaveATripGivenDoublesValuesForDistanceAndMoney() throws Exception {
+        BigDecimal distance = new BigDecimal(454.45);
+        Money price = new Money(new Currency("R"), new BigDecimal(345.90));
+        BigDecimal pricePerKm = new BigDecimal(12.4);
+        Trip trip = new Trip();
+        trip.setDistance(distance);
+        trip.setPrice(price);
+        trip.setPricePerKm(pricePerKm);
+
+        String tripString = new Gson().toJson(trip);
+        TripService service = Mockito.mock(TripService.class);
+
+        controller.setService(service);
+        mockMvc.perform(post(String.format("/%s", VIEW_PAGE)).
+                contentType(MediaType.APPLICATION_JSON).
+                with(user(admin(ObjectId.get()))).
+                content(tripString)).
+                andExpect(status().isOk());
     }
 
     @Test
