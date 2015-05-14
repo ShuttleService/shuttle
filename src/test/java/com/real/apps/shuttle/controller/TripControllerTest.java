@@ -81,8 +81,8 @@ public class TripControllerTest {
     @After
     public void cleanUp() {
         controller.setService(tripService);
-        //  mongoTemplate.dropCollection("driver");
-        //mongoTemplate.dropCollection("vehicle");
+        mongoTemplate.dropCollection("driver");
+        mongoTemplate.dropCollection("vehicle");
     }
 
     @Test
