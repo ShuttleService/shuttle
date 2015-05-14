@@ -233,14 +233,17 @@ describe('Testing The Trip Controller', function () {
         });
 
         expect($scope.trip.bookedRange).toBeUndefined();
-        $scope.from = new Date();
-        $scope.to = {date: 'Fake date'};
+        var fromString = "May 12, 2015 8:16:27 PM";
+        var toString = "May 12, 2015 8:21:27 PM";
+        $scope.from = new Date(2015, 4, 12, 8, 16, 27, 0);
+        $scope.to = new Date(2015, 4, 12, 8, 21, 27, 0);
 
         var bookedRange = {from: $scope.from, to: $scope.to};
 
         $scope.saveClick();
 
-        expect($scope.trip.bookedRange).toEqual(bookedRange);
+        expect($scope.trip.bookedRange.from).toEqual(fromString);
+        expect($scope.trip.bookedRange.to).toEqual(toString);
 
     });
 
@@ -318,7 +321,6 @@ describe('Testing The Trip Controller', function () {
         expect(VehicleService.query).toHaveBeenCalledWith(params);
         expect($scope.bookableDrivers).toEqual(bookableDrivers);
         expect($scope.bookableVehicles).toEqual(bookableVehicles);
-
 
     })
 });

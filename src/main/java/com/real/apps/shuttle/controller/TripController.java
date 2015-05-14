@@ -37,7 +37,7 @@ public class TripController {
     @ResponseBody
     public Page<Trip> page(@PathVariable("skip") int skip, @PathVariable("limit") int limit, @AuthenticationPrincipal User user) {
         logger.debug(String.format("Receiving request for list of trips {skip:%d,limit:%d,user:%s}", skip, limit, user));
-        Page<Trip> emptyPage = new PageImpl<>(new ArrayList<Trip>());
+        Page<Trip> emptyPage = new PageImpl<>(new ArrayList<>());
 
         if (user == null) {
             logger.debug("The user is null. No user is logged in. Returning an empty page ");
@@ -83,7 +83,7 @@ public class TripController {
             logger.debug("There Is No User Logged In. Will Not Add The Trip. Returning The Trip Unsaved");
             return trip;
         }
-
+        logger.debug(String.format("Saving A Trip %s ",trip));
         String role = role(user);
         logger.debug(String.format("{role:%s}", role));
         switch (role) {

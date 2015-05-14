@@ -168,7 +168,8 @@ public class DriverController {
     public Set<Driver> bookable(@PathVariable("companyId") final ObjectId companyId, @PathVariable("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date from,
                                 @PathVariable("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date to, @PathVariable("skip") int skip,
                                 @PathVariable("limit") int limit, @AuthenticationPrincipal User user) {
-        final BookedRange bookedRange = new BookedRange(from, to);
+        final BookedRange bookedRange = new BookedRange(from,to);
+
         final Pageable pageable = new PageRequest(skip, limit);
         logger.debug(String.format("Finding Bookable Drivers {BookedRange:%s, LoggedInUser:%s, skip:%d,limit:%d}", bookedRange, user, skip, limit));
 

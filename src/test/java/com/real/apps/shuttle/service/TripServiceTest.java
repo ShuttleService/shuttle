@@ -120,7 +120,6 @@ public class TripServiceTest {
         final Date from = new Date();
         final Date to = DateUtils.addMinutes(from, 2);
         final BookedRange bookedRange = new BookedRange(from, to);
-
         trip.setBookedRange(bookedRange);
         trip.setVehicleId(vehicle.getId());
         trip.setDriverId(driver.getId());

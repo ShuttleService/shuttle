@@ -46,6 +46,7 @@ public class VehicleDomainServiceImpl implements VehicleDomainService {
 
     @Override
     public boolean book(Vehicle vehicle, BookedRange bookedRange) {
+        logger.debug(String.format("Booking Vehicle:%s, BookedRange:%s ", vehicle, bookedRange));
         if (bookedRange == null) {
             return false;
         }

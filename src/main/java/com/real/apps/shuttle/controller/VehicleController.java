@@ -85,7 +85,7 @@ public class VehicleController {
     public Set<Vehicle> bookable(@PathVariable("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date from, @PathVariable("to")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date to,@PathVariable("companyId") ObjectId companyId,@PathVariable("skip") int skip, @PathVariable("limit") int limit,
                                  @AuthenticationPrincipal User user) {
-        BookedRange bookedRange = new BookedRange(from, to);
+        BookedRange bookedRange = new BookedRange(from,to);
         logger.debug(String.format("Finding Bookable Vehicles {BookedRange:%s,skip:%d,limit:%d,CompanyId:%s\nuser:%s}", bookedRange, skip, limit,
                 companyId, user));
         if (user == null) {

@@ -15,6 +15,8 @@ import org.springframework.web.servlet.view.tiles3.TilesConfigurer;
 import org.springframework.web.servlet.view.tiles3.TilesView;
 import org.springframework.web.servlet.view.tiles3.TilesViewResolver;
 
+import java.text.DateFormat;
+
 @Configuration
 @ComponentScan(basePackages = "com.real.apps.shuttle")
 @EnableWebMvc
@@ -41,7 +43,9 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter {
 
     @Override
     public void configureMessageConverters(java.util.List<org.springframework.http.converter.HttpMessageConverter<?>> converters) {
-        Gson gson = new GsonBuilder().registerTypeAdapter(SimpleGrantedAuthority.class, new SimpleGrantedAuthorityInstanceCreator()).create();
+        Gson gson = new GsonBuilder().registerTypeAdapter(SimpleGrantedAuthority.class, new SimpleGrantedAuthorityInstanceCreator())
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+
         GsonHttpMessageConverter messageConverter = new GsonHttpMessageConverter();
         messageConverter.setGson(gson);
 

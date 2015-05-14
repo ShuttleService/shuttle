@@ -9,7 +9,7 @@ angular.module('services', ['ngResource']).
 
         return $resource(CONTEXT_ROOT + '/driver/:pathVariable/:_companyId/:bookableFrom/:bookableTo/:skip/:limit', {
             pathVariable: '@pathVariable',
-            _companyId:'@_companyId',
+            _companyId: '@_companyId',
             bookingRangeFrom: '@bookableFrom',
             bookingRangeTo: '@bookableTo',
             skip: '@skip',
@@ -47,6 +47,24 @@ angular.module('services', ['ngResource']).
         }
     }).
 
+    factory('DateFormatUtils', function () {
+
+        function doFormat(hour, meridiem) {
+
+        }
+
+        return {
+
+            format: function (dateToFormat) {
+                //May 12, 2015 8:16:27 PM
+                var hours = dateToFormat.getDays();
+                
+                return
+
+            }
+        }
+    }).
+
     factory('UserService', function ($resource, CONTEXT_ROOT) {
 
         return $resource(CONTEXT_ROOT + '/user/:subPath1/:_id/:skip/:limit', {
@@ -60,7 +78,7 @@ angular.module('services', ['ngResource']).
     .factory('VehicleService', function ($resource, CONTEXT_ROOT) {
         return $resource(CONTEXT_ROOT + '/vehicle/:pathVariable/:_companyId/:bookableFrom/:bookableTo/:_id/:skip/:limit', {
             pathVariable: '@pathVariable',
-            _companyId:'@_companyId',
+            _companyId: '@_companyId',
             _id: '@_id',
             skip: '@skip',
             limit: '@limit',

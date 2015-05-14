@@ -109,8 +109,12 @@ angular.module('controllers', ['services']).
 
         $scope.saveClick = function () {
             console.log('Attempting To Save The Trip');
-            $scope.trip.bookedRange = {from: $scope.from, to: $scope.to};
-            $log.debug("{BookedRange:{from:" + $scope.trip.bookedRange.from + ", to:" + $scope.trip.bookedRange.to);
+
+            if ($scope.from && $scope.to) {
+                $scope.trip.bookedRange = {from: $scope.from , to: $scope.to};
+                $log.debug("{BookedRange:{from:" + $scope.trip.bookedRange.from + ", to:" + $scope.trip.bookedRange.to);
+            }
+
             if ($scope.company) {
                 var companyId = $scope.company.id;
                 var companyName = $scope.company.tradingAs;

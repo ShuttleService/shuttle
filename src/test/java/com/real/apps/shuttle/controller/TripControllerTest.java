@@ -2,19 +2,18 @@ package com.real.apps.shuttle.controller;
 
 import com.google.gson.Gson;
 import com.real.apps.shuttle.config.MvcConfiguration;
-import com.real.apps.shuttle.domain.model.Driver;
-import com.real.apps.shuttle.domain.model.Trip;
-import com.real.apps.shuttle.domain.model.User;
-import com.real.apps.shuttle.domain.model.Vehicle;
+import com.real.apps.shuttle.domain.model.*;
 import com.real.apps.shuttle.repository.DriverRepository;
 import com.real.apps.shuttle.repository.RepositoryConfig;
 import com.real.apps.shuttle.repository.VehicleRepository;
 import com.real.apps.shuttle.service.ServiceConfig;
 import com.real.apps.shuttle.service.TripService;
+import org.apache.commons.lang3.time.DateUtils;
 import org.bson.types.ObjectId;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnitRuleMockery;
+import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -34,6 +33,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.Filter;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import static com.real.apps.shuttle.controller.UserDetailsUtils.*;
@@ -81,8 +81,8 @@ public class TripControllerTest {
     @After
     public void cleanUp() {
         controller.setService(tripService);
-        mongoTemplate.dropCollection("driver");
-        mongoTemplate.dropCollection("vehicle");
+        //  mongoTemplate.dropCollection("driver");
+        //mongoTemplate.dropCollection("vehicle");
     }
 
     @Test
@@ -112,6 +112,39 @@ public class TripControllerTest {
     }
 
     @Test
+    public void shouldSaveATrip() throws Exception {
+        //"bookedRange":{"from":"May 12, 2015 8:16:27 PM","to":"May 12, 2015 8:21:27 PM"}
+        //"bookedRange":{"from":"2015-05-01T09:11:00.000Z","to":"2015-05-02T09:11:00.000Z"}
+       /* String content = "{\"price\":{\"currency\":{\"currencyCode\":\"R\"},\"amount\":81},\"pricePerKm\":9,\"distance\":9,\"clientName\":" +
+                "\"Zoro\",\"clientCellNumber\":845757575,\"source\":\"Home\",\"destination\":\"Work\",\"bookedRange\":{\"from\":\"May 12, 2015 8:16:27 PM\",\"to\":\"May 12, 2015 8:21:27 PM\"},\"companyId\":{\"_time\":1431357211,\"_machine" +
+                "\":-56178087,\"_inc\":1189193287,\"_new\":false},\"companyName\":\"Real Shuttle\",\"driverId\":{\"_time\":1431360003," +
+                "\"_machine\":-56182995,\"_inc\":-1874559372,\"_new\":false},\"driverName\":\"Violet Majoni\",\"vehicleName\":" +
+                "\"Toyota Fortuner CK62NNGP\",\"vehicleId\":{\"_time\":1431357281,\"_machine\":-56178087,\"_inc\":1189193302,\"_new\":false}}";*/
+
+        String content = "{\"price\":{\"currency\":{\"currencyCode\":\"R\"},\"amount\":81},\"pricePerKm\":9,\"distance\":9,\"clientName\":" +
+                "\"Zoro\",\"clientCellNumber\":845757575,\"source\":\"Home\",\"destination\":\"Work\",\"bookedRange\":{\"from\":\"2015-05-01T09:11:00.000Z\",\"to\":\"2015-05-02T09:11:00.000Z\"},\"companyId\":{\"_time\":1431357211,\"_machine" +
+                "\":-56178087,\"_inc\":1189193287,\"_new\":false},\"companyName\":\"Real Shuttle\",\"driverId\":{\"_time\":1431360003," +
+                "\"_machine\":-56182995,\"_inc\":-1874559372,\"_new\":false},\"driverName\":\"Violet Majoni\",\"vehicleName\":" +
+                "\"Toyota Fortuner CK62NNGP\",\"vehicleId\":{\"_time\":1431357281,\"_machine\":-56178087,\"_inc\":1189193302,\"_new\":false}}";
+
+       /* String content = "{\"price\":{\"currency\":{\"currencyCode\":\"R\"},\"amount\":21},\"clientName\":\"Grant\",\"clientCellNumber\"" +
+                ":9848484848,\"source\":\"Dariel\",\"destination\":\"Waverly\",\"distance\":6,\"pricePerKm\":3.5,\"bookedRange\":{\"from\":\"" +
+                "2015-05-01T09:11:00.000Z\",\"to\":\"2015-05-01T09:22:00.000Z\"},\"companyId\":{\"_time\":1431538331,\"_machine\":-725172619,\"" +
+                "_inc\":-637084021,\"_new\":false},\"companyName\":\"RealShuttle\",\"driverId\":{\"_time\":1431538364,\"_machine\":-725172619,\"" +
+                "_inc\":-637084017,\"_new\":false},\"driverName\":\"Zorodzayi Mukuya\",\"vehicleName\":\"Ford Figo BF51TXGP\",\"vehicleId\":{\"" +
+                "_time\":1431538405,\"_machine\":-725172619,\"_inc\":-637084009,\"_new\":false}}";*/
+
+
+        mockMvc.perform(post(String.format("/%s", VIEW_PAGE)).
+                with(user(admin(ObjectId.get()))).
+                contentType(MediaType.APPLICATION_JSON).
+                content(content)).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$[0].clientName").value(""));
+
+    }
+
+    @Test
     public void shouldSetTheTripClientIdAndNameToLoggedInUserCallServiceInsertAndReturnTheInsertedTripWhenWorldIsLoggedIn() throws Exception {
         String name = "Test Client Name To Insert";
         String surname = "Test Client Surname To Insert";
@@ -128,9 +161,12 @@ public class TripControllerTest {
         user.setSurname(surname);
 
         String tripString = new Gson().toJson(trip);
-        mockMvc.perform(post("/" + VIEW_PAGE).with(user(user)).contentType(MediaType.APPLICATION_JSON).content(tripString)).
-                andExpect(jsonPath("$.clientId._time").value(id.getTimestamp()))
-                .andExpect(jsonPath("$.clientName").value(name + " " + surname));
+        mockMvc.perform(post("/" + VIEW_PAGE).
+                with(user(user)).
+                contentType(MediaType.APPLICATION_JSON).
+                content(tripString)).
+                andExpect(jsonPath("$.clientId._time").value(id.getTimestamp())).
+                andExpect(jsonPath("$.clientName").value(name + " " + surname));
         mongoTemplate.dropCollection("trip");
     }
 
@@ -138,7 +174,8 @@ public class TripControllerTest {
     public void shouldSetTheTripCompanyIdAndNameToTheLoggedInCompanyWhenACompanyUserIsLoggedIn() throws Exception {
         String companyName = "Test Company Name To Be Set On Trip";
         ObjectId id = ObjectId.get();
-
+        Date from = new Date();
+        Date to = DateUtils.addMinutes(from, 3);
         User user = companyUser(id);
         user.setCompanyName(companyName);
         driverRepository.save(driver);
@@ -146,6 +183,8 @@ public class TripControllerTest {
         Trip trip = new Trip();
         trip.setDriverId(driver.getId());
         trip.setVehicleId(vehicle.getId());
+        BookedRange bookedRange = new BookedRange(from, to);
+        trip.setBookedRange(bookedRange);
         String jsonTrip = new Gson().toJson(trip);
 
         mockMvc.perform(post("/" + VIEW_PAGE).with(user(user)).contentType(MediaType.APPLICATION_JSON).content(jsonTrip)).
@@ -160,6 +199,10 @@ public class TripControllerTest {
         final Trip trip = new Trip();
         String source = "Test Source To Be Inserted";
         trip.setSource(source);
+        Date from = new Date();
+        Date to = DateUtils.addMinutes(from, 4);
+        BookedRange bookedRange = new BookedRange(from, to);
+        trip.setBookedRange(bookedRange);
         String json = new Gson().toJson(trip);
 
         context.checking(new Expectations() {{

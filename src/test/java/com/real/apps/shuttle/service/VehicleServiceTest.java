@@ -5,6 +5,7 @@ import com.real.apps.shuttle.domain.model.Vehicle;
 import com.real.apps.shuttle.domain.model.service.VehicleDomainService;
 import com.real.apps.shuttle.repository.RepositoryConfig;
 import com.real.apps.shuttle.repository.VehicleRepository;
+import org.apache.commons.lang3.time.DateUtils;
 import org.bson.types.ObjectId;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -91,7 +92,11 @@ public class VehicleServiceTest {
     @Test
     public void shouldCallDomainServiceBookable() {
         VehicleDomainService domainService = mock(VehicleDomainService.class);
-        BookedRange bookedRange = new BookedRange(new Date(), new Date());
+        Date from = new Date();
+        Date to = DateUtils.addMinutes(from, 2);
+
+        BookedRange bookedRange = new BookedRange(from,to);
+
         ObjectId companyId = ObjectId.get();
         Pageable pageable = new PageRequest(skip, limit);
 

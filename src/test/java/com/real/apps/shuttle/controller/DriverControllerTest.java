@@ -100,9 +100,10 @@ public class DriverControllerTest {
     }
 
     @Test
-    public void shouldInjectAllDependencies(){
-        assertThat(controller.domainService,is(notNullValue()));
+    public void shouldInjectAllDependencies() {
+        assertThat(controller.domainService, is(notNullValue()));
     }
+
     @Test
     public void shouldRenderDriverPage() throws Exception {
         mockMvc.perform(get("/" + VIEW_PAGE).with(user(companyUser(ObjectId.get()))))

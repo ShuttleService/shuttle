@@ -1,6 +1,7 @@
 package com.real.apps.shuttle.domain.model;
 
 import org.apache.commons.lang3.Validate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -11,11 +12,10 @@ import static org.apache.commons.lang3.time.DateUtils.*;
  * Created by zorodzayi on 15/04/14.
  */
 public class BookedRange {
-    private Date from;
-    private Date to;
-
-    public BookedRange() {
-    }
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private final Date from;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private final Date to;
 
     public BookedRange(Date from, Date to) {
         Validate.notNull(from);
@@ -69,16 +69,8 @@ public class BookedRange {
         return from;
     }
 
-    public void setFrom(Date from) {
-        this.from = from;
-    }
-
     public Date getTo() {
         return to;
-    }
-
-    public void setTo(Date to) {
-        this.to = to;
     }
 
     @Override

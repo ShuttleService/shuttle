@@ -10,6 +10,6 @@ public class Money {
 
     @Override
     public String toString() {
-        return String.format("{amount:%d, Currency:%}", amount, currency);
+        return String.format("{amount:%s, Currency:%s}", amount, currency);
     }
 }

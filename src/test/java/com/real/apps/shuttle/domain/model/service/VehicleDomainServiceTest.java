@@ -7,6 +7,7 @@ import com.real.apps.shuttle.repository.VehicleRepository;
 import com.real.apps.shuttle.service.ServiceConfig;
 import org.apache.commons.lang3.time.DateUtils;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class VehicleDomainServiceTest {
     private Date to = DateUtils.addMinutes(from, 1);
     private Date later = DateUtils.addMinutes(to, 1);
 
-    private BookedRange bookedRange = new BookedRange(from, to);
+    private BookedRange bookedRange = new BookedRange(from,to);
 
     @After
     public void cleanUp() {
@@ -74,7 +75,7 @@ public class VehicleDomainServiceTest {
         vehicle = repository.findOne(vehicle.getId());
         assertThat(vehicle.getBookedRanges().size(), is(1));
 
-        BookedRange bookedRange = new BookedRange(to, later);
+        BookedRange bookedRange = new BookedRange(to,later);
         booked = service.book(vehicle, bookedRange);
         assertThat(booked, is(true));
         vehicle = repository.findOne(vehicle.getId());

@@ -7,6 +7,7 @@ import com.real.apps.shuttle.repository.RepositoryConfig;
 import com.real.apps.shuttle.service.ServiceConfig;
 import org.apache.commons.lang3.time.DateUtils;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -37,7 +38,7 @@ public class DriverDomainServiceTest {
     private Date from = new Date();
     private Date to = DateUtils.addMinutes(from, 4);
     private Date later = DateUtils.addMinutes(to, 4);
-    private BookedRange bookedRange = new BookedRange(from, to);
+    private BookedRange bookedRange = new BookedRange(from,to);
 
     @After
     public void cleanUp() {
@@ -73,8 +74,8 @@ public class DriverDomainServiceTest {
         service.book(driver, bookedRange);
         driver = repository.findOne(driver.getId());
         assertThat(driver.getBookedRanges().size(), is(1));
-
-        boolean booked = service.book(driver, new BookedRange(to, later));
+        BookedRange bookedRange = new BookedRange(to,later);
+        boolean booked = service.book(driver, bookedRange);
         assertThat(booked, is(true));
         driver = repository.findOne(driver.getId());
         assertThat(driver.getBookedRanges().size(), is(2));

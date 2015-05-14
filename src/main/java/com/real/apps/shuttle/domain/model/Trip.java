@@ -134,8 +134,8 @@ public class Trip extends Proprietary {
 
     @Override
     public String toString() {
-        return String.format("{source:%s,id:%s,clientName:%s,destination:%s,pricePerKm:%d,price:%s,vehicleName:%s,vehicleId:%s,driverName:%s," +
-                        "driverId:%s,distance:%d,clientCellNumber:%s,clientId:%s,bookedRange:%s}", source, id, clientName, destination, pricePerKm,
+        return String.format("{source:%s,id:%s,clientName:%s,destination:%s,pricePerKm:%s,price:%s,vehicleName:%s,vehicleId:%s,driverName:%s," +
+                        "driverId:%s,distance:%s,clientCellNumber:%s,clientId:%s,bookedRange:%s}", source, id, clientName, destination, pricePerKm,
                 price, vehicleName, vehicleId, driverName, driverId, distance, clientCellNumber, clientId, bookedRange);
     }
 
