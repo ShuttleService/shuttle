@@ -47,24 +47,6 @@ angular.module('services', ['ngResource']).
         }
     }).
 
-    factory('DateFormatUtils', function () {
-
-        function doFormat(hour, meridiem) {
-
-        }
-
-        return {
-
-            format: function (dateToFormat) {
-                //May 12, 2015 8:16:27 PM
-                var hours = dateToFormat.getDays();
-                
-                return
-
-            }
-        }
-    }).
-
     factory('UserService', function ($resource, CONTEXT_ROOT) {
 
         return $resource(CONTEXT_ROOT + '/user/:subPath1/:_id/:skip/:limit', {
