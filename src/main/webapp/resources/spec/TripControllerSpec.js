@@ -233,8 +233,6 @@ describe('Testing The Trip Controller', function () {
         });
 
         expect($scope.trip.bookedRange).toBeUndefined();
-        var fromString = "May 12, 2015 8:16:27 PM";
-        var toString = "May 12, 2015 8:21:27 PM";
         $scope.from = new Date(2015, 4, 12, 8, 16, 27, 0);
         $scope.to = new Date(2015, 4, 12, 8, 21, 27, 0);
 
@@ -242,8 +240,8 @@ describe('Testing The Trip Controller', function () {
 
         $scope.saveClick();
 
-        expect($scope.trip.bookedRange.from).toEqual(fromString);
-        expect($scope.trip.bookedRange.to).toEqual(toString);
+        expect($scope.trip.bookedRange.from).toEqual(bookedRange.from);
+        expect($scope.trip.bookedRange.to).toEqual(bookedRange.to);
 
     });
 
