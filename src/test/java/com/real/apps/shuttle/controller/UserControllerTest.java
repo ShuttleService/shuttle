@@ -2,7 +2,9 @@ package com.real.apps.shuttle.controller;
 
 import com.google.gson.Gson;
 import com.real.apps.shuttle.config.MvcConfiguration;
+import com.real.apps.shuttle.controller.command.ChangePasswordCommand;
 import com.real.apps.shuttle.domain.model.User;
+import com.real.apps.shuttle.domain.model.service.UserDomainService;
 import com.real.apps.shuttle.miscellaneous.Role;
 import com.real.apps.shuttle.service.UserService;
 import org.bson.types.ObjectId;
@@ -34,11 +36,11 @@ import java.util.List;
 import static com.real.apps.shuttle.controller.UserDetailsUtils.*;
 import static com.real.apps.shuttle.miscellaneous.Role.*;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -63,6 +65,8 @@ public class UserControllerTest {
     private UserService service;
     @Autowired
     private UserService userService;
+    @Mock
+    private UserDomainService userDomainService;
     private final int skip = 12, limit = 34;
 
     @Autowired
@@ -75,7 +79,13 @@ public class UserControllerTest {
 
     @After
     public void cleanUp() {
-        controller.setService(userService);
+        controller.service = userService;
+    }
+
+    @Test
+    public void InjectDependencies() {
+        assertThat(controller.service, notNullValue());
+        assertThat(controller.domainService, notNullValue());
     }
 
     @Test
@@ -98,7 +108,7 @@ public class UserControllerTest {
             will(returnValue(page));
         }});
 
-        controller.setService(service);
+        controller.service = (service);
         mockMvc.perform(get("/" + VIEW_PAGE + "/" + skip + "/" + limit).with(user(admin(ObjectId.get())))).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$.content[0].firstName").value(firstName));
@@ -118,7 +128,7 @@ public class UserControllerTest {
 
         String userJsonString = new Gson().toJson(user);
 
-        controller.setService(service);
+        controller.service = (service);
 
         mockMvc.perform(post("/" + VIEW_PAGE).with(user(admin(ObjectId.get()))).contentType(MediaType.APPLICATION_JSON).content(userJsonString))
                 .andExpect(status().isOk()).
@@ -139,7 +149,7 @@ public class UserControllerTest {
         UserService service = Mockito.mock(UserService.class);
 
         String jsonUser = new Gson().toJson(user);
-        controller.setService(service);
+        controller.service = (service);
 
         ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
 
@@ -155,7 +165,7 @@ public class UserControllerTest {
         assertThat(user.getAuthorities().size(), is(0));
 
         UserService service = Mockito.mock(UserService.class);
-        controller.setService(service);
+        controller.service = (service);
 
         String jsonUser = new Gson().toJson(user);
 
@@ -176,7 +186,7 @@ public class UserControllerTest {
 
         UserService service = Mockito.mock(UserService.class);
         String jsonUser = new Gson().toJson(user);
-        controller.setService(service);
+        controller.service = (service);
 
         ArgumentCaptor<User> argumentCaptor = ArgumentCaptor.forClass(User.class);
         mockMvc.perform(post(String.format("/%s", VIEW_PAGE)).with(user(companyUser(ObjectId.get()))).contentType(MediaType.APPLICATION_JSON).content(jsonUser)).
@@ -199,7 +209,7 @@ public class UserControllerTest {
 
         String jsonUser = new Gson().toJson(user);
 
-        controller.setService(service);
+        controller.service = (service);
 
         mockMvc.perform(post(String.format("/%s", VIEW_PAGE)).with(user(world(ObjectId.get()))).contentType(MediaType.APPLICATION_JSON).content(jsonUser)).
                 andExpect(status().isOk()).andExpect(jsonPath("$.id._time").value(id.getTimestamp()));
@@ -212,7 +222,7 @@ public class UserControllerTest {
         user.setCompanyId(id);
         final Page<User> page = new PageImpl<>(Arrays.asList(user));
 
-        controller.setService(service);
+        controller.service = (service);
 
         context.checking(new Expectations() {{
             oneOf(service).pageByCompanyId(id, skip, limit);
@@ -231,7 +241,7 @@ public class UserControllerTest {
         final User user = new User();
         user.setId(id);
 
-        controller.setService(service);
+        controller.service = service;
 
         context.checking(new Expectations() {{
             oneOf(service).findOne(id);
@@ -277,6 +287,25 @@ public class UserControllerTest {
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$[0].role").value(WORLD)).
                 andExpect(jsonPath("$[1].role").doesNotExist());
+    }
+
+    @Test
+    public void shouldCallDomainServiceChangePasswordOnChangingAPassword() throws Exception {
+        String username = "Test UserName";
+        String currentPassword = "Test Current Password";
+        String newPassword = "Test New Password";
+        ChangePasswordCommand changePasswordCommand = new ChangePasswordCommand(username, currentPassword, newPassword);
+        String jsonRequest = new Gson().toJson(changePasswordCommand);
+
+        context.checking(new Expectations() {{
+            oneOf(userDomainService).changePassword(username, currentPassword, newPassword);
+        }});
+        controller.domainService = userDomainService;
+
+        mockMvc.perform(put(String.format("/%s/changePassword", VIEW_PAGE)).contentType(MediaType.APPLICATION_JSON).content(jsonRequest)).
+                andExpect(status().isOk());
+
+        context.assertIsSatisfied();
     }
 
 }
