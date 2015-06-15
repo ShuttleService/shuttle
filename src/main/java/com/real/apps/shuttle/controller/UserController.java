@@ -165,7 +165,7 @@ public class UserController {
         return roles;
     }
 
-    @RequestMapping(value = "/changePassword", method = RequestMethod.PUT)
+    @RequestMapping(method = RequestMethod.PUT)
     @ResponseBody
     public ChangePasswordCommand changePassword(@RequestBody ChangePasswordCommand changePasswordCommand) {
         logger.debug(String.format("Changing Password Using %s ", changePasswordCommand));

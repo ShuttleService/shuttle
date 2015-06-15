@@ -114,7 +114,7 @@ describe('Testing The User Controller', function () {
         expect($scope.user.companyName).toEqual(company.tradingAs);
     });
 
-    it('saveClick Should Set The Role As The List Of The Selected Role',function(){
+    it('saveClick Should Set The Role As The List Of The Selected Role', function () {
         var role = 'Test Role To Be Set As A Single Element In An Array Of Authorities.';
         $scope.user.authority = role;
         $scope.saveClick();
@@ -137,6 +137,57 @@ describe('Testing The User Controller', function () {
         $scope.saveClick();
         expect($scope.user.companyName).toEqual(companyName);
         expect($scope.user.companyId).toEqual(companyId);
+    });
+
+    it('Should Be Able To Save When The password And Password Retype Are The Same.', function () {
+        var samePassword = 'Test Password The Same For Both Password And Password Retype';
+        $scope.user.password = samePassword;
+        $scope.formHolder.confirmPassword = samePassword;
+        spyOn(FormSubmissionUtilService, 'canSave').andReturn(true);
+
+        var actual = $scope.canSave();
+
+        expect(actual).toBe(true);
+        expect(FormSubmissionUtilService.canSave).toHaveBeenCalled();
+    });
+    it('Should Be Unable To Save When The Password And Password Retype Are Different', function () {
+        $scope.user.password = 'Test Password Different From Password Retype';
+        $scope.formHolder.confirmPassword = 'Test Retype Password Different From Password';
+
+        spyOn(FormSubmissionUtilService, 'canSave').andReturn(true);
+
+        var actual = $scope.canSave();
+
+        expect(actual).toBe(false);
+        expect(FormSubmissionUtilService.canSave).toHaveBeenCalled();
+    });
+    it('Should Call The update (with parameters on the scope i.e username,currentPassword and newPassword) To Change The Password ', function () {
+
+        $scope.username = 'Test Username';
+        $scope.currentPassword = 'Test Current Password';
+        $scope.newPassword = 'Test New Password';
+        spyOn(UserService, 'update');
+
+        expect($scope.changePassword).toBeDefined();
+
+        $scope.changePassword();
+
+        expect(UserService.update).toHaveBeenCalledWith({
+            username: $scope.username,
+            currentPassword: $scope.currentPassword,
+            newPassword: $scope.newPassword
+        });
+    });
+
+    it('Should Call FormSubmissionUtil.canSave With Change Password Form', function () {
+        spyOn(FormSubmissionUtilService, 'canSave').andReturn(true);
+        $scope.canChangePasswordForm = {};
+        expect($scope.canChangePassword).toBeDefined();
+
+        var actual = $scope.canChangePassword();
+
+        expect(FormSubmissionUtilService.canSave).toHaveBeenCalledWith($scope.changePasswordForm);
+        expect(actual).toBeTruthy();
     });
 
 });

@@ -5,6 +5,7 @@ describe('Testing The User Service', function () {
     var UserService;
     var CONTEXT_ROOT;
     var $httpBackend;
+    var SUB_PATH = '/user'
     beforeEach(module('services'));
 
     beforeEach(inject(function (_UserService_, _CONTEXT_ROOT_, _$httpBackend_) {
@@ -25,7 +26,7 @@ describe('Testing The User Service', function () {
         expect(UserService.save).toBeDefined();
         expect(UserService.delete).toBeDefined();
         expect(UserService.remove).toBeDefined();
-        expect(UserService.put).toBeDefined();
+        expect(UserService.update).toBeDefined();
     });
 
     it('Should Call The Rest Services With The Correct URL ', function () {
@@ -78,18 +79,39 @@ describe('Testing The User Service', function () {
         expect(actualUser.userName).toEqual(savedUser.userName);
     });
 
-    it('Should Set The Sub Path To role. Call The URL And Return The Roles ',function(){
-        var subPath1 = {subPath1:'role'};
-        var url = CONTEXT_ROOT+'/user/role';
+    it('Should Set The Sub Path To role. Call The URL And Return The Roles ', function () {
+        var pathVariable = {pathVariable: 'role'};
+        var url = CONTEXT_ROOT + '/user/role';
         var roles = ['Test Role '];
         $httpBackend.expectGET(url).respond(roles);
 
-        var actual = UserService.query(subPath1);
+        var actual = UserService.query(pathVariable);
 
         $httpBackend.flush();
 
         expect(actual.length).toEqual(1);
         expect(actual[0]).toEqual(roles[0]);
+    });
+
+    it('Should Set The Sub Path To changePassword, Call ChangePassword on user/changePassword Passing the given username,currentPassword ' +
+        'and newPassword ', function () {
+
+        var url = CONTEXT_ROOT + SUB_PATH;
+
+        var changePasswordCommand = {
+            username: 'Test User Name',
+            currentPassword: 'Test Current Password',
+            newPassword: 'Test New Password'
+        };
+        console.log('The Url To Change Password With ' + url);
+        $httpBackend.expectPOST(url, changePasswordCommand).respond(changePasswordCommand);
+
+        var actual = UserService.save(changePasswordCommand);
+        $httpBackend.flush();
+
+        expect(actual.username).toEqual(changePasswordCommand.username);
+        expect(actual.currentPassword).toEqual(changePasswordCommand.currentPassword);
+        expect(actual.newPassword).toEqual(changePasswordCommand.newPassword);
     });
 
     afterEach(function () {

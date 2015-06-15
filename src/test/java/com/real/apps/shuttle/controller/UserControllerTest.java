@@ -302,7 +302,7 @@ public class UserControllerTest {
         }});
         controller.domainService = userDomainService;
 
-        mockMvc.perform(put(String.format("/%s/changePassword", VIEW_PAGE)).contentType(MediaType.APPLICATION_JSON).content(jsonRequest)).
+        mockMvc.perform(put(String.format("/%s", VIEW_PAGE)).contentType(MediaType.APPLICATION_JSON).content(jsonRequest)).
                 andExpect(status().isOk());
 
         context.assertIsSatisfied();
