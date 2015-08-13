@@ -7,5 +7,5 @@ import com.real.apps.shuttle.domain.model.User;
  */
 public interface UserDomainService {
     void changePassword(User user, String newPassword);
-    void changePassword(String username,String oldPassword,String newPassword);
+    void changePassword(String username,String currentPassword,String newPassword);
 }

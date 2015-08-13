@@ -111,7 +111,7 @@ angular.module('controllers', ['services']).
             console.log('Attempting To Save The Trip');
 
             if ($scope.from && $scope.to) {
-                $scope.trip.bookedRange = {from: $scope.from , to: $scope.to};
+                $scope.trip.bookedRange = {from: $scope.from, to: $scope.to};
                 $log.debug("{BookedRange:{from:" + $scope.trip.bookedRange.from + ", to:" + $scope.trip.bookedRange.to);
             }
 
@@ -181,7 +181,6 @@ angular.module('controllers', ['services']).
                 $log.debug('I Am Not Finding Any Bookable Driver And / Or Bookable Vehicles As Either From, To Or Company Are Null');
             }
         };
-
 
         $scope.list();
     }).
@@ -287,6 +286,7 @@ angular.module('controllers', ['services']).
         $scope.confirmPasswordPrestine = angular.copy($scope.confirmPassword);
         $scope.new = true;
         $scope.roles = [{role: 'ROLE_admin'}, {role: 'ROLE_agent'}, {role: 'ROLE_world'}, {role: 'ROLE_companyUser'}];
+
         $scope.saveClick = function () {
             $log.debug('Clicked Submit Button. This Be The Authorities Submitted ' + $scope.user.authority);
             $scope.user.username = $scope.user.email;
@@ -318,7 +318,7 @@ angular.module('controllers', ['services']).
         };
 
         $scope.canSave = function () {
-            return FormSubmissionUtilService.canSave($scope.formHolder.addForm);
+            return FormSubmissionUtilService.canSave($scope.formHolder.addForm) && $scope.user.password === $scope.formHolder.confirmPassword;
         };
 
         $scope.list = function () {
@@ -333,6 +333,18 @@ angular.module('controllers', ['services']).
             $scope.user = angular.copy($scope.prestineUser);
             $scope.formHolder.confirmPassword = angular.copy($scope.confirmPasswordPrestine);
         };
+
+        $scope.canChangePassword = function () {
+            return FormSubmissionUtilService.canSave($scope.changePasswordForm);
+        }
+        $scope.changePassword = function () {
+
+            UserService.update({
+                username: $scope.username,
+                currentPassword: $scope.currentPassword,
+                newPassword: $scope.newPassword
+            });
+        }
 
         $scope.list();
     }).

@@ -1,6 +1,8 @@
 package com.real.apps.shuttle.controller;
 
+import com.real.apps.shuttle.controller.command.ChangePasswordCommand;
 import com.real.apps.shuttle.domain.model.User;
+import com.real.apps.shuttle.domain.model.service.UserDomainService;
 import com.real.apps.shuttle.miscellaneous.Role;
 import com.real.apps.shuttle.service.UserService;
 import org.apache.log4j.Logger;
@@ -15,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import static com.real.apps.shuttle.miscellaneous.Role.*;
@@ -27,8 +28,12 @@ import static com.real.apps.shuttle.miscellaneous.Role.*;
 @RequestMapping(value = UserController.VIEW_NAME)
 public class UserController {
     @Autowired
-    private UserService service;
+    UserService service;
+    @Autowired
+    UserDomainService domainService;
+
     private Logger logger = Logger.getLogger(UserController.class);
+
     public static final String VIEW_NAME = "user";
 
     @RequestMapping(method = RequestMethod.GET)
@@ -160,7 +165,12 @@ public class UserController {
         return roles;
     }
 
-    public void setService(UserService service) {
-        this.service = service;
+    @RequestMapping(method = RequestMethod.PUT)
+    @ResponseBody
+    public ChangePasswordCommand changePassword(@RequestBody ChangePasswordCommand changePasswordCommand) {
+        logger.debug(String.format("Changing Password Using %s ", changePasswordCommand));
+        domainService.changePassword(changePasswordCommand.getUsername(), changePasswordCommand.getCurrentPassword(), changePasswordCommand.getNewPassword());
+        return changePasswordCommand;
     }
+
 }

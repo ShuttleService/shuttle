@@ -49,12 +49,12 @@ angular.module('services', ['ngResource']).
 
     factory('UserService', function ($resource, CONTEXT_ROOT) {
 
-        return $resource(CONTEXT_ROOT + '/user/:subPath1/:_id/:skip/:limit', {
-            subPath1: '@subPath1',
+        return $resource(CONTEXT_ROOT + '/user/:pathVariable/:_id/:skip/:limit', {
+            pathVariable: '@pathVariable',
             _id: '@_id',
             skip: '@skip',
             limit: '@limit'
-        }, {put: {method: 'PUT'}});
+        }, {update: {method: 'PUT'}});
     })
 
     .factory('VehicleService', function ($resource, CONTEXT_ROOT) {
