@@ -3,19 +3,25 @@ package com.real.apps.shuttle.domain.model.service
 import com.real.apps.shuttle.domain.model.BookedRange
 import com.real.apps.shuttle.domain.model.Driver
 import com.real.apps.shuttle.repository.DriverRepository
+import com.real.apps.shuttle.repository.RepositoryConfig
+import com.real.apps.shuttle.service.ServiceConfig
 import org.apache.log4j.Logger
 import org.bson.types.ObjectId
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
-
+import org.springframework.test.context.ContextConfiguration
 
 /**
  * Created by zorodzayi on 15/04/18.
  */
-class DriverDomainServiceSpec extends spock.lang.Specification {
 
+@ContextConfiguration(classes = [ServiceConfig, RepositoryConfig])
+class DriverDomainServiceSpec extends spock.lang.Specification {
+    @Autowired
+    private DriverDomainService domainService;
     private DriverDomainServiceImpl service = new DriverDomainServiceImpl();
     private Date now = new Date();
     private Date earlier;
@@ -34,6 +40,11 @@ class DriverDomainServiceSpec extends spock.lang.Specification {
         earlier = calendar.getTime();
         calendar.add(Calendar.MILLISECOND, 2)
         later = calendar.getTime()
+    }
+
+    def 'Should Inject The DriverDomainService'() {
+        expect:
+        domainService != null;
     }
 
     def 'Should Find Drivers That Are Bookable By Checking That Each Driver Is Bookable'() {
@@ -129,7 +140,7 @@ class DriverDomainServiceSpec extends spock.lang.Specification {
         1 * bookedRangeService.availableForBooking(bookedRanges, bookedRange)
     }
 
-    def 'Should Not Book A null BookedRange'(){
+    def 'Should Not Book A null BookedRange'() {
         given: 'A Set Of Booked Ranges'
         Set<BookedRange> bookedRanges = new HashSet<>()
 
@@ -138,11 +149,11 @@ class DriverDomainServiceSpec extends spock.lang.Specification {
         service.bookedRangeService = bookedRangeService
 
         when: 'We Attempt To Book A Null Booked Range'
-        boolean bookable = service.book(new Driver(),null)
+        boolean bookable = service.book(new Driver(), null)
 
         then:
         !bookable
-        0 * bookedRangeService.availableForBooking(_,_)
+        0 * bookedRangeService.availableForBooking(_, _)
 
     }
 }
