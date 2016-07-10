@@ -7,10 +7,10 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="resources/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="resources/bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="resources/bower_components/angular/angular.min.js"></script>
     <script src="resources/bower_components/angular-resource/angular-resource.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/plain" rel="stylesheet">
+    <link href="resources/bower_components/bootstrap/dist/css/bootstrap.css" type="text/plain" rel="stylesheet">
 
     <script src="resources/js/Service.js"></script>
     <script src="resources/js/Controller.js"></script>

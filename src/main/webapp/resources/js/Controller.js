@@ -29,7 +29,7 @@ angular.module('controllers', ['services']).
 
         $scope.findRoles = function () {
             $log.debug('Calling User Service Find Roles To Get Roles And Set Them On The $rootScope Shared State ');
-            $rootScope.sharedState.roles = UserService.get({subPath1: 'role'});
+            $rootScope.sharedState.roles = UserService.query({subPath1: 'role'});
         };
 
         $scope.init = function () {
@@ -80,7 +80,7 @@ angular.module('controllers', ['services']).
 
         $scope.bookableList = function () {
             $log.debug('Finding Bookable Drivers ');
-            $scope.bookable = DriverService.get({
+            $scope.bookable = DriverService.query({
                 pathVariable: 'bookable',
                 _companyId: $scope.companyId,
                 bookableFrom: $scope.bookableFrom,
@@ -175,8 +175,8 @@ angular.module('controllers', ['services']).
                     limit: 100
                 };
 
-                $scope.bookableDrivers = DriverService.get(params);
-                $scope.bookableVehicles = VehicleService.get(params);
+                $scope.bookableDrivers = DriverService.query(params);
+                $scope.bookableVehicles = VehicleService.query(params);
             } else {
                 $log.debug('I Am Not Finding Any Bookable Driver And / Or Bookable Vehicles As Either From, To Or Company Are Null');
             }
@@ -391,7 +391,7 @@ angular.module('controllers', ['services']).
 
             $log.debug('Finding Bookable Vehicles');
 
-            $scope.bookable = VehicleService.get({
+            $scope.bookable = VehicleService.query({
                 pathVariable: 'bookable',
                 _companyId: $scope.companyId,
                 bookableFrom: $scope.bookableFrom,
