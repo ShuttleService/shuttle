@@ -6,11 +6,11 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="resources/vendor/jquery-2.1.1.min.js"></script>
-    <script src="resources/vendor/bootstrap-3.2.0/dist/js/bootstrap.js"></script>
-    <script src="resources/vendor/angular-1.4.0-rc.1/angular.js"></script>
-    <script src="resources/vendor/angular-1.4.0-rc.1/angular-resource.js"></script>
-    <link href="resources/vendor/bootstrap-3.2.0/dist/css/bootstrap.css" type="text/plain" rel="stylesheet">
+    <script src="resources/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="resources/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="resources/bower_components/angular/angular.min.js"></script>
+    <script src="resources/bower_components/angular-resource/angular-resource.min.js"></script>
+    <link href="resources/bower_components/bootstrap/dist/css/bootstrap.css" type="text/plain" rel="stylesheet">
 
     <script src="resources/js/Service.js"></script>
     <script src="resources/js/Controller.js"></script>

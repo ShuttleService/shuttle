@@ -197,7 +197,7 @@
                     </webApp>
                     <connectors>
                         <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
-                            <port>9080</port>
+                            <port>8080</port>
                         </connector>
                     </connectors>
                     <scanIntervalSeconds>1</scanIntervalSeconds>

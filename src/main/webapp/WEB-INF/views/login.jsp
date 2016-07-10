@@ -4,12 +4,12 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html ng-app="controllers" ng-controller="UserController">
 <head class="page-header">
-    <script src="resources/vendor/jquery-2.1.1.min.js"></script>
-    <script src="resources/vendor/bootstrap-3.2.0/dist/js/bootstrap.js"></script>
-    <link href="resources/vendor/bootstrap-3.2.0/dist/css/bootstrap.css" type="text/css" rel="stylesheet">
     <link href="resources/style.css" type="text/css" rel="stylesheet">
-    <script src="resources/vendor/angular-1.4.0-rc.1/angular.js"></script>
-    <script src="resources/vendor/angular-1.4.0-rc.1/angular-resource.js"></script>
+    <script src="resources/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="resources/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="resources/bower_components/angular/angular.min.js"></script>
+    <script src="resources/bower_components/angular-resource/angular-resource.min.js"></script>
+    <link href="resources/bower_components/bootstrap/dist/css/bootstrap.css" type="text/plain" rel="stylesheet">
     <script src="resources/js/Service.js"></script>
     <script src="resources/js/Controller.js"></script>
     <title>Shuttle Service</title>

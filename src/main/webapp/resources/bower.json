@@ -1,0 +1,23 @@
+{
+  "name": "Shuttle Services",
+  "homepage": "https://github.com/ShuttleService/shuttle",
+  "authors": [
+    "Zorodzayi Mukuya <mukuya@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "angularjs#^1.5.7",
+    "bootstrap": "^3.3.6",
+    "angular-resource": "^1.5.7"
+  }
+}
