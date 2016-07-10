@@ -162,6 +162,7 @@ public class UserController {
             logger.debug("There is no user here. Return World");
         }
         roles.add(new SimpleGrantedAuthority(WORLD));
+        logger.debug("Found the roles " + roles);
         return roles;
     }
 

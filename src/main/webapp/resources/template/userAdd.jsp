@@ -50,7 +50,7 @@
                             <label class="control-label">Role</label>
                             <select placeholder="Role" class="form-control"
                                     name="authorities" ng-model="user.authority"
-                                    ng-options="role.role for role in sharedState.roles" required></select>
+                                    ng-options="role.role as role.role for role in sharedState.roles" required></select>
                         </div>
                         <div class="form-group col-xs-6">
                             <label class="control-label">Company</label>
