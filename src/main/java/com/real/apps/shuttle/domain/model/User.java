@@ -30,6 +30,7 @@ public class User extends Proprietary implements UserDetails {
     private String dateOfBirth;
     private String streetAddress;
     private String suburb;
+    private String country;
     private String town;
     private String province;
     private String postalCode;
@@ -204,9 +205,12 @@ public class User extends Proprietary implements UserDetails {
     @Override
     public String toString() {
 
-        return String.format("{id:%s,username:%s,password:%s,firstName:%s,surname:%s,email:%s,companyName:%s,companyId:%s,cellNumber:%s,dateOfBirth:%s,streetAddress:%s,suburb:%s,town:%s,province:%s,postalCode:%s," +
-                        " accountNonExpired:%b,accountNonLocked:%b,credentialsNonExpired:%b,enabled:%b,authorities:%s,agentId:%s,agentName:%s}", id, username,password, firstName, surname, email, companyName, companyId, cellNumber, dateOfBirth,
-                streetAddress, suburb, town, province, postalCode, accountNonExpired, accountNonLocked, credentialsNonExpired, email, authorities, agentId, agentName);
+        return String.format("{id:%s,username:%s,password:%s,firstName:%s,surname:%s,email:%s,companyName:%s,companyId:%s," +
+                        "cellNumber:%s,dateOfBirth:%s,streetAddress:%s,suburb:%s,town:%s,province:%s,country:%s,postalCode:%s," +
+                        " accountNonExpired:%b,accountNonLocked:%b,credentialsNonExpired:%b,enabled:%b,authorities:%s,agentId:%s,agentName:%s}",
+                id, username, password, firstName, surname, email, companyName, companyId, cellNumber, dateOfBirth,
+                streetAddress, suburb, town, province,country, postalCode, accountNonExpired, accountNonLocked,
+                credentialsNonExpired, email, authorities, agentId, agentName);
     }
 
     @Override

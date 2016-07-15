@@ -5,85 +5,72 @@
 <html ng-app="controllers" ng-controller="SharedController">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
     <script src="resources/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="resources/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="resources/bower_components/angular/angular.min.js"></script>
     <script src="resources/bower_components/angular-resource/angular-resource.min.js"></script>
+    <script src="resources/bower_components/angular-route/angular-route.min.js"></script>
     <link href="resources/bower_components/bootstrap/dist/css/bootstrap.css" type="text/css" rel="stylesheet">
-
+    <script src="resources/bower_components/angular-aria/angular-aria.min.js"></script>
+    <script src="resources/bower_components/angular-animate/angular-animate.min.js"></script>
+    <script src="resources/bower_components/angular-messages/angular-messages.min.js"></script>
+    <script src="resources/bower_components/angular-material/angular-material.min.js"></script>
+    <link href="resources/bower_components/bootstrap/dist/css/bootstrap.css" type="text/css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,500,600,700,300Italic,500Italic,600Italic,700Italic"
+          type="text/css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons" type="text/css" rel="stylesheet">
+    <link href="resources/bower_components/angular-material/angular-material.min.css" type="text/css" rel="stylesheet">
     <script src="resources/js/Service.js"></script>
     <script src="resources/js/Controller.js"></script>
 
     <link href="resources/style.css" type="text/css" rel="stylesheet">
-
-    <title><tiles:getAsString name="title"/></title>
 </head>
-<body>
+<body layout="column">
+<md-toolbar class="md-toolbar-tools" layout layout-align="center center">
+    <security:authorize access="hasAnyRole('ROLE_admin','ROLE_companyUser','ROLE_world')">
+        <md-button href='#/trip'>Trips</md-button>
+    </security:authorize>
+    <security:authorize access="hasAnyRole('ROLE_admin','ROLE_companyUser')">
+        <md-button href='#/driver'>Drivers</md-button>
+    </security:authorize>
+    <security:authorize access="hasAnyRole('ROLE_admin','ROLE_companyUser')">
+        <md-button href='#/vehicle'>Vehicles</md-button>
+    </security:authorize>
+    <security:authorize access="hasAnyRole('ROLE_admin','ROLE_companyUser')">
+        <md-button href='#/user'>Users</md-button>
+    </security:authorize>
 
-<div class="container">
-    <div class="col-xs-12">
-        <nav class="navbar navbar-default navbar-static-top">
-            <div class="navbar-inner">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-target="#menu" data-toggle="collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="#"><tiles:getAsString name="title"/></a>
-                </div>
-                <div class="collapse navbar-collapse" id="menu">
-                    <ul class="nav navbar-nav">
-                        <security:authorize access="hasAnyRole('ROLE_admin','ROLE_companyUser','ROLE_world')">
-                            <li><a class="active" href="<spring:url value='trip'/>">Trips</a></li>
-                        </security:authorize>
-                        <security:authorize access="hasAnyRole('ROLE_admin','ROLE_companyUser')">
-                            <li><a href="<spring:url value='driver'/> ">Drivers</a></li>
-                        </security:authorize>
-                        <security:authorize access="hasAnyRole('ROLE_admin','ROLE_companyUser')">
-                            <li><a href="<spring:url value='vehicle' />">Vehicles</a></li>
-                        </security:authorize>
-                        <security:authorize access="hasAnyRole('ROLE_admin','ROLE_companyUser')">
-                            <li><a href="<spring:url value='user' />">Users</a></li>
-                        </security:authorize>
+    <md-button href='#/review'>Reviews</md-button>
 
-                        <li><a href="<spring:url value="review"/>">Reviews</a></li>
+    <security:authorize access="hasAnyRole('ROLE_admin','ROLE_agent')">
+        <md-menu>
+            <md-button ng-click="$mdOpenMenu($event)">Agent</md-button>
+            <md-menu-content>
+                <md-button href='#/company'>Companies</md-button>
+            </md-menu-content>
+        </md-menu>
+    </security:authorize>
+    <security:authorize access="hasAnyRole('ROLE_admin')">
+        <md-menu>
+            <md-button ng-click="$mdOpenMenu($event)">Admin</md-button>
+            <md-menu-content>
+                <md-button href='#/agent'>Agents</md-button>
+                <md-button href='#/company'>Companies</md-button>
+            </md-menu-content>
+        </md-menu>
+    </security:authorize>
+    <md-button href="<spring:url value="logout"/>">Logout</md-button>
 
-                        <security:authorize access="hasAnyRole('ROLE_admin','ROLE_agent')">
-                            <li class="dropdown">
-                                <a data-toggle="dropdown" class="dropdown-toggle" data-target="#" href="#">Agent<b
-                                        class="caret"></b> </a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="<spring:url value='/company'/>">Companies</a></li>
-                                </ul>
-                            </li>
-                        </security:authorize>
-                        <security:authorize access="hasAnyRole('ROLE_admin')">
-                            <li class="dropdown">
-                                <a data-toggle="dropdown" class="dropdown-toggle" data-target="#" href="#">Admin<b
-                                        class="caret"></b> </a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="<spring:url value='/agent'/>">Agents</a></li>
-                                    <li><a href="<spring:url value='/company'/>">Companies</a></li>
-                                </ul>
-                            </li>
-                        </security:authorize>
-                        <li class="pull-right"><a href="<spring:url value="logout"/>">Logout</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </div>
-    <div class="pull-right">
-        <button data-toggle="modal" data-target="#add"><span class="glyphicon-plus"></span></button>
-    </div>
-    <div class="row">
-        <div class="col-xs-12 text-center">
-            <tiles:insertAttribute name="body"/>
-        </div>
-    </div>
-</div>
+    <md-button href="{{'#/'+addUrl}}">
+        <md-icon>add</md-icon>
+    </md-button>
+
+</md-toolbar>
+<md-content layout="column" layout-align="top center" flex>
+    <ng-view></ng-view>
+</md-content>
+<md-toolbar></md-toolbar>
 </body>
 </html>
 

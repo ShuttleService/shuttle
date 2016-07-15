@@ -9,53 +9,46 @@
                     <button type="button" data-dismiss="modal" class="close">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <form class="form-horizontal well col-xs-12" name="addForm">
-                        <div class="form-group col-xs-6">
-                            <label class="control-label">First Name</label>
-                            <input type="text" placeholder="First Name" minlength="2" ng-model="driver.firstName"
-                                   name="firstName" class="form-control" required>
-                        </div>
-                        <div class="form-group col-xs-6">
-                            <label class="control-label">Surname</label>
-                            <input type="text" placeholder="Surname" ng-model="driver.surname" name="surname"
-                                   minlength="2"
-                                   class="form-control" required>
-                        </div>
-                        <div class="form-group col-xs-6">
-                            <label class="control-label">Email Address</label>
-                            <input type="email" class="form-control" placeholder="Email Address" minlength="6"
-                                   ng-model="driver.email" name="email" required>
-                        </div>
-                        <div class="form-group col-xs-6">
-                            <label class="control-label">Cellphone Number</label>
-                            <input type="number" class="form-control" placeholder="Cellphone Number" ng-minlength="9"
-                                   name="cellNumber" ng-model="driver.cellPhone" required>
-                        </div>
-                        <div class="form-group col-xs-6">
-                            <label class="control-label">Company</label>
-                            <select class="form-control" placeholder="Company" name="company" ng-model="company"
-                                    ng-options="company.tradingAs for company in sharedState.companyPage.content" required></select>
-                        </div>
-                        <div class="form-group col-xs-6">
-                            <label class="control-label">Driver's License Class</label>
-                            <input type="text" class="form-control" minlength="1" maxlength="3"
-                                   name="driversLicenseClass"
-                                   ng-model="driver.driversLicenseClass"
-                                   placeholder="Drivers License Class" required>
-                        </div>
-                        <div class="form-group col-xs-6">
-                            <label class="control-label">Driver's License Number</label>
-                            <input type="text" class="form-control" minlength="4" name="driversLicenseNumber"
-                                   ng-model="driver.driversLicenseNumber" placeholder="Drivers License Number"
-                                   required>
-                        </div>
+                    <form name="addForm">
+                        <md-input-container>
+                            <label>First Name</label>
+                            <input type="text" minlength="2" ng-model="driver.firstName" name="firstName" required>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Surname</label>
+                            <input type="text"  ng-model="driver.surname" name="surname" minlength="2" required>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Email Address</label>
+                            <input type="email" minlength="6" ng-model="driver.email" name="email" required>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Cellphone Number</label>
+                            <input type="number" ng-minlength="9" name="cellNumber" ng-model="driver.cellPhone" required>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Company</label>
+                            <select name="company" ng-model="company"
+                                       ng-options="company.tradingAs for company in sharedState.companyPage.content"
+                                       required></select>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Driver's License Class</label>
+                            <input type="text" minlength="1" maxlength="3" name="driversLicenseClass"
+                                   ng-model="driver.driversLicenseClass" required>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Driver's License Number</label>
+                            <input type="text" minlength="4" name="driversLicenseNumber" ng-model="driver.driversLicenseNumber" required>
+                        </md-input-container>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="reset" class="btn btn-default" ng-click="reset()">Reset</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" ng-disabled="!canSave()" ng-click="saveClick()">Save
-                    </button>
+                    <md-button type="reset" class="btn btn-default" ng-click="reset()">Reset</md-button>
+                    <md-button type="button" class="btn btn-default" data-dismiss="modal">Close</md-button>
+                    <md-button type="button" class="btn btn-primary" ng-disabled="!canSave()" ng-click="saveClick()">
+                        Save
+                    </md-button>
                 </div>
             </div>
 

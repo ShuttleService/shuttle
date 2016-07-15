@@ -2,46 +2,49 @@
  * Created by zorodzayi on 14/10/09.
  */
 
-angular.module('controllers', ['services']).controller('SharedController', function ($rootScope, $scope, $log, AgentService, CompanyService, DriverService, UserService, VehicleService, RESULT_SIZE) {
-    $rootScope.sharedState = {};
-    var params = {skip: 0, limit: RESULT_SIZE};
+angular.module('controllers', ['services', 'ngMaterial', 'ngRoute']).controller('SharedController',
+    function ($rootScope, $scope, $log, AgentService, CompanyService, DriverService, UserService, VehicleService,
+              RESULT_SIZE) {
+        $rootScope.sharedState = {};
+        var params = {skip: 0, limit: RESULT_SIZE};
 
-    $scope.findCompanies = function () {
-        $log.debug('Calling Company Service Get To Get A CompanyPage To Set On The $rootScope Shared State');
-        $rootScope.sharedState.companyPage = CompanyService.get(params);
-    };
+        $scope.findCompanies = function () {
+            $log.debug('Calling Company Service Get To Get A CompanyPage To Set On The $rootScope Shared State');
+            $rootScope.sharedState.companyPage = CompanyService.get(params);
+        };
 
-    $scope.findVehicles = function () {
-        $log.debug('Calling Vehicle Service Get To Get A VehiclePage To Set On The $rootScope Shared State');
-        $rootScope.sharedState.vehiclePage = VehicleService.get(params);
-    };
+        $scope.findVehicles = function () {
+            $log.debug('Calling Vehicle Service Get To Get A VehiclePage To Set On The $rootScope Shared State');
+            $rootScope.sharedState.vehiclePage = VehicleService.get(params);
+        };
 
-    $scope.findDrivers = function () {
-        $log.debug('Calling Driver Service Get To Get A DriverPage To Set On The $rootScope Shared State');
-        $rootScope.sharedState.driverPage = DriverService.get(params)
-    };
+        $scope.findDrivers = function () {
+            $log.debug('Calling Driver Service Get To Get A DriverPage To Set On The $rootScope Shared State');
+            $rootScope.sharedState.driverPage = DriverService.get(params);
+        };
 
-    $scope.findAgents = function () {
-        $log.debug('Calling Agent Service Get To Get An AgentPage To Set On The $rootScope Shared State');
-        $rootScope.sharedState.agentPage = AgentService.get(params);
-    };
+        $scope.findAgents = function () {
+            $log.debug('Calling Agent Service Get To Get An AgentPage To Set On The $rootScope Shared State');
+            $rootScope.sharedState.agentPage = AgentService.get(params);
+        };
 
-    $scope.findRoles = function () {
-        $log.debug('Calling User Service Find Roles To Get Roles And Set Them On The $rootScope Shared State ');
-        $rootScope.sharedState.roles = UserService.query({subPath1: 'role'});
-        $log.debug('The roles will be ' + JSON.stringify($rootScope.sharedState.roles));
-    };
+        $scope.findRoles = function () {
+            $log.debug('Calling User Service Find Roles To Get Roles And Set Them On The $rootScope Shared State ');
+            $rootScope.sharedState.roles = UserService.query({pathVariable: 'role'});
+            $log.debug('The roles will be ' + JSON.stringify($rootScope.sharedState.roles));
+        };
 
-    $scope.init = function () {
-        $scope.findCompanies();
-        $scope.findVehicles();
-        $scope.findDrivers();
-        $scope.findAgents();
-        $scope.findRoles();
-    };
+        $scope.init = function () {
+            $scope.findCompanies();
+            $scope.findVehicles();
+            $scope.findDrivers();
+            $scope.findAgents();
+            $scope.findRoles();
+        };
 
-    $scope.init();
-}).controller('DriverController', function ($scope, $log, DriverService, FormSubmissionUtilService, RESULT_SIZE) {
+        $scope.init();
+    }).controller('DriverController', function ($rootScope, $scope, $log, DriverService, FormSubmissionUtilService, RESULT_SIZE) {
+    $rootScope.addUrl = 'driver-add';
     $scope.new = true;
     $scope.driver = {bookedRanges: []};
     $scope.prestineDriver = angular.copy($scope.driver);
@@ -90,7 +93,8 @@ angular.module('controllers', ['services']).controller('SharedController', funct
     }
 
     $scope.list();
-}).controller('TripController', function ($scope, TripService, DriverService, VehicleService, FormSubmissionUtilService, $log, RESULT_SIZE) {
+}).controller('TripController', function ($rootScope, $scope, TripService, DriverService, VehicleService, FormSubmissionUtilService, $log, RESULT_SIZE) {
+    $rootScope.addUrl = 'trip-add';
     $scope.trip = {price: {currency: {}}};
     $scope.prestineTrip = angular.copy($scope.trip);
     $scope.new = true;
@@ -180,13 +184,14 @@ angular.module('controllers', ['services']).controller('SharedController', funct
     };
 
     $scope.list();
-}).controller('ReviewController', function ($scope, $log, ReviewService, FormSubmissionUtilService, RESULT_SIZE) {
+}).controller('ReviewController', function ($scope, $log, $rootScope, ReviewService, FormSubmissionUtilService, RESULT_SIZE) {
 
     $scope.review = {};
     $scope.prestineReview = angular.copy($scope.review);
     $scope.new = true;
     $scope.skip = 0;
     $scope.limit = RESULT_SIZE;
+    $rootScope.addUrl = 'review-add';
 
     $scope.canSave = function () {
         return FormSubmissionUtilService.canSave($scope.addForm);
@@ -223,7 +228,9 @@ angular.module('controllers', ['services']).controller('SharedController', funct
     };
 
     $scope.list();
-}).controller('CompanyController', function ($scope, $log, CompanyService, FormSubmissionUtilService, RESULT_SIZE) {
+}).controller('CompanyController', function ($scope, $log, CompanyService, FormSubmissionUtilService, RESULT_SIZE,
+                                             $rootScope) {
+    $rootScope.addUrl = 'company-add';
 
     $scope.company = {};
     $scope.prestineCompany = angular.copy($scope.company);
@@ -267,9 +274,13 @@ angular.module('controllers', ['services']).controller('SharedController', funct
     };
 
     $scope.list();
-}).controller('UserController', function ($scope, $log, UserService, FormSubmissionUtilService, CompanyService, RESULT_SIZE) {
+}).controller('UserController', function ($scope, $log, UserService, CountryService, FormSubmissionUtilService,
+                                          CompanyService, RESULT_SIZE, $rootScope) {
+    $rootScope.addUrl = 'user-add';
+
     $scope.range = {};
     $scope.range.skip = 0;
+    $scope.countries = CountryService.countries();
     $scope.range.limit = RESULT_SIZE;
     $scope.user = {};
     $scope.formHolder = {};
@@ -338,12 +349,13 @@ angular.module('controllers', ['services']).controller('SharedController', funct
     }
 
     $scope.list();
-}).controller('VehicleController', function ($scope, $log, FormSubmissionUtilService, VehicleService, RESULT_SIZE) {
+}).controller('VehicleController', function ($scope, $log, FormSubmissionUtilService, VehicleService, RESULT_SIZE, $rootScope) {
     $scope.skip = 0;
     $scope.vehicleTypes = ['Bakkie', 'Bus', 'Hatch Back', 'Lorry', 'Mini Bus', 'Sedan', 'Station Wagon', 'SUV', 'Truck', 'Van'];
     $scope.limit = RESULT_SIZE;
     $scope.vehicle = {};
     $scope.prestineVehicle = angular.copy($scope.vehicle);
+    $rootScope.addUrl = 'vehicle-add';
 
     $scope.list = function () {
         var params = {skip: $scope.skip, limit: $scope.limit};
@@ -352,7 +364,6 @@ angular.module('controllers', ['services']).controller('SharedController', funct
     };
 
     $scope.canSave = function () {
-
         $log.debug('Checking The Validity Of the Vehicle add Form');
         return FormSubmissionUtilService.canSave($scope.addForm);
     };
@@ -391,7 +402,9 @@ angular.module('controllers', ['services']).controller('SharedController', funct
     }
 
     $scope.list();
-}).controller('AgentController', function ($scope, AgentService, FormSubmissionUtilService, RESULT_SIZE, $log) {
+}).controller('AgentController', function ($scope, AgentService, FormSubmissionUtilService, RESULT_SIZE,
+                                           $log, $rootScope) {
+    $rootScope.addUrl = 'agent-add';
 
     $scope.agent = {};
     $scope.pristineAgent = angular.copy($scope.agent);
@@ -420,5 +433,75 @@ angular.module('controllers', ['services']).controller('SharedController', funct
 
     $scope.list();
 
+}).config(function ($routeProvider) {
+    $routeProvider.when('/user-add', {
+        controller: 'UserController',
+        controllerAs: 'controller',
+        templateUrl: 'resources/template/user-add.html'
+
+    });
+
+    $routeProvider.when('/user', {
+        controller: 'UserController',
+        templateUrl: 'resources/template/user.html'
+    });
+
+    $routeProvider.when('/agent', {
+        controller: 'AgentController',
+        templateUrl: 'resources/template/agent.html'
+    });
+
+    $routeProvider.when('/agent-add', {
+        controller: 'AgentController',
+        templateUrl: 'resources/template/agent-add.html'
+    });
+
+    $routeProvider.when('/company', {
+        controller: 'CompanyController',
+        templateUrl: 'resources/template/company.html'
+    });
+    $routeProvider.when('/company-add', {
+        controller: 'CompanyController',
+        templateUrl: 'resources/template/company-add.html'
+    });
+
+    $routeProvider.when('/review', {
+        controller: 'ReviewController',
+        templateUrl: 'resources/template/review.html'
+    });
+
+    $routeProvider.when('/review-add', {
+        controller: 'ReviewController',
+        templateUrl: 'resources/template/review-add.html'
+    });
+
+    $routeProvider.when('/vehicle', {
+        controller: 'VehicleController',
+        templateUrl: 'resources/template/vehicle.html'
+    });
+
+    $routeProvider.when('/vehicle-add', {
+        controller: 'VehicleController',
+        templateUrl: 'resources/template/vehicle-add.html'
+    });
+
+    $routeProvider.when('/driver', {
+        controller: 'DriverController',
+        templateUrl: 'resources/template/driver.html'
+    });
+    $routeProvider.when('/driver-add', {
+        controller: 'DriverController',
+        templateUrl: 'resources/template/driver-add.html'
+    });
+    $routeProvider.when('/trip', {
+        controller: 'TripController',
+        templateUrl: 'resources/template/trip.html'
+    });
+    $routeProvider.when('/trip-add',
+        {
+            controller: 'TripController',
+            templateUrl: 'resources/template/trip-add.html'
+        }
+    );
 }).constant('RESULT_SIZE', 100);
 

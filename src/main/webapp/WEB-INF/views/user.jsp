@@ -1,5 +1,4 @@
 <div ng-controller="UserController">
-    <ng-include src="'resources/template/userAdd.jsp'"></ng-include>
     <table class="table table-striped table-hover">
         <thead>
         <tr>

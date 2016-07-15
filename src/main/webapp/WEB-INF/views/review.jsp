@@ -9,25 +9,23 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <form class="form-horizontal well" name="addForm">
-                        <div class="form-group">
-                            <label class="control-label">Reviewed</label>
-                            <input class="form-control" name="id" type="text" placeholder="Reviewed" ng-minlength="1"
-                                   ng-model="review.id" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Review Text</label>
-                            <textarea class="form-control" name="text" placeholder="Review Text" ng-minlength="5"
-                                      ng-model="review.text" required>
+                    <form name="addForm">
+                        <md-input-container>
+                            <label>Reviewee</label>
+                            <input name="id" type="text" ng-minlength="1" ng-model="review.id" required>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Review Text</label>
+                            <textarea name="text" ng-minlength="5" ng-model="review.text" required>
                             </textarea>
-                        </div>
+                        </md-input-container>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="reset" class="btn btn-default" ng-click="reset();">Reset</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" ng-disabled="!canSave()" ng-click="saveClick()">Save
-                    </button>
+                    <md-button type="reset" ng-click="reset();">Reset</md-button>
+                    <md-button type="button" data-dismiss="modal">Close</md-button>
+                    <md-button type="button" ng-disabled="!canSave()" ng-click="saveClick()">Save
+                    </md-button>
                 </div>
             </div>
         </div>

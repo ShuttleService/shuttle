@@ -9,54 +9,49 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <form class="form-horizontal well col-xs-12" name="addForm">
-                        <div class="form-group col-xs-6">
-                            <label class="control-label">Company Full Name</label>
-                            <input type="text" class="form-control" ng-minlength="2" name="fullName"
-                                   placeholder="Company Full Name" ng-model="company.fullName" required>
-                        </div>
-                        <div class="form-group col-xs-6">
-                            <label class="control-label">Trading As</label>
-                            <input type="text" class="form-control" ng-minlength="2" name="tradingAs"
-                                   placeholder="Trading As" ng-model="company.tradingAs" required>
-                        </div>
-                        <div class="form-group col-xs-6">
-                            <label class="control-label">Slug</label>
-                            <input type="text" class="form-control" ng-minlength="1" name="slug" placeholder="Slug"
-                                   ng-model="company.slug" required>
-                        </div>
-                        <div class="form-group col-xs-6">
-                            <label class="control-label">Registration Number</label>
-                            <input type="text" class="form-control" ng-minlength="1" name="registrationNumber"
-                                   placeholder="Registration Number" ng-model="company.registrationNumber" required>
-                        </div>
-                        <div class="form-group col-xs-6">
-                            <label class="control-label">VAT Number</label>
-                            <input type="text" class="form-control" ng-minlength="1" name="vatNumber"
-                                   placeholder="VAT Number" ng-model="company.vatNumber" required>
-                        </div>
-                        <div class="form-group col-xs-6">
-                            <label class="control-label">Logo</label>
-                            <input type="text" class="form-control" name="logo" placeholder="Logo"
-                                   ng-model="company.logo">
-                        </div>
-                        <div class="form-group col-xs-6">
-                            <label class="control-label" for="agent">Agent</label>
-                            <select class="form-control" name="agent" id="agent" ng-model="agent"
+                    <form name="addForm">
+                        <md-input-container>
+                            <label>Company Full Name</label>
+                            <input type="text" ng-minlength="2" name="fullName" ng-model="company.fullName" required>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Trading As</label>
+                            <input type="text" ng-minlength="2" name="tradingAs" ng-model="company.tradingAs" required>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Slug</label>
+                            <input type="text" ng-minlength="1" name="slug" ng-model="company.slug" required>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Registration Number</label>
+                            <input type="text" ng-minlength="1" name="registrationNumber" ng-model="company.registrationNumber" required>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>VAT Number</label>
+                            <input type="text" ng-minlength="1" name="vatNumber" ng-model="company.vatNumber" required>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Logo</label>
+                            <input type="text" name="logo" ng-model="company.logo">
+                        </md-input-container>
+                        <md-input-container>
+                            <label for="agent">Agent</label>
+                            <select name="agent" id="agent" ng-model="agent"
                                     ng-options="agent.fullName for agent in sharedState.agentPage.content"></select>
-                        </div>
-                        <div class="form-group col-xs-12">
-                            <label class="control-label">Description</label>
-                            <textarea class="col-xs-12" ng-minlength="2" name="description"
-                                      ng-model="company.description" placeholder="Description" required></textarea>
-                        </div>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Description</label>
+                            <textarea ng-minlength="2" name="description"
+                                      ng-model="company.description" required></textarea>
+                        </md-input-container>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="reset" class="btn btn-default" ng-click="reset()">Reset</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" ng-disabled="!canSave()" ng-click="saveClick()">Save
-                    </button>
+                    <md-button type="reset" class="btn btn-default" ng-click="reset()">Reset</md-button>
+                    <md-button type="button" class="btn btn-default" data-dismiss="modal">Close</md-button>
+                    <md-button type="button" class="btn btn-primary" ng-disabled="!canSave()" ng-click="saveClick()">
+                        Save
+                    </md-button>
                 </div>
             </div>
         </div>

@@ -1,5 +1,3 @@
-<%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <div class="container" ng-controller="AgentController">
     <div class="modal fade" id="add">
         <div class="modal-dialog">
@@ -9,49 +7,45 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <form class="form-horizontal well col-xs-12" name="addForm">
-                        <div class="form-group col-xs-6">
-                            <label class="control-label">Agent Full Name</label>
-                            <input type="text" class="form-control" ng-minlength="2" name="fullName"
-                                   placeholder="Agent Full Name" ng-model="agent.fullName" required>
-                        </div>
-                        <div class="form-group col-xs-6">
-                            <label class="control-label">Trading As</label>
-                            <input type="text" class="form-control" ng-minlength="2" name="tradingAs"
-                                   placeholder="Trading As" ng-model="agent.tradingAs" required>
-                        </div>
-                        <div class="form-group col-xs-6">
-                            <label class="control-label">Slug</label>
-                            <input type="text" class="form-control" ng-minlength="1" name="slug" placeholder="Slug"
-                                   ng-model="agent.slug" required>
-                        </div>
-                        <div class="form-group col-xs-6">
-                            <label class="control-label">Registration Number</label>
-                            <input type="text" class="form-control" ng-minlength="1" name="registrationNumber"
-                                   placeholder="Registration Number" ng-model="agent.registrationNumber" required>
-                        </div>
-                        <div class="form-group col-xs-6">
-                            <label class="control-label">VAT Number</label>
+                    <form name="addForm">
+                        <md-input-container>
+                            <label>Agent Full Name</label>
+                            <input type="text" ng-minlength="2" name="fullName" ng-model="agent.fullName" required>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Trading As</label>
+                            <input type="text" ng-minlength="2" name="tradingAs" ng-model="agent.tradingAs" required>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Slug</label>
+                            <input type="text" ng-minlength="1" name="slug" ng-model="agent.slug" required>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Registration Number</label>
+                            <input type="text" ng-minlength="1" name="registrationNumber"
+                                   ng-model="agent.registrationNumber" required>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>VAT Number</label>
                             <input type="text" class="form-control" ng-minlength="1" name="vatNumber"
-                                   placeholder="VAT Number" ng-model="agent.vatNumber" required>
-                        </div>
-                        <div class="form-group col-xs-6">
-                            <label class="control-label">Logo</label>
-                            <input type="text" class="form-control" name="logo" placeholder="Logo"
-                                   ng-model="agent.logo">
-                        </div>
-                        <div class="form-group col-xs-12">
-                            <label class="control-label">Description</label>
-                            <textarea class="col-xs-12" ng-minlength="2" data-ng-model="agent.description"
-                                      placeholder="Description" required></textarea>
-                        </div>
+                                   ng-model="agent.vatNumber" required>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Logo</label>
+                            <input type="text" name="logo" ng-model="agent.logo">
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Description</label>
+                            <textarea ng-minlength="2" ng-model="agent.description" required></textarea>
+                        </md-input-container>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="reset" class="btn btn-default" ng-click="reset()">Reset</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" ng-disabled="!canSave()" ng-click="saveClick()">Save
-                    </button>
+                    <md-button type="reset" ng-click="reset()">Reset</md-button>
+                    <md-button type="button" data-dismiss="modal">Close</md-button>
+                    <md-button type="button" ng-disabled="!canSave()" ng-click="saveClick()">
+                        Save
+                    </md-button>
                 </div>
             </div>
         </div>
