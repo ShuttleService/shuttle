@@ -1,4 +1,4 @@
-<div layout="column">
+<div layout="column" ng-controller="UserController">
     <p class="md-title">New User Sign Up Form</p>
     <form name="formHolder.addForm" layout="column" layout-padding class="md-inline-form">
         <input type="hidden" name="userName" ng-minlength="6" ng-model="user.email" required readonly>
@@ -34,7 +34,7 @@
             </md-input-container>
         </div>
         <div layout-padding layout-gt-sm="row" flex>
-            <security:authorize access="hasAnyRole('ROLE_admin')" flex>
+            <security:authorize access="hasAnyRole('ROLE_admin')">
                 <md-input-container flex>
                     <label>Role</label>
                     <md-select name="authorities" ng-model="user.authority" required>
@@ -85,7 +85,6 @@
                     <md-option ng-value="country.code" ng-repeat="country in countries">{{country.name}}
                     </md-option>
                 </md-select>
-                </md-content>
             </md-input-container>
         </div>
     </form>
@@ -95,5 +94,4 @@
         <md-button type="button" ng-disabled="false" ng-click="saveClick()">Save
         </md-button>
     </div>
-</div>
 </div>

@@ -277,7 +277,10 @@ angular.module('controllers', ['services', 'ngMaterial', 'ngRoute']).controller(
 }).controller('UserController', function ($scope, $log, UserService, CountryService, FormSubmissionUtilService,
                                           CompanyService, RESULT_SIZE, $rootScope) {
     $rootScope.addUrl = 'user-add';
-
+    $scope.toggleRegister = function(){
+        $scope.register = true;
+        $log.debug('registering. Set register to $scope.register');
+    };
     $scope.range = {};
     $scope.range.skip = 0;
     $scope.countries = CountryService.countries();
