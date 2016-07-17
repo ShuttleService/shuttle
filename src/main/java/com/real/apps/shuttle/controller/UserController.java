@@ -36,6 +36,11 @@ public class UserController {
 
     public static final String VIEW_NAME = "user";
 
+    @RequestMapping("/add")
+    public String userAdd() {
+        return "user-add";
+    }
+
     @RequestMapping(method = RequestMethod.GET)
     public String render() {
         return VIEW_NAME;
@@ -173,5 +178,6 @@ public class UserController {
         domainService.changePassword(changePasswordCommand.getUsername(), changePasswordCommand.getCurrentPassword(), changePasswordCommand.getNewPassword());
         return changePasswordCommand;
     }
+
 
 }

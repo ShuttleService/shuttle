@@ -5,6 +5,14 @@
         <put-attribute name="body" value="" />
         <put-attribute name="title" value="Shuttle Service. Software As A Service."/>
     </definition>
+    <definition name="user-add" extends="home">
+        <put-attribute name="title" value="Signing up a new user"/>
+        <put-attribute name="body" value="/WEB-INF/views/user-add.jsp"/>
+    </definition>
+    <definition name="signup" extends="home">
+        <put-attribute name="title" value="Signing up a new user"/>
+        <put-attribute name="body" value="/WEB-INF/views/user-add.jsp"/>
+    </definition>
     <definition name="driver" extends="home">
         <put-attribute name="body" value="/WEB-INF/views/driver.jsp"/>
         <put-attribute name="title" value="Drivers"/>

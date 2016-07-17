@@ -142,7 +142,7 @@
 <md-toolbar class="md-toolbar-tools">
 </md-toolbar>
 </body>
-<head class="page-header">
+<head>
     <link href="resources/style.css" type="text/css" rel="stylesheet">
     <script src="resources/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="resources/bower_components/bootstrap/dist/js/bootstrap.js"></script>
