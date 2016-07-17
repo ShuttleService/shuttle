@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
  */
 @ContextConfiguration(classes = [MvcConfiguration])
 @WebAppConfiguration
-class UserControllerSpec extends spock.lang.Specification {
+class SignupControllerSpec extends spock.lang.Specification {
 
     @Autowired
     private WebApplicationContext applicationContext;
@@ -31,10 +31,10 @@ class UserControllerSpec extends spock.lang.Specification {
         applicationContext
     }
 
-    def 'visiting /user-add should show user-add.html'() {
+    def 'visiting /signup should show signup.jsp'() {
         expect:
-        mockMvc.perform(get('/user/add')).andDo(print()).
+        mockMvc.perform(get('/signup')).andDo(print()).
                 andExpect(status().isOk()).
-                andExpect(view().name('user-add'))
+                andExpect(view().name('signup'))
     }
 }

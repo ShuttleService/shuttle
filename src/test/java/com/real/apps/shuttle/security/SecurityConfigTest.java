@@ -254,4 +254,5 @@ public class SecurityConfigTest {
     public void allShouldAccessReviewPage() throws Exception {
         mockMvc.perform(get("/review")).andExpect(status().isOk());
     }
+
 }

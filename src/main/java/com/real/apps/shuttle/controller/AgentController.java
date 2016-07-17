@@ -16,39 +16,47 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.real.apps.shuttle.miscellaneous.Role.*;
+
 /**
  * Created by zorodzayi on 14/12/17.
  */
 @Controller
-@RequestMapping(AgentController.VIEW_NAME)
+@RequestMapping
 public class AgentController {
     public static final String VIEW_NAME = "agent";
     @Autowired
     private AgentService service;
     private Logger logger = LoggerFactory.getLogger(AgentController.class);
-    @RequestMapping
-    public String render(){
-        return  VIEW_NAME;
+
+    @RequestMapping("/agent-add")
+    public String renderAdd() {
+        return "agent-add";
     }
-    @RequestMapping(value = "/{skip}/{limit}")
+
+    @RequestMapping("/"+VIEW_NAME)
+    public String render() {
+        return VIEW_NAME;
+    }
+
+    @RequestMapping(value = "/"+VIEW_NAME+"/{skip}/{limit}")
     @ResponseBody
-    public Page<Agent> page(@PathVariable("skip") int skip,@PathVariable("limit") int limit,@AuthenticationPrincipal User user){
-        logger.debug(String.format("Finding Agents {skip:%d,limit:%d,authenticatedUser:%s}",skip,limit,user));
+    public Page<Agent> page(@PathVariable("skip") int skip, @PathVariable("limit") int limit, @AuthenticationPrincipal User user) {
+        logger.debug(String.format("Finding Agents {skip:%d,limit:%d,authenticatedUser:%s}", skip, limit, user));
         Page<Agent> emptyPage = new PageImpl<>(new ArrayList<Agent>());
-        if(user == null){
+        if (user == null) {
             logger.debug(String.format("There Is No Authenticated User. Will Return Empty Page"));
             return emptyPage;
         }
 
         String role = user.getAuthorities() != null && user.getAuthorities().iterator().hasNext() ?
-        user.getAuthorities().iterator().next().getAuthority() : "";
+                user.getAuthorities().iterator().next().getAuthority() : "";
 
-        if(ADMIN.equals(role)){
-            return service.page(skip,limit);
-        }else if(AGENT.equals(role) && user.getAgentId() != null ){
+        if (ADMIN.equals(role)) {
+            return service.page(skip, limit);
+        } else if (AGENT.equals(role) && user.getAgentId() != null) {
             Agent agent = service.findOne(user.getAgentId());
             List<Agent> agents = new ArrayList<>();
-            if(agent != null ){
+            if (agent != null) {
                 agents.add(agent);
             }
             return new PageImpl<>(agents);
@@ -56,20 +64,20 @@ public class AgentController {
         return emptyPage;
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST,value = "/"+VIEW_NAME)
     @ResponseBody
-    public Agent post(@RequestBody Agent agent,@AuthenticationPrincipal User user){
-        logger.debug(String.format("Posting agent %s {user:%s}",agent,user));
-        if(user == null){
+    public Agent post(@RequestBody Agent agent, @AuthenticationPrincipal User user) {
+        logger.debug(String.format("Posting agent %s {user:%s}", agent, user));
+        if (user == null) {
             logger.debug("There is no user logged in. Returning without saving the agent");
-        }else{
+        } else {
             String role = user.getAuthorities() != null && !user.getAuthorities().isEmpty() ? user.getAuthorities().iterator().next().getAuthority() : "";
-            switch (role){
-                case  ADMIN:{
+            switch (role) {
+                case ADMIN: {
                     logger.debug(String.format("An Admin Is Logged In. Inserting The Agent"));
                     return service.insert(agent);
                 }
-                case AGENT:{
+                case AGENT: {
                     logger.debug(String.format("An Agent Is Logged In. Not Inserting The Agent. An Agent Cannot Create Another Agent"));
                     return agent;
                 }

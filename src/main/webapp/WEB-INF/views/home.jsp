@@ -7,25 +7,25 @@
 <body layout="column">
 <md-toolbar class="md-toolbar-tools" layout layout-align="center center">
     <security:authorize access="hasAnyRole('ROLE_admin','ROLE_companyUser','ROLE_world')">
-        <md-button href='#/trip'>Trips</md-button>
+        <md-button href='/trip'>Trips</md-button>
     </security:authorize>
     <security:authorize access="hasAnyRole('ROLE_admin','ROLE_companyUser')">
-        <md-button href='#/driver'>Drivers</md-button>
+        <md-button href='/driver'>Drivers</md-button>
     </security:authorize>
     <security:authorize access="hasAnyRole('ROLE_admin','ROLE_companyUser')">
-        <md-button href='#/vehicle'>Vehicles</md-button>
+        <md-button href='/vehicle'>Vehicles</md-button>
     </security:authorize>
     <security:authorize access="hasAnyRole('ROLE_admin','ROLE_companyUser')">
-        <md-button href='#/user'>Users</md-button>
+        <md-button href='/user'>Users</md-button>
     </security:authorize>
 
-    <md-button href='#/review'>Reviews</md-button>
+    <md-button href='/review'>Reviews</md-button>
 
     <security:authorize access="hasAnyRole('ROLE_admin','ROLE_agent')">
         <md-menu>
             <md-button ng-click="$mdOpenMenu($event)">Agent</md-button>
             <md-menu-content>
-                <md-button href='#/company'>Companies</md-button>
+                <md-button href='/company'>Companies</md-button>
             </md-menu-content>
         </md-menu>
     </security:authorize>
@@ -33,14 +33,14 @@
         <md-menu>
             <md-button ng-click="$mdOpenMenu($event)">Admin</md-button>
             <md-menu-content>
-                <md-button href='#/agent'>Agents</md-button>
-                <md-button href='#/company'>Companies</md-button>
+                <md-button href='/agent'>Agents</md-button>
+                <md-button href='/company'>Companies</md-button>
             </md-menu-content>
         </md-menu>
     </security:authorize>
     <md-button href="<spring:url value="logout"/>">Logout</md-button>
 
-    <md-button href="{{'#/'+addUrl}}">
+    <md-button href="{{'/'+addUrl}}">
         <md-icon>add</md-icon>
     </md-button>
 

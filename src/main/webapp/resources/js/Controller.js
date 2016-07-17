@@ -4,8 +4,9 @@
 
 angular.module('controllers', ['services', 'ngMaterial', 'ngRoute']).controller('SharedController',
     function ($rootScope, $scope, $log, AgentService, CompanyService, DriverService, UserService, VehicleService,
-              RESULT_SIZE) {
+              RESULT_SIZE, CONTEXT_ROOT) {
         $rootScope.sharedState = {};
+        $scope.contextRoot = CONTEXT_ROOT;
         var params = {skip: 0, limit: RESULT_SIZE};
 
         $scope.findCompanies = function () {
@@ -76,7 +77,7 @@ angular.module('controllers', ['services', 'ngMaterial', 'ngRoute']).controller(
     };
 
     $scope.reset = function () {
-        $log.debug("Reverting The Driver To It's Prestine State");
+        $log.debug("Reverting The Driver To It's Pristine State");
         $scope.driver = angular.copy($scope.prestineDriver);
     };
 
@@ -277,10 +278,6 @@ angular.module('controllers', ['services', 'ngMaterial', 'ngRoute']).controller(
 }).controller('UserController', function ($scope, $log, UserService, CountryService, FormSubmissionUtilService,
                                           CompanyService, RESULT_SIZE, $rootScope) {
     $rootScope.addUrl = 'user-add';
-    $scope.toggleRegister = function(){
-        $scope.register = true;
-        $log.debug('registering. Set register to $scope.register');
-    };
     $scope.range = {};
     $scope.range.skip = 0;
     $scope.countries = CountryService.countries();
@@ -386,7 +383,7 @@ angular.module('controllers', ['services', 'ngMaterial', 'ngRoute']).controller(
     };
 
     $scope.reset = function () {
-        $log.debug('Reverting The Vehicle To It\'s Prestine State');
+        $log.debug('Reverting The Vehicle To It\'s Pristine State');
         $scope.vehicle = angular.copy($scope.prestineVehicle);
     };
 
@@ -436,75 +433,5 @@ angular.module('controllers', ['services', 'ngMaterial', 'ngRoute']).controller(
 
     $scope.list();
 
-}).config(function ($routeProvider) {
-    $routeProvider.when('/user-add', {
-        controller: 'UserController',
-        controllerAs: 'controller',
-        templateUrl: 'resources/template/user-add.html'
-
-    });
-
-    $routeProvider.when('/user', {
-        controller: 'UserController',
-        templateUrl: 'resources/template/user.html'
-    });
-
-    $routeProvider.when('/agent', {
-        controller: 'AgentController',
-        templateUrl: 'resources/template/agent.html'
-    });
-
-    $routeProvider.when('/agent-add', {
-        controller: 'AgentController',
-        templateUrl: 'resources/template/agent-add.html'
-    });
-
-    $routeProvider.when('/company', {
-        controller: 'CompanyController',
-        templateUrl: 'resources/template/company.html'
-    });
-    $routeProvider.when('/company-add', {
-        controller: 'CompanyController',
-        templateUrl: 'resources/template/company-add.html'
-    });
-
-    $routeProvider.when('/review', {
-        controller: 'ReviewController',
-        templateUrl: 'resources/template/review.html'
-    });
-
-    $routeProvider.when('/review-add', {
-        controller: 'ReviewController',
-        templateUrl: 'resources/template/review-add.html'
-    });
-
-    $routeProvider.when('/vehicle', {
-        controller: 'VehicleController',
-        templateUrl: 'resources/template/vehicle.html'
-    });
-
-    $routeProvider.when('/vehicle-add', {
-        controller: 'VehicleController',
-        templateUrl: 'resources/template/vehicle-add.html'
-    });
-
-    $routeProvider.when('/driver', {
-        controller: 'DriverController',
-        templateUrl: 'resources/template/driver.html'
-    });
-    $routeProvider.when('/driver-add', {
-        controller: 'DriverController',
-        templateUrl: 'resources/template/driver-add.html'
-    });
-    $routeProvider.when('/trip', {
-        controller: 'TripController',
-        templateUrl: 'resources/template/trip.html'
-    });
-    $routeProvider.when('/trip-add',
-        {
-            controller: 'TripController',
-            templateUrl: 'resources/template/trip-add.html'
-        }
-    );
 }).constant('RESULT_SIZE', 100);
 

@@ -1,17 +1,18 @@
 <?xml version="1.0"?>
-<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 <tiles-definitions>
     <definition name="home" template="/WEB-INF/views/home.jsp">
-        <put-attribute name="body" value="" />
+        <put-attribute name="body" value=""/>
         <put-attribute name="title" value="Shuttle Service. Software As A Service."/>
     </definition>
-    <definition name="user-add" extends="home">
-        <put-attribute name="title" value="Signing up a new user"/>
-        <put-attribute name="body" value="/WEB-INF/views/user-add.jsp"/>
+    <definition name="agent-add" extends="home">
+        <put-attribute name="title" value="Adding a new agent"></put-attribute>
+        <put-attribute name="body" value="/WEB-INF/views/agent-add.jsp"></put-attribute>
     </definition>
     <definition name="signup" extends="home">
         <put-attribute name="title" value="Signing up a new user"/>
-        <put-attribute name="body" value="/WEB-INF/views/user-add.jsp"/>
+        <put-attribute name="body" value="/WEB-INF/views/signup.jsp"/>
     </definition>
     <definition name="driver" extends="home">
         <put-attribute name="body" value="/WEB-INF/views/driver.jsp"/>
@@ -22,7 +23,7 @@
         <put-attribute name="title" value="Trips"/>
     </definition>
     <definition name="admin" extends="home">
-        <put-attribute name="body" value="/WEB-INF/views/admin.jsp" />
+        <put-attribute name="body" value="/WEB-INF/views/admin.jsp"/>
         <put-attribute name="title" value="Administration"/>
     </definition>
     <definition name="vehicle" extends="home">
