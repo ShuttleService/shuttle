@@ -1,5 +1,5 @@
 <div ng-controller="UserController">
-    <table class="table table-striped table-hover">
+    <table>
         <thead>
         <tr>
             <th>Reference</th>

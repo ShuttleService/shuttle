@@ -42,7 +42,7 @@
             </md-input-container>
         </div>
     </form>
-    <div flex layout="row" layout-align="center right" layout-padding>
+    <div layout="row" layout-align="center right" layout-padding>
         <md-button type="reset" ng-click="reset()">Reset</md-button>
         <md-button type="button" ng-disabled="!canSave()" ng-click="saveClick();">
             Save

@@ -1,6 +1,5 @@
 <div flex layout="column" ng-controller="AgentController">
     <div flex>
-        <p class="md-title">Adding An Agent</p>
         <form name="addForm">
             <div flex layout-gt-sm="row">
                 <md-input-container flex>

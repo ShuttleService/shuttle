@@ -1,6 +1,4 @@
 <div flex layout-padding layout="column" ng-controller="DriverController">
-    <p class="md-title">Adding A Driver</p>
-
     <form name="addForm" layout="column" layout-padding>
         <div layout-padding layout-align-gt-sm="row" flex>
             <md-input-container flex>

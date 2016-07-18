@@ -1,5 +1,4 @@
 <div flex layout="column" layout-padding ng-controller="CompanyController">
-    <p class="md-title">Adding A Company</p>
     <form name="addForm" flex>
         <div flex layout-gt-sm="row">
             <md-input-container flex>
@@ -34,7 +33,8 @@
             <md-input-container flex>
                 <label>Agent</label>
                 <md-select name="agent" id="agent" ng-model="agent">
-                    <md-option ng-value="agent.fullName" ng-repeat="agent in sharedState.agentPage.content">{{agent.fullName}}
+                    <md-option ng-value="agent.fullName" ng-repeat="agent in sharedState.agentPage.content">
+                        {{agent.fullName}}
                     </md-option>
                 </md-select>
             </md-input-container>
