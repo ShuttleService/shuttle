@@ -29,7 +29,6 @@ import static com.real.apps.shuttle.miscellaneous.Role.*;
  * Created by zorodzayi on 14/10/09.
  */
 @Controller
-@RequestMapping(value = VehicleController.VIEW_PAGE)
 public class VehicleController {
 
     public static final String VIEW_PAGE = "vehicle";
@@ -39,12 +38,17 @@ public class VehicleController {
     VehicleDomainService domainService;
     private Logger logger = Logger.getLogger(VehicleController.class);
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping("/" + VIEW_PAGE)
     public String render() {
         return VIEW_PAGE;
     }
 
-    @RequestMapping(value = "/{skip}/{limit}")
+    @RequestMapping("/vehicle-add")
+    public String renderAdd() {
+        return "vehicle-add";
+    }
+
+    @RequestMapping(value = "/" + VIEW_PAGE + "/{skip}/{limit}")
     @ResponseBody
     public Page<Vehicle> page(@PathVariable("skip") int skip, @PathVariable("limit") int limit, @AuthenticationPrincipal User user) {
         logger.debug(String.format("Receiving a list request for {skip:%d,limit:%d, user:%s}", skip, limit, user));
@@ -80,12 +84,12 @@ public class VehicleController {
         return emptyPage;
     }
 
-    @RequestMapping(value = "/bookable/{companyId}/{from}/{to}/{skip}/{limit}")
+    @RequestMapping(value = "/" + VIEW_PAGE + "/bookable/{companyId}/{from}/{to}/{skip}/{limit}")
     @ResponseBody
     public Set<Vehicle> bookable(@PathVariable("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date from, @PathVariable("to")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date to,@PathVariable("companyId") ObjectId companyId,@PathVariable("skip") int skip, @PathVariable("limit") int limit,
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date to, @PathVariable("companyId") ObjectId companyId, @PathVariable("skip") int skip, @PathVariable("limit") int limit,
                                  @AuthenticationPrincipal User user) {
-        BookedRange bookedRange = new BookedRange(from,to);
+        BookedRange bookedRange = new BookedRange(from, to);
         logger.debug(String.format("Finding Bookable Vehicles {BookedRange:%s,skip:%d,limit:%d,CompanyId:%s\nuser:%s}", bookedRange, skip, limit,
                 companyId, user));
         if (user == null) {
@@ -97,34 +101,34 @@ public class VehicleController {
         switch (role) {
 
             case COMPANY_USER: {
-                logger.debug(String.format("Finding Bookable Vehicles for Company:%s, Logged In As Company User",user.getCompanyName()));
-                return domainService.bookable(user.getCompanyId(),pageable, bookedRange);
+                logger.debug(String.format("Finding Bookable Vehicles for Company:%s, Logged In As Company User", user.getCompanyName()));
+                return domainService.bookable(user.getCompanyId(), pageable, bookedRange);
             }
             case ADMIN:
-            case WORLD:{
-                logger.debug(String.format("Finding Bookable Vehicles For CompanyId:%s. Logged In As World",companyId));
-                return domainService.bookable(companyId,pageable,bookedRange);
+            case WORLD: {
+                logger.debug(String.format("Finding Bookable Vehicles For CompanyId:%s. Logged In As World", companyId));
+                return domainService.bookable(companyId, pageable, bookedRange);
             }
         }
         return new HashSet<>();
     }
 
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST, value = "/" + VIEW_PAGE)
     @ResponseBody
     public Vehicle post(@RequestBody Vehicle vehicle) {
         logger.debug("Posting The Vehicle  " + vehicle);
         return service.insert(vehicle);
     }
 
-    @RequestMapping(method = RequestMethod.PUT)
+    @RequestMapping(method = RequestMethod.PUT, value = "/" + VIEW_PAGE)
     @ResponseBody
     public Vehicle put(@RequestBody Vehicle vehicle) {
         logger.debug("Putting The Vehicle  " + vehicle);
         return service.update(vehicle);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/one/{id}")
+    @RequestMapping(method = RequestMethod.GET, value = "/" + VIEW_PAGE + "/one/{id}")
     @ResponseBody
     public Vehicle getOne(@PathVariable("id") ObjectId id) {
         logger.debug(String.format("Getting One With {id:%s}", id));

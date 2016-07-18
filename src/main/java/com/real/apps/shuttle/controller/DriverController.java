@@ -18,7 +18,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -30,7 +29,6 @@ import static com.real.apps.shuttle.miscellaneous.Role.*;
  * Created by zorodzayi on 14/10/05.
  */
 @Controller
-@RequestMapping(value = DriverController.VIEW_NAME)
 public class DriverController {
     @Autowired
     private DriverService service;
@@ -39,13 +37,18 @@ public class DriverController {
     public static final String VIEW_NAME = "driver";
     private Logger logger = Logger.getLogger(DriverController.class);
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET, value = "/" + VIEW_NAME)
     public String render() {
         logger.debug("Showing Driver Controller");
         return VIEW_NAME;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{skip}/{limit}")
+    @RequestMapping(method = RequestMethod.GET, value = "/driver-add")
+    public String renderAdd() {
+        return "driver-add";
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/" + VIEW_NAME + "/{skip}/{limit}")
     @ResponseBody
     public Page<Driver> list(@PathVariable("skip") int skip, @PathVariable("limit") int limit, @AuthenticationPrincipal User user) {
         logger.debug(String.format("Finding Drivers {skip:%d,limit:%d,user:%s}", skip, limit, user));
@@ -76,7 +79,7 @@ public class DriverController {
     }
 
     @ResponseBody
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST, value = "/" + VIEW_NAME)
     public Driver post(@RequestBody Driver driver, @AuthenticationPrincipal User user) {
         logger.debug(String.format("Posting. Prior To Inserting The Driver {Driver:%s,Logged In User:%s}", driver, user));
 
@@ -106,7 +109,7 @@ public class DriverController {
     }
 
     @ResponseBody
-    @RequestMapping(method = RequestMethod.DELETE)
+    @RequestMapping(method = RequestMethod.DELETE, value = "/" + VIEW_NAME)
     public Driver delete(@RequestBody Driver driver, @AuthenticationPrincipal User user) {
         logger.debug(String.format("Deleting Driver {Driver:%s,Logged In User:%s}", driver, user));
 
@@ -133,7 +136,7 @@ public class DriverController {
     }
 
     @ResponseBody
-    @RequestMapping(method = RequestMethod.PUT)
+    @RequestMapping(method = RequestMethod.PUT, value = "/" + VIEW_NAME)
     public Driver put(@RequestBody Driver driver, @AuthenticationPrincipal User user) {
         logger.debug(String.format("Putting The Driver. {Driver:%s,Logged In User:%s}", driver, user));
 
@@ -163,12 +166,12 @@ public class DriverController {
         return driver;
     }
 
-    @RequestMapping("/bookable/{companyId}/{from}/{to}/{skip}/{limit}")
+    @RequestMapping("/" + VIEW_NAME + "/bookable/{companyId}/{from}/{to}/{skip}/{limit}")
     @ResponseBody
     public Set<Driver> bookable(@PathVariable("companyId") final ObjectId companyId, @PathVariable("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date from,
                                 @PathVariable("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Date to, @PathVariable("skip") int skip,
                                 @PathVariable("limit") int limit, @AuthenticationPrincipal User user) {
-        final BookedRange bookedRange = new BookedRange(from,to);
+        final BookedRange bookedRange = new BookedRange(from, to);
 
         final Pageable pageable = new PageRequest(skip, limit);
         logger.debug(String.format("Finding Bookable Drivers {BookedRange:%s, LoggedInUser:%s, skip:%d,limit:%d}", bookedRange, user, skip, limit));
@@ -196,7 +199,7 @@ public class DriverController {
     }
 
     @ResponseBody
-    @RequestMapping(method = RequestMethod.GET, value = "/one/{id}")
+    @RequestMapping(method = RequestMethod.GET, value = "/" + VIEW_NAME + "/one/{id}")
     public Driver getOne(@PathVariable("id") ObjectId id) {
         logger.debug(String.format("Getting One With id %s", id));
         return service.findOne(id);

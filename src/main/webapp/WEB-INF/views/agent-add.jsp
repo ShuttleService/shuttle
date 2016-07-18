@@ -1,4 +1,4 @@
-<div flex layout="column">
+<div flex layout="column" ng-controller="AgentController">
     <div flex>
         <p class="md-title">Adding An Agent</p>
         <form name="addForm">

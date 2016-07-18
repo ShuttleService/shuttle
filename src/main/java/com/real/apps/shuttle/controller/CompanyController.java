@@ -1,7 +1,5 @@
 package com.real.apps.shuttle.controller;
 
-import static com.real.apps.shuttle.miscellaneous.Role.*;
-
 import com.real.apps.shuttle.domain.model.Company;
 import com.real.apps.shuttle.domain.model.User;
 import com.real.apps.shuttle.service.CompanyService;
@@ -18,23 +16,29 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static com.real.apps.shuttle.miscellaneous.Role.*;
+
 /**
  * Created by zorodzayi on 14/10/16.
  */
 @Controller
-@RequestMapping(value = CompanyController.VIEW_PAGE)
 public class CompanyController {
     @Autowired
     private CompanyService service;
     private Logger logger = Logger.getLogger(CompanyController.class);
     public static final String VIEW_PAGE = "company";
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET, value = "/company-add")
+    public String renderAdd() {
+        return "company-add";
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/" + VIEW_PAGE)
     public String render() {
         return VIEW_PAGE;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{skip}/{limit}")
+    @RequestMapping(method = RequestMethod.GET, value = VIEW_PAGE + "/{skip}/{limit}")
     @ResponseBody
     public Page<Company> page(@PathVariable("skip") int skip, @PathVariable("limit") int limit, @AuthenticationPrincipal User user) {
         logger.debug(String.format("Getting List With {skip:%d,limit:%d,user:%s}", skip, limit, user));
@@ -82,7 +86,7 @@ public class CompanyController {
     }
 
     @ResponseBody
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST, value = "/" + VIEW_PAGE)
     public Company post(@RequestBody Company company, @AuthenticationPrincipal User user) {
         logger.debug(String.format("Posting Company {company:%s,Logged In User:%s}", company, user));
         if (user == null) {
@@ -111,14 +115,14 @@ public class CompanyController {
     }
 
     @ResponseBody
-    @RequestMapping(method = RequestMethod.PUT)
+    @RequestMapping(method = RequestMethod.PUT, value = "/" + VIEW_PAGE)
     public Company put(@RequestBody Company company) {
         logger.debug(String.format("Putting With Company: %s", company));
         return service.update(company);
     }
 
     @ResponseBody
-    @RequestMapping(method = RequestMethod.DELETE)
+    @RequestMapping(method = RequestMethod.DELETE, value = "/" + VIEW_PAGE)
     public Company delete(@RequestBody Company company, @AuthenticationPrincipal User user) {
         logger.debug(String.format("Deleting Company {Company:%s,LoggedInUser:%s", company, user));
         if (user == null) {
@@ -143,7 +147,7 @@ public class CompanyController {
     }
 
     @ResponseBody
-    @RequestMapping(method = RequestMethod.GET, value = "/one/{id}")
+    @RequestMapping(method = RequestMethod.GET, value = "/" + VIEW_PAGE + "/one/{id}")
     public Company getOne(@PathVariable("id") ObjectId id) {
         logger.debug(String.format("Getting One With Company:%s", id));
         return service.findOne(id);

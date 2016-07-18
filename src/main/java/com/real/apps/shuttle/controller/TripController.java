@@ -20,20 +20,25 @@ import static com.real.apps.shuttle.miscellaneous.Role.*;
  * Created by zorodzayi on 14/10/05.
  */
 @Controller
-@RequestMapping(value = TripController.VIEW_NAME)
+
 public class TripController {
     public final static String VIEW_NAME = "trip";
     private Logger logger = Logger.getLogger(TripController.class);
     @Autowired
     private TripService service;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping("/" + VIEW_NAME)
     public String render() {
         logger.debug("Showing Trip Controller");
         return VIEW_NAME;
     }
 
-    @RequestMapping(value = "/{skip}/{limit}")
+    @RequestMapping("/trip-add")
+    public String renderAdd() {
+        return "trip-add";
+    }
+
+    @RequestMapping("/" + VIEW_NAME + "/{skip}/{limit}")
     @ResponseBody
     public Page<Trip> page(@PathVariable("skip") int skip, @PathVariable("limit") int limit, @AuthenticationPrincipal User user) {
         logger.debug(String.format("Receiving request for list of trips {skip:%d,limit:%d,user:%s}", skip, limit, user));
@@ -76,14 +81,14 @@ public class TripController {
         return emptyPage;
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST, value = "/" + VIEW_NAME)
     @ResponseBody
     public Trip post(@RequestBody Trip trip, @AuthenticationPrincipal User user) {
         if (user == null) {
             logger.debug("There Is No User Logged In. Will Not Add The Trip. Returning The Trip Unsaved");
             return trip;
         }
-        logger.debug(String.format("Saving A Trip %s ",trip));
+        logger.debug(String.format("Saving A Trip %s ", trip));
         String role = role(user);
         logger.debug(String.format("{role:%s}", role));
         switch (role) {
@@ -108,7 +113,7 @@ public class TripController {
         return trip;
     }
 
-    @RequestMapping(method = RequestMethod.DELETE)
+    @RequestMapping(method = RequestMethod.DELETE, value = "/" + VIEW_NAME)
     @ResponseBody
     public Trip delete(@RequestBody Trip trip, @AuthenticationPrincipal User user) {
         logger.debug(String.format("Deleting The Trip {trip:%s,user:%s}", trip, user));
@@ -133,7 +138,7 @@ public class TripController {
         return trip;
     }
 
-    @RequestMapping(method = RequestMethod.PUT)
+    @RequestMapping(method = RequestMethod.PUT, value = "/" + VIEW_NAME)
     @ResponseBody
     public Trip put(@RequestBody Trip trip, @AuthenticationPrincipal User user) {
         logger.debug(String.format("Putting The Trip {trip:%s,user:%s}", trip, user));
@@ -167,7 +172,7 @@ public class TripController {
         return trip;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/one/{id}")
+    @RequestMapping("/" + VIEW_NAME + "/one/{id}")
     @ResponseBody
     public Trip getOne(@PathVariable("id") ObjectId id) {
         logger.debug(String.format("Getting One id:%s", id));

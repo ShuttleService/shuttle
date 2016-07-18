@@ -1,5 +1,3 @@
-<%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <div ng-controller="ReviewController">
     <div class="modal fade" id="add">
         <div class="modal-dialog">
@@ -23,7 +21,6 @@
                 </div>
                 <div class="modal-footer">
                     <md-button type="reset" ng-click="reset();">Reset</md-button>
-                    <md-button type="button" data-dismiss="modal">Close</md-button>
                     <md-button type="button" ng-disabled="!canSave()" ng-click="saveClick()">Save
                     </md-button>
                 </div>

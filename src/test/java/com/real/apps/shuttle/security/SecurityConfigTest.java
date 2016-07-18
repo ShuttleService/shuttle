@@ -120,6 +120,7 @@ public class SecurityConfigTest {
         mockMvc.perform(get(agent).with(user(world(id)))).andExpect(status().isForbidden());
         mockMvc.perform(get(agent)).andExpect(status().is3xxRedirection());
     }
+
     @Test
     public void adminAndAgentShouldAccessTheCompanyPage() throws Exception {
         String company = "/company";
@@ -200,6 +201,7 @@ public class SecurityConfigTest {
         mockMvc.perform(get(trip).with(user(agent(id)))).andExpect(status().isForbidden());
         mockMvc.perform(get(trip)).andExpect(status().is3xxRedirection());
     }
+
     @Test
     public void anonymousAgentCompanyUserAdminAndWorldShouldAccessTheUserPage() throws Exception {
         String user = "/user";
@@ -248,11 +250,6 @@ public class SecurityConfigTest {
         mockMvc.perform(get(vehicle).with(user(agent(id)))).andExpect(status().isForbidden());
         mockMvc.perform(get(vehicle).with(user(world(id)))).andExpect(status().isForbidden());
         mockMvc.perform(get(vehicle)).andExpect(status().is3xxRedirection());
-    }
-
-    @Test
-    public void allShouldAccessReviewPage() throws Exception {
-        mockMvc.perform(get("/review")).andExpect(status().isOk());
     }
 
 }

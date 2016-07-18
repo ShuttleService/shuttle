@@ -158,7 +158,7 @@ angular.module('controllers', ['services', 'ngMaterial', 'ngRoute']).controller(
     };
 
     $scope.reset = function () {
-        $log.debug('Reverting The Trip To Its Prestine State');
+        $log.debug('Reverting The Trip To Its Pristine State');
         $scope.trip = angular.copy($scope.prestineTrip);
     };
 
@@ -277,7 +277,7 @@ angular.module('controllers', ['services', 'ngMaterial', 'ngRoute']).controller(
     $scope.list();
 }).controller('UserController', function ($scope, $log, UserService, CountryService, FormSubmissionUtilService,
                                           CompanyService, RESULT_SIZE, $rootScope) {
-    $rootScope.addUrl = 'user-add';
+    $rootScope.addUrl = 'signup';
     $scope.range = {};
     $scope.range.skip = 0;
     $scope.countries = CountryService.countries();

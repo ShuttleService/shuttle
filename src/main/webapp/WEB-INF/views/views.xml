@@ -6,45 +6,65 @@
         <put-attribute name="body" value=""/>
         <put-attribute name="title" value="Shuttle Service. Software As A Service."/>
     </definition>
+    <definition name="vehicle-add" extends="home">
+        <put-attribute name="title" value="Adding a new review"></put-attribute>
+        <put-attribute name="body" value="/WEB-INF/views/vehicle-add.jsp"></put-attribute>
+    </definition>
+    <definition name="trip-add" extends="home">
+        <put-attribute name="title" value="Adding a new review"></put-attribute>
+        <put-attribute name="body" value="/WEB-INF/views/trip-add.jsp"></put-attribute>
+    </definition>
+    <definition name="review-add" extends="home">
+        <put-attribute name="title" value="Adding a new review"></put-attribute>
+        <put-attribute name="body" value="/WEB-INF/views/review-add.jsp"></put-attribute>
+    </definition>
     <definition name="agent-add" extends="home">
         <put-attribute name="title" value="Adding a new agent"></put-attribute>
         <put-attribute name="body" value="/WEB-INF/views/agent-add.jsp"></put-attribute>
     </definition>
+    <definition name="company-add" extends="home">
+        <put-attribute name="title" value="Adding a new company"></put-attribute>
+        <put-attribute name="body" value="/WEB-INF/views/company-add.jsp"></put-attribute>
+    </definition>
+    <definition name="driver-add" extends="home">
+        <put-attribute name="body" value="/WEB-INF/views/driver-add.jsp"></put-attribute>
+        <put-attribute name="title" value="Adding a new driver"></put-attribute>
+    </definition>
     <definition name="signup" extends="home">
-        <put-attribute name="title" value="Signing up a new user"/>
-        <put-attribute name="body" value="/WEB-INF/views/signup.jsp"/>
+        <put-attribute name="title" value="Signing up a new user"></put-attribute>
+        <put-attribute name="body" value="/WEB-INF/views/signup.jsp"></put-attribute>
     </definition>
     <definition name="driver" extends="home">
-        <put-attribute name="body" value="/WEB-INF/views/driver.jsp"/>
-        <put-attribute name="title" value="Drivers"/>
+        <put-attribute name="body" value="/WEB-INF/views/driver.jsp"></put-attribute>
+        <put-attribute name="title" value="Drivers"></put-attribute>
     </definition>
     <definition name="trip" extends="home">
-        <put-attribute name="body" value="/WEB-INF/views/trip.jsp"/>
-        <put-attribute name="title" value="Trips"/>
+        <put-attribute name="body" value="/WEB-INF/views/trip.jsp"></put-attribute>
+        <put-attribute name="title" value="Trips"></put-attribute>
     </definition>
     <definition name="admin" extends="home">
-        <put-attribute name="body" value="/WEB-INF/views/admin.jsp"/>
-        <put-attribute name="title" value="Administration"/>
+        <put-attribute name="body" value="/WEB-INF/views/admin.jsp"></put-attribute>
+        <put-attribute name="title" value="Administration"></put-attribute>
     </definition>
     <definition name="vehicle" extends="home">
-        <put-attribute name="body" value="/WEB-INF/views/vehicle.jsp"/>
-        <put-attribute name="title" value="Vehicles"/>
+        <put-attribute name="body" value="/WEB-INF/views/vehicle.jsp"></put-attribute>
+        <put-attribute name="title" value="Vehicles"></put-attribute>
     </definition>
     <definition name="review" extends="home">
-        <put-attribute name="body" value="/WEB-INF/views/review.jsp"/>
-        <put-attribute name="title" value="Reviews"/>
+        <put-attribute name="body" value="/WEB-INF/views/review.jsp"></put-attribute>
+        <put-attribute name="title" value="Reviews"></put-attribute>
     </definition>
     <definition name="company" extends="home">
-        <put-attribute name="body" value="/WEB-INF/views/company.jsp"/>
-        <put-attribute name="title" value="Company Name"/>
+        <put-attribute name="body" value="/WEB-INF/views/company.jsp"></put-attribute>
+        <put-attribute name="title" value="Companies"></put-attribute>
     </definition>
     <definition name="agent" extends="home">
-        <put-attribute name="body" value="/WEB-INF/views/agent.jsp"/>
-        <put-attribute name="title" value="Agent Name"/>
+        <put-attribute name="body" value="/WEB-INF/views/agent.jsp"></put-attribute>
+        <put-attribute name="title" value="Agents"></put-attribute>
     </definition>
     <definition name="user" extends="home">
         <put-attribute name="title" value="Users"/>
-        <put-attribute name="body" value="/WEB-INF/views/user.jsp"/>
+        <put-attribute name="body" value="/WEB-INF/views/user.jsp"></put-attribute>
     </definition>
     <definition name="login" template="/WEB-INF/views/login.jsp"/>
 </tiles-definitions>

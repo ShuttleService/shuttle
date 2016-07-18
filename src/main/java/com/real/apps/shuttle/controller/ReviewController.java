@@ -13,48 +13,53 @@ import org.springframework.web.bind.annotation.*;
  * Created by zorodzayi on 14/10/11.
  */
 @Controller
-@RequestMapping(value = ReviewController.VIEW_PAGE)
 public class ReviewController {
     @Autowired
     private ReviewService service;
     public static final String VIEW_PAGE = "review";
     private Logger logger = Logger.getLogger(ReviewController.class);
 
-    @RequestMapping(method = RequestMethod.GET)
-    public String render(){
-        return  VIEW_PAGE;
+    @RequestMapping("/review-add")
+    public String renderAdd() {
+        return "review-add";
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping("/" + VIEW_PAGE)
+    public String render() {
+        return VIEW_PAGE;
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/" + VIEW_PAGE)
     @ResponseBody
-    public Review post(@RequestBody Review review){
-        logger.debug(String.format("Posting The Review %s",review));
+    public Review post(@RequestBody Review review) {
+        logger.debug(String.format("Posting The Review %s", review));
         return service.insert(review);
-     }
-    @RequestMapping("/{skip}/{limit}")
-    @ResponseBody
-    public Page<Review> page(@PathVariable("skip")int skip,@PathVariable("limit") int limit){
-        return service.list(skip,limit);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE)
+    @RequestMapping("/" + VIEW_PAGE + "/{skip}/{limit}")
     @ResponseBody
-    public Review delete(@RequestBody Review review){
-        logger.debug(String.format("Deleting The Review %s",review));
+    public Page<Review> page(@PathVariable("skip") int skip, @PathVariable("limit") int limit) {
+        return service.list(skip, limit);
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/" + VIEW_PAGE)
+    @ResponseBody
+    public Review delete(@RequestBody Review review) {
+        logger.debug(String.format("Deleting The Review %s", review));
         return service.delete(review);
     }
 
-    @RequestMapping(method = RequestMethod.PUT)
+    @RequestMapping(method = RequestMethod.PUT, value = "/" + VIEW_PAGE)
     @ResponseBody
-    public Review put(@RequestBody Review review){
-        logger.debug(String.format("Putting The Review %s",review));
+    public Review put(@RequestBody Review review) {
+        logger.debug(String.format("Putting The Review %s", review));
         return service.update(review);
     }
 
-    @RequestMapping(method = RequestMethod.GET,value = "/one/{id}")
+    @RequestMapping("/" + VIEW_PAGE + "/one/{id}")
     @ResponseBody
-    public Review getOne(@PathVariable("id")ObjectId id){
-        logger.debug(String.format("Getting One With ObejctId:%s",id));
+    public Review getOne(@PathVariable("id") ObjectId id) {
+        logger.debug(String.format("Getting One With ObejctId:%s", id));
         return service.findOne(id);
     }
 
