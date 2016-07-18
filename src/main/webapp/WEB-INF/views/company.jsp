@@ -1,7 +1,7 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <div ng-controller="CompanyController">
-    <table>
+    <table class="table table-striped table-hover">
         <thead>
         <tr>
             <th>Reference</th>

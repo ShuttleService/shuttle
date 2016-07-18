@@ -1,4 +1,4 @@
-<table ng-controller="TripController">
+<table ng-controller="TripController" class="table table-striped table-hover">
     <thead>
     <tr>
         <th>Reference</th>

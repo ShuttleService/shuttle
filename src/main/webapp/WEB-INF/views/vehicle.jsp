@@ -1,4 +1,4 @@
-<table ng-controller="VehicleController">
+<table class="table table-striped table-hover" ng-controller="VehicleController">
     <thead>
     <tr>
         <th>Reference</th>

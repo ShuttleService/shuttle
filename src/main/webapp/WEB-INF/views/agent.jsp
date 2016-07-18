@@ -1,5 +1,5 @@
 <div ng-controller="AgentController">
-    <table class="table-cell">
+    <table class="table table-striped table-hover">
         <thead>
         <tr>
             <th>Reference</th>
