@@ -5,6 +5,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.ReadPreference;
 import com.mongodb.WriteConcern;
 import com.real.apps.shuttle.domain.model.User;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.authentication.UserCredentials;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
@@ -16,6 +17,11 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @Configuration
 @EnableMongoRepositories
 public class RepositoryConfig extends AbstractMongoConfiguration {
+    @Value("#{environment.OPENSHIFT_MONGODB_DB_HOST}")
+    private String host;
+    @Value("#{environment.OPENSHIFT_MONGODB_DB_PORT}")
+    private Integer port;
+
     @Override
     protected String getDatabaseName() {
 
@@ -24,10 +30,14 @@ public class RepositoryConfig extends AbstractMongoConfiguration {
 
     @Override
     public Mongo mongo() throws Exception {
-        MongoClient client = new MongoClient();
+        //TODO: test this setup
+        String host = this.host != null ? this.host : "localhost";
+        int port = this.port != null ? this.port : 27017;
+
+        MongoClient client = new MongoClient(host, port);
+
         client.setWriteConcern(WriteConcern.SAFE);
         client.setReadPreference(ReadPreference.nearest());
-
         return client;
     }
 
@@ -37,7 +47,8 @@ public class RepositoryConfig extends AbstractMongoConfiguration {
     }
 
     @Override
-    public UserCredentials getUserCredentials(){
-        return new UserCredentials("admin","MgHTUL7KpBx1");
+
+    public UserCredentials getUserCredentials() {
+        return new UserCredentials("", "");
     }
 }
