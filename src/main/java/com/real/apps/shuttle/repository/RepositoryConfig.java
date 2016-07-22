@@ -38,6 +38,6 @@ public class RepositoryConfig extends AbstractMongoConfiguration {
 
     @Override
     public UserCredentials getUserCredentials(){
-        return new UserCredentials("","");
+        return new UserCredentials("admin","MgHTUL7KpBx1");
     }
 }
