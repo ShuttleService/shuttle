@@ -21,6 +21,10 @@ public class RepositoryConfig extends AbstractMongoConfiguration {
     private String host;
     @Value("#{environment.OPENSHIFT_MONGODB_DB_PORT}")
     private Integer port;
+    @Value("#{environment.OPENSHIFT_MONGODB_DB_USERNAME}")
+    private String username;
+    @Value("#{environment.OPENSHIFT_MONGODB_DB_PASSWORD}")
+    private String password;
 
     @Override
     protected String getDatabaseName() {
@@ -47,8 +51,10 @@ public class RepositoryConfig extends AbstractMongoConfiguration {
     }
 
     @Override
-
     public UserCredentials getUserCredentials() {
-        return new UserCredentials("", "");
+        //TODO test this method
+        String username = this.username != null ? this.username : "";
+        String password = this.password != null ? this.password : "";
+        return new UserCredentials(username, password);
     }
 }
