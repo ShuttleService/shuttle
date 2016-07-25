@@ -2,19 +2,16 @@ describe('The Company Service Test', function () {
 
     var CompanyService;
     var $httpBackend;
-    var CONTEXT_ROOT;
 
     beforeEach(module('services'));
 
-    beforeEach(inject(function (_CompanyService_, _$httpBackend_, _CONTEXT_ROOT_) {
+    beforeEach(inject(function (_CompanyService_, _$httpBackend_) {
 
         CompanyService = _CompanyService_;
         $httpBackend = _$httpBackend_;
-        CONTEXT_ROOT = _CONTEXT_ROOT_;
 
         expect(CompanyService).toBeDefined();
         expect($httpBackend).toBeDefined();
-        expect(CONTEXT_ROOT).toBeDefined();
     }));
 
     it('Should Verify That The $resource Methods Are exposed', function () {
@@ -32,7 +29,7 @@ describe('The Company Service Test', function () {
 
         var company = {name: 'Test Company Name To Get', id: 'TestCompanyIdToGet'};
 
-        $httpBackend.expectGET(CONTEXT_ROOT + '/company/' + company.id).respond(company);
+        $httpBackend.expectGET('/company/' + company.id).respond(company);
         var actualCompany;
 
         CompanyService.get({_id: company.id}, function (data) {
@@ -54,7 +51,7 @@ describe('The Company Service Test', function () {
         var skip = 12;
         var limit = 30;
 
-        $httpBackend.expectGET(CONTEXT_ROOT + '/company/' + skip + '/' + limit).respond(companyArray);
+        $httpBackend.expectGET('/company/' + skip + '/' + limit).respond(companyArray);
         var actualCompanyArray;
 
         CompanyService.query({skip: skip, limit: limit}, function (data) {
@@ -70,7 +67,7 @@ describe('The Company Service Test', function () {
 
         var company = {name: 'Test Company Name To Post', id: 'Test Company Id To Post'};
 
-        var url = CONTEXT_ROOT + '/company';
+        var url =  '/company';
 
         $httpBackend.expectPOST(url, company).respond(company);
 
@@ -90,7 +87,7 @@ describe('The Company Service Test', function () {
     it('Should Put The Company To The Correct URL', function () {
         var company = {name: 'Test Company Name To Put', id: 'Test Company Id To Put'};
 
-        var url = CONTEXT_ROOT + '/company';
+        var url = '/company';
 
         $httpBackend.expectPUT(url, company).respond(company);
         var actualCompany;
@@ -108,7 +105,7 @@ describe('The Company Service Test', function () {
     it('Should Delete The Company On The Correct URL', function () {
         var company = {name: 'Test Company Name To Delete', id: 'TestCompanyIDToDelete'};
 
-        var url = CONTEXT_ROOT + '/company/' + company.id;
+        var url =  '/company/' + company.id;
 
         $httpBackend.expectDELETE(url).respond(company);
         var actualCompany;

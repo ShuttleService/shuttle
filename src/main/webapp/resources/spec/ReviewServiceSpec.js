@@ -4,15 +4,13 @@
 describe('Testing The Review Service', function () {
 
     var ReviewService;
-    var CONTEXT_ROOT;
     var $httpBackend;
 
     beforeEach(module('services'));
 
-    beforeEach(inject(function (_ReviewService_, _CONTEXT_ROOT_, _$httpBackend_) {
+    beforeEach(inject(function (_ReviewService_, _$httpBackend_) {
 
         ReviewService = _ReviewService_;
-        CONTEXT_ROOT = _CONTEXT_ROOT_;
         $httpBackend = _$httpBackend_;
     }));
 
@@ -28,7 +26,7 @@ describe('Testing The Review Service', function () {
         var skip = 1;
         var limit = 3;
 
-        $httpBackend.whenGET(CONTEXT_ROOT + '/review/' + skip + '/' + limit).respond(reviews);
+        $httpBackend.whenGET('/review/' + skip + '/' + limit).respond(reviews);
         var result = ReviewService.query({skip:skip,limit:limit});
         $httpBackend.flush();
         expect(result[0]).toEqual(review);

@@ -6,20 +6,17 @@ describe('Driver Service Test', function () {
 
     var $httpBackend;
     var DriverService;
-    var CONTEXT_ROOT;
     var skip = 1, limit = 2;
 
     beforeEach(module('services'));
 
-    beforeEach(inject(function (_$controller_, _DriverService_, _$httpBackend_, _CONTEXT_ROOT_) {
+    beforeEach(inject(function (_$controller_, _DriverService_, _$httpBackend_) {
 
         DriverService = _DriverService_;
         $httpBackend = _$httpBackend_;
-        CONTEXT_ROOT = _CONTEXT_ROOT_;
 
         expect(DriverService).toBeDefined();
         expect($httpBackend).toBeDefined();
-        expect(CONTEXT_ROOT).toBeDefined();
     }));
 
     it('Should Verify That The $resource methods are exposed', function () {
@@ -31,7 +28,7 @@ describe('Driver Service Test', function () {
         var driver2 = 'Driver 2';
         var drivers = [driver1, driver2];
 
-        $httpBackend.whenGET(CONTEXT_ROOT + '/driver/' + skip + '/' + limit).respond(drivers);
+        $httpBackend.whenGET( '/driver/' + skip + '/' + limit).respond(drivers);
         var result = DriverService.query({skip: skip, limit: limit});
         $httpBackend.flush();
         expect(result[0]).toEqual(driver1);
@@ -45,7 +42,7 @@ describe('Driver Service Test', function () {
         var pathVariable = 'bookable';
         var companyId = 'TestCompanyID';
 
-        var url = CONTEXT_ROOT + '/driver/' + pathVariable + '/' + companyId + '/' + from + '/' + to + '/' + skip + '/' + limit;
+        var url = '/driver/' + pathVariable + '/' + companyId + '/' + from + '/' + to + '/' + skip + '/' + limit;
 
         $httpBackend.expectGET(url).respond(bookableDrivers);
 

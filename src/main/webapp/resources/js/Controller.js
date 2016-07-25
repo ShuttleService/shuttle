@@ -4,9 +4,8 @@
 
 angular.module('controllers', ['services', 'ngMaterial']).controller('SharedController',
     function ($rootScope, $scope, $log, AgentService, CompanyService, DriverService, UserService, VehicleService,
-              RESULT_SIZE, CONTEXT_ROOT) {
+              RESULT_SIZE) {
         $rootScope.sharedState = {};
-        $scope.contextRoot = CONTEXT_ROOT;
         var params = {skip: 0, limit: RESULT_SIZE};
 
         $scope.findCompanies = function () {

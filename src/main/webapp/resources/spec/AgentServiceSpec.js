@@ -2,17 +2,15 @@
  * Created by zorodzayi on 14/12/17.
  */
 describe('Testing The Agent Service', function () {
-    var AgentService, $httpBackend,CONTEXT_ROOT;
+    var AgentService, $httpBackend;
 
     beforeEach(module('services'));
-    beforeEach(inject(function (_AgentService_,_$httpBackend_,_CONTEXT_ROOT_) {
+    beforeEach(inject(function (_AgentService_,_$httpBackend_) {
         AgentService = _AgentService_;
         $httpBackend = _$httpBackend_;
-        CONTEXT_ROOT = _CONTEXT_ROOT_;
 
         expect(AgentService).toBeDefined();
-        expect(CONTEXT_ROOT).toBeDefined();
-        expect(CONTEXT_ROOT).toBeDefined();
+
     }));
 
 
@@ -25,7 +23,7 @@ describe('Testing The Agent Service', function () {
     it('Should Call The Correct URL To Save The Agent',function(){
 
         var agent = {name:'Test Agent Name To Be Saved'};
-        $httpBackend.expectPOST(CONTEXT_ROOT+'/agent',agent).respond(agent);
+        $httpBackend.expectPOST('/agent',agent).respond(agent);
 
         var actual = AgentService.save(agent);
         $httpBackend.flush();
@@ -41,7 +39,7 @@ describe('Testing The Agent Service', function () {
         var skip = 0, limit = 2;
         var params = {skip:skip,limit:limit};
 
-        $httpBackend.expectGET(CONTEXT_ROOT+'/agent/'+skip+'/'+limit).respond(page);
+        $httpBackend.expectGET('/agent/'+skip+'/'+limit).respond(page);
 
         var actual = AgentService.get(params);
         $httpBackend.flush();

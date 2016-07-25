@@ -181,14 +181,10 @@
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
-            <!--
             <plugin>
                 <groupId>org.mortbay.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
                 <configuration>
-                    <webApp>
-                        <contextPath>/shuttle</contextPath>
-                    </webApp>
                     <connectors>
                         <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
                             <port>8080</port>
@@ -199,7 +195,6 @@
                     <stopPort>8081</stopPort>
                 </configuration>
             </plugin>
-            -->
             <plugin>
                 <groupId>org.codehaus.gmavenplus</groupId>
                 <artifactId>gmavenplus-plugin</artifactId>
