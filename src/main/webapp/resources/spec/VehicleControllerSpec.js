@@ -42,7 +42,7 @@ describe('Vehicle Controller Test', function () {
         $scope.limit = limit;
         var page = {size: limit};
 
-        spyOn(VehicleService, 'get').andReturn(page);
+        spyOn(VehicleService, 'get').and.returnValue(page);
 
         expect($scope.page).toBeDefined();
         $scope.list();
@@ -68,14 +68,14 @@ describe('Vehicle Controller Test', function () {
         expect($scope.saveClick).toBeDefined();
         var page = {size: 'Page'};
         spyOn(VehicleService, 'save');
-        spyOn($scope, 'list').andReturn(page);
+        spyOn($scope, 'list').and.returnValue(page);
 
         $scope.saveClick();
         expect(VehicleService.save).toHaveBeenCalledWith($scope.vehicle, jasmine.any(Function));
         expect($scope.list).toHaveBeenCalled();
     });
 
-    it('Should Revert The Vehicle Back To It\'s Prestine State', function () {
+    it('Should Revert The Vehicle Back To It\'s Pristine State', function () {
         var prestine = $scope.vehicle;
         $scope.vehicle = {name: 'Vehicle Name To Be Reverted'};
         expect($scope.reset).toBeDefined();
@@ -85,7 +85,7 @@ describe('Vehicle Controller Test', function () {
 
     it('Should Call The FormSubmissionUtilService Can Save With The Form', function () {
         $scope.addForm = {$valid: true};
-        spyOn(FormSubmissionUtilService, 'canSave').andReturn(true);
+        spyOn(FormSubmissionUtilService, 'canSave').and.returnValue(true);
         expect($scope.canSave).toBeDefined();
 
         var actual = $scope.canSave();
@@ -111,7 +111,7 @@ describe('Vehicle Controller Test', function () {
             expect($scope.bookable).toBeUndefined();
             expect($scope.bookableList).toBeDefined();
 
-            spyOn(VehicleService, 'query').andReturn(bookable);
+            spyOn(VehicleService, 'query').and.returnValue(bookable);
 
             $scope.bookableList();
 

@@ -49,7 +49,7 @@ describe('Testing The Trip Controller', function () {
 
         var page = {content: ['', 1, "3"]};
 
-        spyOn(TripService, 'get').andReturn(page);
+        spyOn(TripService, 'get').and.returnValue(page);
         var skip = 3;
         var limit = 5;
         $scope.skip = skip;
@@ -77,7 +77,7 @@ describe('Testing The Trip Controller', function () {
             $scope: $scope
         });
 
-        spyOn(FormSubmissionUtilService, 'canSave').andReturn(false);
+        spyOn(FormSubmissionUtilService, 'canSave').and.returnValue(false);
 
         expect($scope.canSave).toBeDefined();
         var actual = $scope.canSave();
@@ -147,7 +147,7 @@ describe('Testing The Trip Controller', function () {
 
         $scope.trip = trip;
 
-        spyOn(TripService, 'save').andReturn(savedTrip);
+        spyOn(TripService, 'save').and.returnValue(savedTrip);
         spyOn($scope, 'list');
         expect($scope.saveClick).toBeDefined();
 
@@ -184,7 +184,7 @@ describe('Testing The Trip Controller', function () {
         });
         var params = {skip: skip, limit: limit};
         var page = {size: limit};
-        spyOn(TripService, 'get').andReturn(page);
+        spyOn(TripService, 'get').and.returnValue(page);
         expect($scope.list).toBeDefined();
 
         $scope.limit = limit;
@@ -255,7 +255,7 @@ describe('Testing The Trip Controller', function () {
 
         $scope.findBookableDriversAndVehicles();
 
-        expect(DriverService.query.wasCalled).toBe(false);
+        expect(DriverService.query).not.toHaveBeenCalled();
         expect(VehicleService.query).not.toHaveBeenCalled();
         expect($scope.bookableDrivers).toEqual({});
         expect($scope.bookableDrivers).toEqual({});
@@ -301,8 +301,8 @@ describe('Testing The Trip Controller', function () {
         var bookableDrivers = ['Driver 1', 'Driver 2'];
         var bookableVehicles = ['Vehicle'];
 
-        spyOn(DriverService, 'query').andReturn(bookableDrivers);
-        spyOn(VehicleService, 'query').andReturn(bookableVehicles);
+        spyOn(DriverService, 'query').and.returnValue(bookableDrivers);
+        spyOn(VehicleService, 'query').and.returnValue(bookableVehicles);
 
         $scope.findBookableDriversAndVehicles();
 

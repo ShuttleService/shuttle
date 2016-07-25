@@ -48,7 +48,7 @@ describe('Testing The Agent Controller', function () {
         $scope.skip = params.skip;
         $scope.limit = params.limit;
 
-        spyOn(AgentService, 'get').andReturn(page);
+        spyOn(AgentService, 'get').and.returnValue(page);
         expect($scope.list).toBeDefined();
         $scope.list();
         expect(AgentService.get).toHaveBeenCalledWith(params);
@@ -57,7 +57,7 @@ describe('Testing The Agent Controller', function () {
 
     it('Should Call FormSubmissionUtils canSave',function(){
         $scope.addForm = {};
-        spyOn(FormSubmissionUtilService,'canSave').andReturn(false);
+        spyOn(FormSubmissionUtilService,'canSave').and.returnValue(false);
         expect($scope.canSave).toBeDefined();
         var actual = $scope.canSave();
         expect(FormSubmissionUtilService.canSave).toHaveBeenCalledWith($scope.addForm);
@@ -68,7 +68,7 @@ describe('Testing The Agent Controller', function () {
 
         var agent = {name:'Test '};
         $scope.agent = agent;
-        spyOn(AgentService,'save').andReturn(agent);
+        spyOn(AgentService,'save').and.returnValue(agent);
 
         expect($scope.saveClick).toBeDefined();
         $scope.saveClick();

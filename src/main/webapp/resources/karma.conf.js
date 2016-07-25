@@ -15,8 +15,11 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
-            'vendor/**/angular.js', 'vendor/**/angular-resource.js', 'vendor/**/angular-mocks.js', 'js/*.js', 'spec/*.js',
-            'vendor/datetimeRangePicker/**/*.js', 'vendor/*.js'
+            'bower_components/**/angular.js', 'bower_components/**/angular-resource.js', 'bower_components/**/angular-mocks.js',
+            'bower_components/angular-material/angular-material.js','bower_components/angular-aria/angular-aria.js',
+            'bower_components/angular-messages/angular-messages.js','bower_components/angular-animate/angular-animate.js',
+            'bower_components/jasmine-core/lib/jasmine-core/jasmine.js',
+            'js/*.js', 'spec/*.js'
         ],
 
 

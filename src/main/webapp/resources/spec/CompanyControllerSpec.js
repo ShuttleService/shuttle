@@ -31,7 +31,7 @@ describe('Company Controller Test.', function () {
     it('Should Return False When addForm is Dirty And Invalid', function () {
         var addForm = {$dirty: true, $valid: false};
 
-        spyOn(FormSubmissionUtilService, 'canSave').andReturn(false);
+        spyOn(FormSubmissionUtilService, 'canSave').and.returnValue(false);
         $scope.addForm = addForm;
         expect($scope.canSave).toBeDefined();
 
@@ -43,7 +43,7 @@ describe('Company Controller Test.', function () {
         var addForm = {$dirty: true, $valid: true};
 
         $scope.addForm = addForm;
-        spyOn(FormSubmissionUtilService, 'canSave').andReturn(true);
+        spyOn(FormSubmissionUtilService, 'canSave').and.returnValue(true);
 
         expect($scope.canSave()).toEqual(true);
         expect(FormSubmissionUtilService.canSave).toHaveBeenCalledWith(addForm);
@@ -54,7 +54,7 @@ describe('Company Controller Test.', function () {
 
         var company = {name: 'Test Company Spy Name For Get', id: 'Test Company Spy Name For Get'};
 
-        spyOn(CompanyService, 'get').andReturn(company);
+        spyOn(CompanyService, 'get').and.returnValue(company);
 
         $scope.id = "TestCompanyIdToGet";
 
@@ -79,7 +79,7 @@ describe('Company Controller Test.', function () {
 
         $scope.new = true;
 
-        spyOn(CompanyService, 'save').andReturn(savedCompany);
+        spyOn(CompanyService, 'save').and.returnValue(savedCompany);
         expect($scope.saveClick).toBeDefined();
         $scope.saveClick();
 
@@ -91,7 +91,7 @@ describe('Company Controller Test.', function () {
         var size = 23;
         var page = {size:size};
 
-        spyOn(CompanyService,'get').andReturn(page);
+        spyOn(CompanyService,'get').and.returnValue(page);
 
         expect($scope.list).toBeDefined();
         var limit = 3;

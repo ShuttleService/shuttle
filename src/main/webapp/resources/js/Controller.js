@@ -2,7 +2,7 @@
  * Created by zorodzayi on 14/10/09.
  */
 
-angular.module('controllers', ['services', 'ngMaterial', 'ngRoute']).controller('SharedController',
+angular.module('controllers', ['services', 'ngMaterial']).controller('SharedController',
     function ($rootScope, $scope, $log, AgentService, CompanyService, DriverService, UserService, VehicleService,
               RESULT_SIZE, CONTEXT_ROOT) {
         $rootScope.sharedState = {};

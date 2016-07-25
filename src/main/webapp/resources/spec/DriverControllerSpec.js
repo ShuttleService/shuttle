@@ -49,7 +49,7 @@ describe('Testing The Driver Controller', function () {
     it('List Should Call Get On The Service Using Parameters On The Scope And Set The Resulting Drivers On The Scope', function () {
         var page = {content: [1, 2, 3]};
 
-        spyOn(DriverService, 'get').andReturn(page);
+        spyOn(DriverService, 'get').and.returnValue(page);
 
         var controller = $controller('DriverController', {
             $scope: $scope
@@ -81,7 +81,7 @@ describe('Testing The Driver Controller', function () {
         });
         expect($scope.canSave).toBeDefined();
         $scope.addForm = {};
-        spyOn(FormSubmissionUtilService, 'canSave').andReturn(true);
+        spyOn(FormSubmissionUtilService, 'canSave').and.returnValue(true);
 
         $scope.canSave();
         expect(FormSubmissionUtilService.canSave).toHaveBeenCalledWith($scope.addForm);
@@ -101,7 +101,7 @@ describe('Testing The Driver Controller', function () {
         $scope.driver = driverToSave;
 
         $scope.new = true;
-        spyOn(DriverService, 'save').andReturn(savedDriver);
+        spyOn(DriverService, 'save').and.returnValue(savedDriver);
         spyOn($scope, 'list');
         expect($scope.saveClick).toBeDefined();
         $scope.saveClick();
@@ -117,7 +117,7 @@ describe('Testing The Driver Controller', function () {
 
         var page = {size: limit};
         var params = {skip: skip, limit: limit};
-        spyOn(DriverService, 'get').andReturn(page);
+        spyOn(DriverService, 'get').and.returnValue(page);
         expect($scope.list).toBeDefined();
 
         $scope.skip = skip;
@@ -136,7 +136,7 @@ describe('Testing The Driver Controller', function () {
         expect($scope.limit).toEqual(RESULT_SIZE);
     });
 
-    it('Should Revert The Driver To The Prestine One', function () {
+    it('Should Revert The Driver To The Pristine One', function () {
         $controller('DriverController', {
             $scope: $scope
         });
@@ -168,7 +168,7 @@ describe('Testing The Driver Controller', function () {
         expect($scope.bookableList).toBeDefined();
         expect($scope.bookable).toBeUndefined();
 
-        spyOn(DriverService, 'query').andReturn(bookable);
+        spyOn(DriverService, 'query').and.returnValue(bookable);
 
         $scope.bookableList();
 

@@ -57,7 +57,6 @@
     <script src="resources/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="resources/bower_components/angular/angular.min.js"></script>
     <script src="resources/bower_components/angular-resource/angular-resource.min.js"></script>
-    <script src="resources/bower_components/angular-route/angular-route.min.js"></script>
     <script src="resources/bower_components/angular-aria/angular-aria.min.js"></script>
     <script src="resources/bower_components/angular-animate/angular-animate.min.js"></script>
     <script src="resources/bower_components/angular-messages/angular-messages.min.js"></script>

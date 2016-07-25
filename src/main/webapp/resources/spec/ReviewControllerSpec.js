@@ -37,7 +37,7 @@ describe('Testing The Review Controller', function () {
         var limit = 10;
         var params = {skip: skip, limit: limit};
 
-        spyOn(ReviewService, 'get').andReturn(page);
+        spyOn(ReviewService, 'get').and.returnValue(page);
         $scope.skip = skip;
         $scope.limit = limit;
 
@@ -70,7 +70,7 @@ describe('Testing The Review Controller', function () {
         $scope.new = true;
         $scope.review = reviewToSave;
 
-        spyOn(ReviewService, 'save').andReturn(savedReview);
+        spyOn(ReviewService, 'save').and.returnValue(savedReview);
 
         $scope.saveClick();
 
@@ -133,7 +133,7 @@ describe('Testing The Review Controller', function () {
 
         expect($scope.canSave).toBeDefined();
 
-        spyOn(FormSubmissionUtilService, 'canSave').andReturn(false);
+        spyOn(FormSubmissionUtilService, 'canSave').and.returnValue(false);
 
         expect($scope.canSave()).toEqual(false);
         expect(FormSubmissionUtilService.canSave).toHaveBeenCalledWith($scope.addForm);
@@ -147,7 +147,7 @@ describe('Testing The Review Controller', function () {
         var limit = 10;
         var params = {skip:skip,limit:limit};
         var page = {size:limit};
-        spyOn(ReviewService,'get').andReturn(page);
+        spyOn(ReviewService,'get').and.returnValue(page);
 
         expect($scope.list).toBeDefined();
         $scope.skip = skip;

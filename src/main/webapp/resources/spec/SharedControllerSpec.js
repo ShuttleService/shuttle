@@ -46,7 +46,7 @@ describe('Testing The "SharedController" (The Controller That Holds The State Th
         var companies = [1, 2, 3, 4, 5];
         var page = {page: {content: companies}};
 
-        spyOn(CompanyService, 'get').andReturn(page);
+        spyOn(CompanyService, 'get').and.returnValue(page);
         expect($scope.findCompanies).toBeDefined();
         $scope.findCompanies();
 
@@ -58,7 +58,7 @@ describe('Testing The "SharedController" (The Controller That Holds The State Th
     it('Should Call VehicleService.get And Set The VehiclePage On The $rootScope SharedState', function () {
         var vehicles = [3,4,5,6,7,7,8];
         var page = {page:{content:vehicles}};
-        spyOn(VehicleService,'get').andReturn(page);
+        spyOn(VehicleService,'get').and.returnValue(page);
         expect($scope.findVehicles).toBeDefined();
         $scope.findVehicles();
         expect(VehicleService.get).toHaveBeenCalledWith(params);
@@ -68,7 +68,7 @@ describe('Testing The "SharedController" (The Controller That Holds The State Th
     it('Should Call DriverService.get And Set The DriverPage On The $rooScope SharedState',function(){
         var drivers = [5,6,7,9,0,23];
         var page = {page:{content:drivers}};
-        spyOn(DriverService,'get').andReturn(page);
+        spyOn(DriverService,'get').and.returnValue(page);
         expect($scope.findDrivers).toBeDefined();
         $scope.findDrivers();
         expect(DriverService.get).toHaveBeenCalledWith(params);
@@ -79,19 +79,19 @@ describe('Testing The "SharedController" (The Controller That Holds The State Th
     it('Should Call The AgentService.get And Set The AgentPage On The $rootScope SharedState',function(){
         var agents = [2,3,4,5];
         var page = {content:agents};
-        spyOn(AgentService,'get').andReturn(page);
+        spyOn(AgentService,'get').and.returnValue(page);
         expect($scope.findAgents).toBeDefined();
         $scope.findAgents();
         expect(AgentService.get).toHaveBeenCalledWith(params);
         expect($rootScope.sharedState.agentPage).toEqual(page);
     });
 
-    it('Should Call Service query with {subPath1:role}, get the roles and set them on the $scope ', function () {
+    it('Should Call Service query with {pathVariable:role}, get the roles and set them on the $scope ', function () {
         var roles = ['ROLE_admin','ROLE_agent','ROLE_world','ROLE_companyUser'];
-        spyOn(UserService,'query').andReturn(roles);
+        spyOn(UserService,'query').and.returnValue(roles);
         expect($scope.findRoles).toBeDefined();
         $scope.findRoles();
-        expect(UserService.query).toHaveBeenCalledWith({subPath1:'role'});
+        expect(UserService.query).toHaveBeenCalledWith({pathVariable:'role'});
         expect($scope.sharedState.roles).toEqual(roles);
     });
 

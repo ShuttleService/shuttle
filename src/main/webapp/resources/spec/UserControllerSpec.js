@@ -54,7 +54,7 @@ describe('Testing The User Controller', function () {
 
     it('Should Call The User FormSubmissionUtil saveClick with addForm', function () {
 
-        spyOn(FormSubmissionUtilService, 'canSave').andReturn(true);
+        spyOn(FormSubmissionUtilService, 'canSave').and.returnValue(true);
         expect($scope.canSave).toBeDefined();
 
         var actual = $scope.canSave();
@@ -68,7 +68,7 @@ describe('Testing The User Controller', function () {
         var limit = 100;
         var params = {skip: skip, limit: limit};
         var page = {size: limit};
-        spyOn(UserService, 'get').andReturn(page);
+        spyOn(UserService, 'get').and.returnValue(page);
         $scope.range = {};
         $scope.range.skip = skip;
         $scope.range.limit = limit;
@@ -143,7 +143,7 @@ describe('Testing The User Controller', function () {
         var samePassword = 'Test Password The Same For Both Password And Password Retype';
         $scope.user.password = samePassword;
         $scope.formHolder.confirmPassword = samePassword;
-        spyOn(FormSubmissionUtilService, 'canSave').andReturn(true);
+        spyOn(FormSubmissionUtilService, 'canSave').and.returnValue(true);
 
         var actual = $scope.canSave();
 
@@ -154,7 +154,7 @@ describe('Testing The User Controller', function () {
         $scope.user.password = 'Test Password Different From Password Retype';
         $scope.formHolder.confirmPassword = 'Test Retype Password Different From Password';
 
-        spyOn(FormSubmissionUtilService, 'canSave').andReturn(true);
+        spyOn(FormSubmissionUtilService, 'canSave').and.returnValue(true);
 
         var actual = $scope.canSave();
 
@@ -180,7 +180,7 @@ describe('Testing The User Controller', function () {
     });
 
     it('Should Call FormSubmissionUtil.canSave With Change Password Form', function () {
-        spyOn(FormSubmissionUtilService, 'canSave').andReturn(true);
+        spyOn(FormSubmissionUtilService, 'canSave').and.returnValue(true);
         $scope.canChangePasswordForm = {};
         expect($scope.canChangePassword).toBeDefined();
 
