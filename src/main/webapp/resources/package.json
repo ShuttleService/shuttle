@@ -1,0 +1,17 @@
+{
+  "name": "shuttle",
+  "version": "0.0.0",
+  "description": "Shuttle Software As A Service",
+  "main": "index.html",
+  "scripts": {
+    "test": "karma run"
+  },
+  "author": "Zorodzayi Mukuya",
+  "license": "ISC",
+  "devDependencies": {
+    "karma": "^1.1.1",
+    "karma-chrome-launcher": "^1.0.1",
+    "karma-firefox-launcher": "^1.0.0",
+    "karma-safari-launcher": "^1.0.0"
+  }
+}
