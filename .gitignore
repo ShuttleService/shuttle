@@ -3,4 +3,5 @@
 .project
 .settings/
 *.iml
+node_modules
 target/
