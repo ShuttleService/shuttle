@@ -1,5 +1,6 @@
 package com.real.apps.shuttle.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.real.apps.shuttle.config.MvcConfiguration;
 import com.real.apps.shuttle.controller.command.ChangePasswordCommand;
@@ -38,6 +39,7 @@ import static com.real.apps.shuttle.miscellaneous.Role.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.ArgumentMatchers.longThat;
 import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -136,7 +138,7 @@ public class UserControllerTest {
 
         mockMvc.perform(post("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(userJsonString))
                 .andExpect(status().isOk()).
-                andExpect(jsonPath("$.firstName").value(firstName));
+                andExpect(jsonPath("$['firstName']").value(firstName));
 
         context.assertIsSatisfied();
     }
@@ -212,7 +214,7 @@ public class UserControllerTest {
         controller.service = (service);
 
         mockMvc.perform(post(String.format("/%s", VIEW_PAGE)).with(user(world(ObjectId.get()))).contentType(MediaType.APPLICATION_JSON).content(jsonUser)).
-                andExpect(status().isOk()).andExpect(jsonPath("$.id._time").value(id.getTimestamp()));
+                andExpect(status().isOk()).andExpect(jsonPath("$['id']['timestamp']").value(id.getTimestamp()));
     }
 
     @Test
@@ -231,7 +233,7 @@ public class UserControllerTest {
 
         mockMvc.perform(get(String.format("/%s/%d/%d", VIEW_PAGE, skip, limit)).with(user(companyUser(id)))).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.content[0].companyId._time").value(id.getTimestamp()));
+                andExpect(jsonPath("$['content'][0]['companyId']['timestamp']").value(id.getTimestamp()));
         context.assertIsSatisfied();
     }
 
@@ -250,7 +252,7 @@ public class UserControllerTest {
 
         mockMvc.perform(get(String.format("/%s/%d/%d", VIEW_PAGE, skip, limit)).with(user(world(id)))).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.content[0].id._time").value(id.getTimestamp()));
+                andExpect(jsonPath("$['content'][0]['id']['timestamp']").value(id.getTimestamp()));
         context.assertIsSatisfied();
     }
 
@@ -258,35 +260,35 @@ public class UserControllerTest {
     public void shouldReturnAllRolesWhenAnAdminIsLoggedIn() throws Exception {
         mockMvc.perform(get(String.format("/%s/role", VIEW_PAGE)).with(user(admin(ObjectId.get())))).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$[0].role").value(ADMIN)).
-                andExpect(jsonPath("$[1].role").value(AGENT)).
-                andExpect(jsonPath("$[2].role").value(COMPANY_USER)).
-                andExpect(jsonPath("$[3].role").value(WORLD));
+                andExpect(jsonPath("$[0]['authority']").value(ADMIN)).
+                andExpect(jsonPath("$[1]['authority']").value(AGENT)).
+                andExpect(jsonPath("$[2]['authority']").value(COMPANY_USER)).
+                andExpect(jsonPath("$[3]['authority']").value(WORLD));
     }
 
     @Test
     public void shouldReturnCompanyUserAndWorldRolesWhenCompanyUserIsLoggedIn() throws Exception {
         mockMvc.perform(get(String.format("/%s/role", VIEW_PAGE)).with(user(companyUser(ObjectId.get())))).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$[0].role").value(COMPANY_USER)).
-                andExpect(jsonPath("$[1].role").value(WORLD)).
-                andExpect(jsonPath("$[2].role").doesNotExist());
+                andExpect(jsonPath("$[0]['authority']").value(COMPANY_USER)).
+                andExpect(jsonPath("$[1]['authority']").value(WORLD)).
+                andExpect(jsonPath("$[2]['authority']").doesNotExist());
     }
 
     @Test
     public void shouldReturnWorldRoleWhenAWorldIsLoggedIn() throws Exception {
         mockMvc.perform(get(String.format("/%s/role", VIEW_PAGE)).with(user(world(ObjectId.get())))).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$[0].role").value(WORLD)).
-                andExpect(jsonPath("$[1].role").doesNotExist());
+                andExpect(jsonPath("$[0]['authority']").value(WORLD)).
+                andExpect(jsonPath("$[1]['authority']").doesNotExist());
     }
 
     @Test
     public void shouldReturnWorldRoleWhenUserIsAnonymous() throws Exception {
         mockMvc.perform(get(String.format("/%s/role", VIEW_PAGE))).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$[0].role").value(WORLD)).
-                andExpect(jsonPath("$[1].role").doesNotExist());
+                andExpect(jsonPath("$[0]['authority']").value(WORLD)).
+                andExpect(jsonPath("$[1]['authority']").doesNotExist());
     }
 
     @Test
@@ -295,8 +297,10 @@ public class UserControllerTest {
         String currentPassword = "Test Current Password";
         String newPassword = "Test New Password";
         ChangePasswordCommand changePasswordCommand = new ChangePasswordCommand(username, currentPassword, newPassword);
+        ObjectMapper objectMapper = new ObjectMapper();
         String jsonRequest = new Gson().toJson(changePasswordCommand);
 
+        //String jsonRequest = objectMapper.writeValueAsString(changePasswordCommand);
         context.checking(new Expectations() {{
             oneOf(userDomainService).changePassword(username, currentPassword, newPassword);
         }});

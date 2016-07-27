@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.real.apps.shuttle.miscellaneous.Role.*;
+import static com.real.apps.shuttle.miscellaneous.Role.ADMIN;
+import static com.real.apps.shuttle.miscellaneous.Role.AGENT;
 
 /**
  * Created by zorodzayi on 14/12/17.
@@ -33,12 +34,12 @@ public class AgentController {
         return "agent-add";
     }
 
-    @RequestMapping("/"+VIEW_NAME)
+    @RequestMapping("/" + VIEW_NAME)
     public String render() {
         return VIEW_NAME;
     }
 
-    @RequestMapping(value = "/"+VIEW_NAME+"/{skip}/{limit}")
+    @RequestMapping(value = "/" + VIEW_NAME + "/{skip}/{limit}")
     @ResponseBody
     public Page<Agent> page(@PathVariable("skip") int skip, @PathVariable("limit") int limit, @AuthenticationPrincipal User user) {
         logger.debug(String.format("Finding Agents {skip:%d,limit:%d,authenticatedUser:%s}", skip, limit, user));
@@ -52,19 +53,22 @@ public class AgentController {
                 user.getAuthorities().iterator().next().getAuthority() : "";
 
         if (ADMIN.equals(role)) {
-            return service.page(skip, limit);
+            Page<Agent> agents = service.page(skip, limit);
+            logger.info(String.format("Admin logged in found and returning %s agents ", agents));
+            return agents;
         } else if (AGENT.equals(role) && user.getAgentId() != null) {
             Agent agent = service.findOne(user.getAgentId());
             List<Agent> agents = new ArrayList<>();
             if (agent != null) {
                 agents.add(agent);
             }
+            logger.info(String.format("Agent logged in found and returning %s agents ", agents));
             return new PageImpl<>(agents);
         }
         return emptyPage;
     }
 
-    @RequestMapping(method = RequestMethod.POST,value = "/"+VIEW_NAME)
+    @RequestMapping(method = RequestMethod.POST, value = "/" + VIEW_NAME)
     @ResponseBody
     public Agent post(@RequestBody Agent agent, @AuthenticationPrincipal User user) {
         logger.debug(String.format("Posting agent %s {user:%s}", agent, user));

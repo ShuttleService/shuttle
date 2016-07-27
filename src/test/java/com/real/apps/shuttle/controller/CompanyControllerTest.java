@@ -103,7 +103,7 @@ public class CompanyControllerTest {
 
         mockMvc.perform(get("/" + VIEW_PAGE + "/" + skip + "/" + limit).with(user(world(ObjectId.get())))).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.content[0].slug").value(slug));
+                andExpect(jsonPath("$['content'][0]['slug']").value(slug));
     }
 
     @Test
@@ -143,8 +143,8 @@ public class CompanyControllerTest {
 
         mockMvc.perform(post("/" + VIEW_PAGE).with(user(agent)).contentType(MediaType.APPLICATION_JSON).content(companyString)).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.agentName").value(agentName)).
-                andExpect(jsonPath("$.agentId._time").value(agentId.getTimestamp()));
+                andExpect(jsonPath("$['agentName']").value(agentName)).
+                andExpect(jsonPath("$['agentId']['timestamp']").value(agentId.getTimestamp()));
         mongoTemplate.dropCollection("company");
     }
 
@@ -164,7 +164,7 @@ public class CompanyControllerTest {
 
         mockMvc.perform(put("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(companyString).with(user(admin(ObjectId.get())))).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.slug").value(slug));
+                andExpect(jsonPath("$['slug']").value(slug));
 
     }
 
@@ -184,7 +184,7 @@ public class CompanyControllerTest {
 
         mockMvc.perform(delete("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).with(user(admin(ObjectId.get()))).content(companyString)).andDo(print()).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.slug").value(slug));
+                andExpect(jsonPath("$['slug']").value(slug));
     }
 
     @Test
@@ -203,7 +203,7 @@ public class CompanyControllerTest {
 
         mockMvc.perform(delete("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).with(user(agent(ObjectId.get()))).content(companyString)).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.slug").value(slug));
+                andExpect(jsonPath("$['slug']").value(slug));
     }
 
     @Test
@@ -221,7 +221,7 @@ public class CompanyControllerTest {
 
         mockMvc.perform(get("/" + VIEW_PAGE + "/one/" + id).with(user(admin(id)))).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.id._time").value(id.getTimestamp()));
+                andExpect(jsonPath("$['id']['timestamp']").value(id.getTimestamp()));
     }
 
     @Test
@@ -240,7 +240,7 @@ public class CompanyControllerTest {
 
         mockMvc.perform(get(String.format("/%s/%d/%d", VIEW_PAGE, skip, limit)).with(user(admin(id)))).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.content[0].id._time").value(id.getTimestamp()));
+                andExpect(jsonPath("$['content'][0]['id']['timestamp']").value(id.getTimestamp()));
     }
 
     @Test
@@ -268,7 +268,7 @@ public class CompanyControllerTest {
 
         mockMvc.perform(get(String.format("/%s/%d/%d", VIEW_PAGE, skip, limit)).with(user(agent(id)))).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.content[0].id._time").value(id.getTimestamp()));
+                andExpect(jsonPath("$['content'][0]['id']['timestamp']").value(id.getTimestamp()));
 
         context.assertIsSatisfied();
     }
@@ -288,7 +288,7 @@ public class CompanyControllerTest {
 
         mockMvc.perform(get(String.format("/%s/%d/%d", VIEW_PAGE, skip, limit)).with(user(companyUser(id)))).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.content[0].id._time").value(id.getTimestamp()));
+                andExpect(jsonPath("$['content'][0]['id']['timestamp']").value(id.getTimestamp()));
         context.assertIsSatisfied();
     }
 }

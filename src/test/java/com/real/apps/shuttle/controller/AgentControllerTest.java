@@ -71,13 +71,13 @@ public class AgentControllerTest {
     }
 
     @Test
-    public void shouldRenderAgentPage() throws Exception {
+    public void renderAgentPage() throws Exception {
         mockMvc.perform(get("/" + VIEW_PAGE).with(user(admin(ObjectId.get())))).
                 andExpect(status().isOk()).andExpect(view().name(VIEW_PAGE));
     }
 
     @Test
-    public void shouldNotCallServiceIfThereIsNoUserLoggedIn() throws Exception {
+    public void doNotCallServiceIfThereIsNoUserLoggedIn() throws Exception {
         context.checking(new Expectations() {{
             never(service).page(skip, limit);
         }});
@@ -87,8 +87,8 @@ public class AgentControllerTest {
     }
 
     @Test
-    public void shouldCallServicePageIfAnAdminIsLoggedIn() throws Exception {
-        String agentName = "Test Agent Name To Be Return In The List Of Find All";
+    public void callServicePageIfAnAdminIsLoggedIn() throws Exception {
+        String agentName = "Test Agent Name To Be Returned In The List Of Find All";
         final Agent agent = new Agent();
         agent.setFullName(agentName);
         final List<Agent> agents = Arrays.asList(agent);
@@ -99,12 +99,14 @@ public class AgentControllerTest {
             will(returnValue(page));
         }});
         controller.setService(service);
-        mockMvc.perform(get(String.format("/%s/%d/%d", VIEW_PAGE, skip, limit)).with(user(admin(ObjectId.get())))).andExpect(status().isOk()).andExpect(jsonPath("$.content[0].fullName").value(agentName));
+        mockMvc.perform(get(String.format("/%s/%d/%d", VIEW_PAGE, skip, limit)).with(user(admin(ObjectId.get())))).
+                andExpect(status().isOk()).
+                andExpect(jsonPath("$['content'][0]['fullName']").value(agentName));
         context.assertIsSatisfied();
     }
 
     @Test
-    public void shouldCallServiceFindOneIfAnAgentIsLoggedIn() throws Exception {
+    public void callServiceFindOneIfAnAgentIsLoggedIn() throws Exception {
         String agentName = "Test Agent Name To Be Returned By Find One.";
         final ObjectId id = ObjectId.get();
         final Agent agent = new Agent();
@@ -120,11 +122,11 @@ public class AgentControllerTest {
 
         mockMvc.perform(get(String.format("/%s/%d/%d", VIEW_PAGE, skip, limit)).with(user(agent(id)))).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.content[0].id._time").value(id.getTimestamp()));
+                andExpect(jsonPath("$['content'][0]['id']['timestamp']").value(id.getTimestamp()));
     }
 
     @Test
-    public void shouldCallInsertOnSaveWhenAnAdminIsLoggedIn() throws Exception {
+    public void callInsertOnSaveWhenAnAdminIsLoggedIn() throws Exception {
         String agentName = "Test Agent Name To Be Mock Inserted";
         final Agent agent = new Agent();
         agent.setFullName(agentName);
@@ -138,11 +140,11 @@ public class AgentControllerTest {
         controller.setService(service);
         mockMvc.perform(post("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(agentString).with(user(admin(ObjectId.get()))))
                 .andExpect(status().isOk()).
-                andExpect(jsonPath("$.fullName").value(agentName));
+                andExpect(jsonPath("$['fullName']").value(agentName));
     }
 
     @Test
-    public void shouldNotInsertWhenNonAdminIsLoggedIn() throws Exception {
+    public void doNotInsertWhenNonAdminIsLoggedIn() throws Exception {
         String agentName = "Test Agent Name To Be Mock Inserted";
         final Agent agent = new Agent();
         agent.setFullName(agentName);

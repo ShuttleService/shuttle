@@ -4,9 +4,13 @@ package com.real.apps.shuttle.controller.command;
  * Created by zorodzayi on 15/06/13.
  */
 public class ChangePasswordCommand {
-    private final String username;
-    private final String currentPassword;
-    private final String newPassword;
+    private String username;
+    private String currentPassword;
+    private String newPassword;
+
+    private ChangePasswordCommand() {
+
+    }
 
     public ChangePasswordCommand(String username, String currentPassword, String newPassword) {
         this.username = username;

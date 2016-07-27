@@ -7,11 +7,13 @@ import java.math.BigDecimal;
  * Created by zorodzayi on 15/01/24.
  */
 public class Money {
-    private final BigDecimal amount;
-    private final Currency currency;
+    private BigDecimal amount;
+    private Currency currency;
+
+    private Money() {
+    }
 
     public Money(Currency currency, BigDecimal amount) {
-
         this.currency = currency;
         this.amount = amount;
     }

@@ -151,6 +151,6 @@ public class ReviewControllerTest {
         controller.setService(service);
         mockMvc.perform(get("/"+ReviewController.VIEW_PAGE+"/one/"+id)).andDo(print()).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.id._time").value(id.getTimestamp()));
+                andExpect(jsonPath("$['id']['timestamp']").value(id.getTimestamp()));
     }
 }

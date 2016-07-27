@@ -32,6 +32,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.servlet.Filter;
 import java.util.*;
 
 import static com.real.apps.shuttle.controller.UserDetailsUtils.*;
@@ -56,7 +57,7 @@ public class VehicleControllerTest {
     private WebApplicationContext webApplicationContext;
     @Autowired
     private VehicleController controller;
-    private MockMvc mockMvc;
+    private MockMvc mockMvc,mockMvcNonSecured;
     private static final String VIEW_PAGE = "vehicle";
     @Rule
     public JUnitRuleMockery context = new JUnitRuleMockery();
@@ -79,10 +80,14 @@ public class VehicleControllerTest {
     private String fromString = new DateTime(this.from).toDateTimeISO().toString();
     private String toString = new DateTime(this.to).toDateTimeISO().toString();
     private ObjectId vehicleCompanyId = ObjectId.get();
+    @Autowired
+    private Filter springSecurityFilterChain;
 
     @Before
     public void init() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).alwaysDo(print()).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).addFilters(springSecurityFilterChain).
+                alwaysDo(print()).addFilters().build();
+        mockMvcNonSecured = MockMvcBuilders.webAppContextSetup(webApplicationContext).alwaysDo(print()).build();
     }
 
     @Test
@@ -97,7 +102,7 @@ public class VehicleControllerTest {
 
     @Test
     public void shouldRenderVehiclePage() throws Exception {
-        mockMvc.perform(get("/" + VIEW_PAGE)).
+        mockMvcNonSecured.perform(get("/" + VIEW_PAGE)).
                 andExpect(view().name(VIEW_PAGE)).andExpect(status().isOk());
     }
 
@@ -117,7 +122,7 @@ public class VehicleControllerTest {
 
         mockMvc.perform(get("/" + VIEW_PAGE + "/" + skip + "/" + limit).with(user(admin(ObjectId.get())))).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.content[0].licenseNumber").value(licenseNumber));
+                andExpect(jsonPath("$['content'][0]['licenseNumber']").value(licenseNumber));
         context.assertIsSatisfied();
     }
 
@@ -137,7 +142,7 @@ public class VehicleControllerTest {
 
         mockMvc.perform(get("/" + VIEW_PAGE + "/" + skip + "/" + limit).with(user(world(ObjectId.get())))).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.content[0].licenseNumber").value(licenseNumber));
+                andExpect(jsonPath("$['content'][0]['licenseNumber']").value(licenseNumber));
         context.assertIsSatisfied();
     }
 
@@ -155,7 +160,7 @@ public class VehicleControllerTest {
         controller.setService(service);
         mockMvc.perform(get(String.format("/%s/%d/%d", VIEW_PAGE, skip, limit)).with(user(companyUser(id)))).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.content[0].companyId._time").value(id.getTimestamp()));
+                andExpect(jsonPath("$['content'][0]['companyId']['timestamp']").value(id.getTimestamp()));
 
     }
 
@@ -175,9 +180,9 @@ public class VehicleControllerTest {
         });
 
         String vehicleString = new Gson().toJson(vehicle);
-        mockMvc.perform(post("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(vehicleString)).andDo(print()).
+        mockMvcNonSecured.perform(post("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(vehicleString)).andDo(print()).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.licenseNumber").value(licenseNumber));
+                andExpect(jsonPath("$['licenseNumber']").value(licenseNumber));
         context.assertIsSatisfied();
     }
 
@@ -196,9 +201,9 @@ public class VehicleControllerTest {
 
         String vehicleString = new Gson().toJson(vehicle);
 
-        mockMvc.perform(put("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(vehicleString)).andDo(print()).
+        mockMvcNonSecured.perform(put("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).content(vehicleString)).andDo(print()).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.licenseNumber").value(licenseNumber));
+                andExpect(jsonPath("$['licenseNumber']").value(licenseNumber));
 
         context.assertIsSatisfied();
     }
@@ -219,7 +224,7 @@ public class VehicleControllerTest {
 
         mockMvc.perform(get("/" + VIEW_PAGE + "/one/" + id)).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("id._time").value(id.getTimestamp()));
+                andExpect(jsonPath("id['timestamp']").value(id.getTimestamp()));
         context.assertIsSatisfied();
     }
 
@@ -245,8 +250,8 @@ public class VehicleControllerTest {
                 with(user(companyUser(companyId)))).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$").isArray()).
-                andExpect(jsonPath("$[0].companyId._time").value(companyId.getTimestamp())).
-                andExpect(jsonPath("$[0].id._time").value(id.getTimestamp()));
+                andExpect(jsonPath("$[0]['companyId']['timestamp']").value(companyId.getTimestamp())).
+                andExpect(jsonPath("$[0]['id']['timestamp']").value(id.getTimestamp()));
 
         verify(domainService).bookable(objectIdArgumentCaptor.capture(), pageableArgumentCaptor.capture(), bookedRangeArgumentCaptor.capture());
 
@@ -287,7 +292,7 @@ public class VehicleControllerTest {
                 with(user(world(id)))).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$").isArray()).
-                andExpect(jsonPath("$[0].companyId._time").value(companyId.getTimestamp()));
+                andExpect(jsonPath("$[0]['companyId']['timestamp']").value(companyId.getTimestamp()));
 
         verify(domainService).bookable(objectIdArgumentCaptor.capture(), pageableArgumentCaptor.capture(), bookedRangeArgumentCaptor.capture());
 
@@ -311,7 +316,7 @@ public class VehicleControllerTest {
                 contentType(MediaType.APPLICATION_JSON)
                 .with(user(admin(id)))).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$[0].companyId._time").value(vehicleCompanyId.getTimestamp()));
+                andExpect(jsonPath("$[0]['companyId']['timestamp']").value(vehicleCompanyId.getTimestamp()));
 
         verify(domainService).bookable(objectIdArgumentCaptor.capture(), pageableArgumentCaptor.capture(), bookedRangeArgumentCaptor.capture());
 

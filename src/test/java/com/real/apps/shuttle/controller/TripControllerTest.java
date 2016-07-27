@@ -112,7 +112,7 @@ public class TripControllerTest {
 
         mockMvc.perform(get("/" + VIEW_PAGE + "/" + skip + "/" + limit).with(user(admin(ObjectId.get())))).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.content[0].source").value(source));
+                andExpect(jsonPath("$['content'][0]['source']").value(source));
     }
 
     @Test
@@ -176,8 +176,8 @@ public class TripControllerTest {
                 with(user(user)).
                 contentType(MediaType.APPLICATION_JSON).
                 content(tripString)).
-                andExpect(jsonPath("$.clientId._time").value(id.getTimestamp())).
-                andExpect(jsonPath("$.clientName").value(name + " " + surname));
+                andExpect(jsonPath("$['clientId']['timestamp']").value(id.getTimestamp())).
+                andExpect(jsonPath("$['clientName']").value(name + " " + surname));
         mongoTemplate.dropCollection("trip");
     }
 
@@ -196,8 +196,8 @@ public class TripControllerTest {
 
         mockMvc.perform(post("/" + VIEW_PAGE).with(user(user)).contentType(MediaType.APPLICATION_JSON).content(jsonTrip)).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.companyName").value(companyName)).
-                andExpect(jsonPath("$.companyId._time").value(id.getTimestamp()));
+                andExpect(jsonPath("$['companyName']").value(companyName)).
+                andExpect(jsonPath("$['companyId']['timestamp']").value(id.getTimestamp()));
         mongoTemplate.dropCollection("trip");
     }
 
@@ -217,7 +217,7 @@ public class TripControllerTest {
 
         mockMvc.perform(post("/" + VIEW_PAGE).with(user(admin(ObjectId.get()))).contentType(MediaType.APPLICATION_JSON).content(json)).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.source").value(source));
+                andExpect(jsonPath("$['source']").value(source));
         context.assertIsSatisfied();
     }
 
@@ -236,8 +236,8 @@ public class TripControllerTest {
 
         String tripString = new Gson().toJson(trip);
         mockMvc.perform(put("/" + VIEW_PAGE).with(user(user)).contentType(MediaType.APPLICATION_JSON).content(tripString)).
-                andExpect(jsonPath("$.clientId._time").value(id.getTimestamp()))
-                .andExpect(jsonPath("$.clientName").value(name + " " + surname));
+                andExpect(jsonPath("$['clientId']['timestamp']").value(id.getTimestamp()))
+                .andExpect(jsonPath("$['clientName']").value(name + " " + surname));
         mongoTemplate.dropCollection("trip");
     }
 
@@ -254,8 +254,8 @@ public class TripControllerTest {
 
         mockMvc.perform(put("/" + VIEW_PAGE).with(user(user)).contentType(MediaType.APPLICATION_JSON).content(jsonTrip)).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.companyName").value(companyName)).
-                andExpect(jsonPath("$.companyId._time").value(id.getTimestamp()));
+                andExpect(jsonPath("$['companyName']").value(companyName)).
+                andExpect(jsonPath("$['companyId']['timestamp']").value(id.getTimestamp()));
         mongoTemplate.dropCollection("trip");
     }
 
@@ -275,7 +275,7 @@ public class TripControllerTest {
 
         mockMvc.perform(put("/" + VIEW_PAGE).with(user(admin(ObjectId.get()))).contentType(MediaType.APPLICATION_JSON).content(json)).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.source").value(source));
+                andExpect(jsonPath("$['source']").value(source));
         context.assertIsSatisfied();
     }
 
@@ -295,7 +295,7 @@ public class TripControllerTest {
 
         mockMvc.perform(delete("/" + VIEW_PAGE).with(user(admin(ObjectId.get()))).contentType(MediaType.APPLICATION_JSON).content(tripString)).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.source").value(source));
+                andExpect(jsonPath("$['source']").value(source));
     }
 
     @Test
@@ -321,7 +321,7 @@ public class TripControllerTest {
 
         mockMvc.perform(delete("/" + VIEW_PAGE).with(user(world(id))).contentType(MediaType.APPLICATION_JSON).content(tripString)).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.source").value(source));
+                andExpect(jsonPath("$['source']").value(source));
 
     }
 
@@ -340,7 +340,7 @@ public class TripControllerTest {
 
         mockMvc.perform(get("/" + VIEW_PAGE + "/one/" + id).with(user(admin(ObjectId.get())))).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.id._time").value(id.getTimestamp()));
+                andExpect(jsonPath("$['id']['timestamp']").value(id.getTimestamp()));
     }
 
     @Test
@@ -359,7 +359,7 @@ public class TripControllerTest {
 
         mockMvc.perform(get(String.format("/%s/%d/%d", VIEW_PAGE, skip, limit)).with(user(companyUser(id)))).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.content[0].companyId._time").value(id.getTimestamp()));
+                andExpect(jsonPath("$['content'][0]['companyId']['timestamp']").value(id.getTimestamp()));
 
         context.assertIsSatisfied();
     }
@@ -380,7 +380,7 @@ public class TripControllerTest {
 
         mockMvc.perform(get(String.format("/%s/%d/%d", VIEW_PAGE, skip, limit)).with(user(world(id)))).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.content[0].clientId._time").value(id.getTimestamp()));
+                andExpect(jsonPath("$['content'][0]['clientId']['timestamp']").value(id.getTimestamp()));
         context.assertIsSatisfied();
     }
 

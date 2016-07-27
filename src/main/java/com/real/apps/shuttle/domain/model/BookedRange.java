@@ -13,9 +13,12 @@ import static org.apache.commons.lang3.time.DateUtils.*;
  */
 public class BookedRange {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private final Date from;
+    private Date from;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private final Date to;
+    private Date to;
+
+    private BookedRange() {
+    }
 
     public BookedRange(Date from, Date to) {
         Validate.notNull(from);

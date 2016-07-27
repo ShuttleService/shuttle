@@ -126,7 +126,7 @@ public class DriverControllerTest {
         }});
         mockMvc.perform(get("/" + VIEW_PAGE + "/" + skip + "/" + limit).with(user(admin(ObjectId.get())))).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.content[0].firstName").value(firstName));
+                andExpect(jsonPath("$['content'][0]['firstName']").value(firstName));
     }
 
     @Test
@@ -148,7 +148,7 @@ public class DriverControllerTest {
         mockMvc.perform(post("/" + VIEW_PAGE).with(user(admin(ObjectId.get()))).contentType(MediaType.APPLICATION_JSON).content(driverString)).
                 andDo(print()).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.firstName").value(firstName));
+                andExpect(jsonPath("$['firstName']").value(firstName));
     }
 
     @Test
@@ -168,8 +168,8 @@ public class DriverControllerTest {
 
         mockMvc.perform(post("/" + VIEW_PAGE).with(user(user)).contentType(MediaType.APPLICATION_JSON).content(driverString)).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.companyName").value(companyName)).
-                andExpect(jsonPath("$.companyId._time").value(companyId.getTimestamp()));
+                andExpect(jsonPath("$['companyName']").value(companyName)).
+                andExpect(jsonPath("$['companyId']['timestamp']").value(companyId.getTimestamp()));
 
         mongoTemplate.dropCollection("driver");
     }
@@ -190,7 +190,7 @@ public class DriverControllerTest {
         String driverString = new Gson().toJson(driver);
         mockMvc.perform(delete("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).with(user(admin(ObjectId.get()))).content(driverString)).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.firstName").value(firstName));
+                andExpect(jsonPath("$['firstName']").value(firstName));
     }
 
     @Test
@@ -209,7 +209,7 @@ public class DriverControllerTest {
 
         mockMvc.perform(delete("/" + VIEW_PAGE).contentType(MediaType.APPLICATION_JSON).with(user(companyUser(ObjectId.get()))).content(driverString)).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.firstName").value(firstName));
+                andExpect(jsonPath("$['firstName']").value(firstName));
     }
 
     @Test
@@ -226,7 +226,7 @@ public class DriverControllerTest {
         String driverString = new Gson().toJson(driver);
         mockMvc.perform(put("/" + VIEW_PAGE).with(user(admin(ObjectId.get()))).contentType(MediaType.APPLICATION_JSON).content(driverString)).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.firstName").value(firstName));
+                andExpect(jsonPath("$['firstName']").value(firstName));
     }
 
     @Test
@@ -243,8 +243,8 @@ public class DriverControllerTest {
 
         mockMvc.perform(put("/" + VIEW_PAGE).with(user(user)).contentType(MediaType.APPLICATION_JSON).content(driverString)).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.companyName").value(companyName)).
-                andExpect(jsonPath("$.companyId._time").value(companyId.getTimestamp()));
+                andExpect(jsonPath("$['companyName']").value(companyName)).
+                andExpect(jsonPath("$['companyId']['timestamp']").value(companyId.getTimestamp()));
     }
 
     @Test
@@ -262,7 +262,7 @@ public class DriverControllerTest {
 
         mockMvc.perform(get("/" + VIEW_PAGE + "/one/" + id).with(user(admin(id)))).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.id._time").value(id.getTimestamp()));
+                andExpect(jsonPath("$['id']['timestamp']").value(id.getTimestamp()));
     }
 
     @Test
@@ -283,7 +283,7 @@ public class DriverControllerTest {
 
         mockMvc.perform(get(String.format("/%s/%d/%d", VIEW_PAGE, skip, limit)).with(user(companyUser(id)))).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.content[0].companyId._time").value(id.getTimestamp()));
+                andExpect(jsonPath("$['content'][0]['companyId']['timestamp']").value(id.getTimestamp()));
 
         context.assertIsSatisfied();
     }
@@ -306,7 +306,7 @@ public class DriverControllerTest {
 
         mockMvc.perform(get(String.format("/%s/%d/%d", VIEW_PAGE, skip, limit)).with(user(world(id)))).
                 andExpect(status().isOk()).
-                andExpect(jsonPath("$.content[0].companyId._time").value(id.getTimestamp()));
+                andExpect(jsonPath("$['content'][0]['companyId']['timestamp']").value(id.getTimestamp()));
 
         context.assertIsSatisfied();
     }
@@ -335,7 +335,7 @@ public class DriverControllerTest {
         mockMvc.perform(get(String.format("/%s/bookable/%s/%s/%s/%d/%d", VIEW_PAGE, id, fromString, toString, skip, limit)).
                 with(user(companyUser(companyId)))).
                 andExpect(status().isOk()).andExpect(jsonPath("$").isArray()).
-                andExpect(jsonPath("$[0].companyId._time").value(companyId.getTimestamp()));
+                andExpect(jsonPath("$[0]['companyId']['timestamp']").value(companyId.getTimestamp()));
 
         verify(domainService).bookableDrivers(objectIdArgumentCaptor.capture(), pageableArgumentCaptor.capture(), bookedRangeArgumentCaptor.capture());
 
@@ -357,7 +357,7 @@ public class DriverControllerTest {
                 with(user(world(id)))).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$").isArray()).
-                andExpect(jsonPath("$[0].companyId._time").value(companyId.getTimestamp()));
+                andExpect(jsonPath("$[0]['companyId']['timestamp']").value(companyId.getTimestamp()));
 
         verify(domainService).bookableDrivers(objectIdArgumentCaptor.capture(), pageableArgumentCaptor.capture(),
                 bookedRangeArgumentCaptor.capture());
@@ -379,7 +379,7 @@ public class DriverControllerTest {
                 with(user(admin(id)))).
                 andExpect(status().isOk()).
                 andExpect(jsonPath("$").isArray()).
-                andExpect(jsonPath("$[0].companyId._time").value(driverCompanyId.getTimestamp()));
+                andExpect(jsonPath("$[0]['companyId']['timestamp']").value(driverCompanyId.getTimestamp()));
 
         verify(domainService).bookableDrivers(objectIdArgumentCaptor.capture(), pageableArgumentCaptor.capture(),
                 bookedRangeArgumentCaptor.capture());
