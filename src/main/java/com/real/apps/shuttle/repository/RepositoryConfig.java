@@ -3,10 +3,12 @@ package com.real.apps.shuttle.repository;
 import com.mongodb.*;
 import com.real.apps.shuttle.domain.model.User;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by zorodzayi on 14/10/26.
@@ -33,8 +35,9 @@ public class RepositoryConfig extends AbstractMongoConfiguration {
         //TODO: test this setup
         String host = this.host != null ? this.host : "localhost";
         int port = this.port != null ? this.port : 27017;
-
-        MongoClient client = new MongoClient(host, port);
+        List<MongoCredential> mongoCredentialList = Arrays.asList(mongoCredential());
+        ServerAddress serverAddress = new ServerAddress(host, port);
+        MongoClient client = new MongoClient(serverAddress, mongoCredentialList);
 
         client.setWriteConcern(WriteConcern.SAFE);
         client.setReadPreference(ReadPreference.nearest());
@@ -47,7 +50,7 @@ public class RepositoryConfig extends AbstractMongoConfiguration {
         return User.class.getPackage().getName();
     }
 
-    @Bean
+
     public MongoCredential mongoCredential() {
         //TODO test this method
         String username = this.username != null ? this.username : "";
