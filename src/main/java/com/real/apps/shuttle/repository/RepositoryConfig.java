@@ -2,7 +2,6 @@ package com.real.apps.shuttle.repository;
 
 import com.mongodb.*;
 import com.real.apps.shuttle.domain.model.User;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
@@ -26,7 +25,6 @@ public class RepositoryConfig extends AbstractMongoConfiguration {
     private String username;
     @Value("#{environment.OPENSHIFT_MONGODB_DB_PASSWORD}")
     private String password;
-    private Logger logger = Logger.getLogger(RepositoryConfig.class);
 
     @Override
     protected String getDatabaseName() {
