@@ -1,13 +1,10 @@
 package com.real.apps.shuttle.repository;
 
-import com.mongodb.Mongo;
-import com.mongodb.MongoClient;
-import com.mongodb.ReadPreference;
-import com.mongodb.WriteConcern;
+import com.mongodb.*;
 import com.real.apps.shuttle.domain.model.User;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.authentication.UserCredentials;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
@@ -28,7 +25,6 @@ public class RepositoryConfig extends AbstractMongoConfiguration {
 
     @Override
     protected String getDatabaseName() {
-
         return "shuttle";
     }
 
@@ -42,6 +38,7 @@ public class RepositoryConfig extends AbstractMongoConfiguration {
 
         client.setWriteConcern(WriteConcern.SAFE);
         client.setReadPreference(ReadPreference.nearest());
+
         return client;
     }
 
@@ -50,11 +47,11 @@ public class RepositoryConfig extends AbstractMongoConfiguration {
         return User.class.getPackage().getName();
     }
 
-    @Override
-    public UserCredentials getUserCredentials() {
+    @Bean
+    public MongoCredential mongoCredential() {
         //TODO test this method
         String username = this.username != null ? this.username : "";
         String password = this.password != null ? this.password : "";
-        return new UserCredentials(username, password);
+        return MongoCredential.createCredential(username, getDatabaseName(), password.toCharArray());
     }
 }
