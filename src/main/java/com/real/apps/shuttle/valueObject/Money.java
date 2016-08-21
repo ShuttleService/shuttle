@@ -18,6 +18,14 @@ public class Money {
         this.amount = amount;
     }
 
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public Currency getCurrency() {
+        return currency;
+    }
+
     @Override
     public String toString() {
         return String.format("{amount:%s, Currency:%s}", amount, currency);
