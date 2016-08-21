@@ -34,15 +34,15 @@ describe('Testing The "SharedController" (The Controller That Holds The State Th
         expect(controller).toBeDefined();
     }));
 
-    it('Should Set The SharedState On The $rootScope', function () {
+    it('Sets The SharedState On The $rootScope', function () {
         expect($rootScope.sharedState).toBeDefined();
     });
 
-    it('init function should be defined', function () {
+    it('verifies that init function is defined', function () {
         expect($scope.init).toBeDefined();
     });
 
-    it('Should Call CompanyService.query and set the companyPage on the $rootScope sharedState', function () {
+    it('Calls CompanyService.query and set the companyPage on the $rootScope sharedState', function () {
         var companies = [1, 2, 3, 4, 5];
         var page = {page: {content: companies}};
 
@@ -55,7 +55,7 @@ describe('Testing The "SharedController" (The Controller That Holds The State Th
 
     });
 
-    it('Should Call VehicleService.get And Set The VehiclePage On The $rootScope SharedState', function () {
+    it('Calls VehicleService.get And Set The VehiclePage On The $rootScope SharedState', function () {
         var vehicles = [3,4,5,6,7,7,8];
         var page = {page:{content:vehicles}};
         spyOn(VehicleService,'get').and.returnValue(page);
@@ -65,7 +65,7 @@ describe('Testing The "SharedController" (The Controller That Holds The State Th
         expect($rootScope.sharedState.vehiclePage).toEqual(page);
     });
 
-    it('Should Call DriverService.get And Set The DriverPage On The $rooScope SharedState',function(){
+    it('Calls DriverService.get And Set The DriverPage On The $rooScope SharedState',function(){
         var drivers = [5,6,7,9,0,23];
         var page = {page:{content:drivers}};
         spyOn(DriverService,'get').and.returnValue(page);
@@ -76,7 +76,7 @@ describe('Testing The "SharedController" (The Controller That Holds The State Th
 
     });
 
-    it('Should Call The AgentService.get And Set The AgentPage On The $rootScope SharedState',function(){
+    it('Calls The AgentService.get And Set The AgentPage On The $rootScope SharedState',function(){
         var agents = [2,3,4,5];
         var page = {content:agents};
         spyOn(AgentService,'get').and.returnValue(page);
@@ -86,7 +86,7 @@ describe('Testing The "SharedController" (The Controller That Holds The State Th
         expect($rootScope.sharedState.agentPage).toEqual(page);
     });
 
-    it('Should Call Service query with {pathVariable:role}, get the roles and set them on the $scope ', function () {
+    it('Calls Service query with {pathVariable:role}, get the roles and set them on the $scope ', function () {
         var roles = ['ROLE_admin','ROLE_agent','ROLE_world','ROLE_companyUser'];
         spyOn(UserService,'query').and.returnValue(roles);
         expect($scope.findRoles).toBeDefined();
@@ -95,7 +95,7 @@ describe('Testing The "SharedController" (The Controller That Holds The State Th
         expect($scope.sharedState.roles).toEqual(roles);
     });
 
-    it('Init Should Call The Various Methods On The Scope To Populate The Drop Downs', function () {
+    it('Init Calls The Various Methods On The Scope To Populate The Drop Downs', function () {
         spyOn($scope, 'findCompanies');
         spyOn($scope,'findVehicles');
         spyOn($scope,'findDrivers');

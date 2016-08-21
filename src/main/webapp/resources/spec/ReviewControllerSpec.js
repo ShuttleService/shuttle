@@ -26,7 +26,7 @@ describe('Testing The Review Controller', function () {
         expect(RESULT_SIZE).toBeDefined();
     }));
 
-    it('Should Call The ReviewService Get With The Params On The Scope And Set The Resulting Reviews On The Scope', function () {
+    it('Calls The ReviewService Get With The Params On The Scope And Set The Resulting Reviews On The Scope', function () {
 
         $controller('ReviewController', {
             $scope: $scope
@@ -48,7 +48,7 @@ describe('Testing The Review Controller', function () {
 
     });
 
-    it('Should Have A review On The $scope', function () {
+    it('Has A review On The $scope', function () {
 
         $controller('ReviewController', {
             $scope: $scope
@@ -57,7 +57,7 @@ describe('Testing The Review Controller', function () {
         expect($scope.review).toBeDefined();
     });
 
-    it('Should Call Review Service save when $scope.new is true', function () {
+    it('Calls Review Service save when $scope.new is true', function () {
 
         $controller('ReviewController', {
             $scope: $scope
@@ -79,7 +79,7 @@ describe('Testing The Review Controller', function () {
         expect($scope.review).toEqual(savedReview);
     });
 
-    it('Should Create A Review Text Array And Add The New Review If There Are No Reviews', function () {
+    it('Creates A Review Text Array And Add The New Review If There Are No Reviews', function () {
 
         $controller('ReviewController', {
             $scope: $scope
@@ -101,7 +101,7 @@ describe('Testing The Review Controller', function () {
 
     });
 
-    it('Should Add The Review Text To The Already Existent Array Of Reviews ', function () {
+    it('Adds The Review Text To The Already Existent Array Of Reviews ', function () {
 
         $controller('ReviewController', {
             $scope: $scope
@@ -125,7 +125,7 @@ describe('Testing The Review Controller', function () {
 
     });
 
-    it('Should Call FormSubmissionUtilService canSave ', function () {
+    it('Calls FormSubmissionUtilService canSave ', function () {
 
         $controller('ReviewController', {
             $scope: $scope
@@ -139,7 +139,7 @@ describe('Testing The Review Controller', function () {
         expect(FormSubmissionUtilService.canSave).toHaveBeenCalledWith($scope.addForm);
     });
 
-    it('Should Call Get On The Service With The Given skip and limit And Put The Page On The Scope', function () {
+    it('Calls Get On The Service With The Given skip and limit And Put The Page On The Scope', function () {
         $controller('ReviewController',{
             $scope:$scope
         });
@@ -157,13 +157,13 @@ describe('Testing The Review Controller', function () {
         expect($scope.page).toEqual(page);
     });
 
-    it('Should Set Skip And Limit On Init',function(){
+    it('Sets Skip And Limit On Init',function(){
         $controller('ReviewController',{$scope:$scope});
         expect($scope.skip).toEqual(0);
         expect($scope.limit).toEqual(RESULT_SIZE);
     });
 
-    it("Should Revert The Review To It's Prestine state",function(){
+    it("Reverts The Review To It's Prestine state",function(){
         $controller('ReviewController',{
             $scope:$scope
         });

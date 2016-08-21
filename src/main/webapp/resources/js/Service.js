@@ -29,7 +29,6 @@ angular.module('services', ['ngResource']).factory('DriverService', function ($r
     return {
 
         canSave: function (form) {
-            $log.debug('Testing Validity For Form : ' + form + '{pristine:' + form.$pristine + ',dirty:' + form.$dirty + ',valid:' + form.$valid + ',invalid:' + form.$invalid + '}');
             return form.$valid === true && form.$dirty === true;
         }
     }

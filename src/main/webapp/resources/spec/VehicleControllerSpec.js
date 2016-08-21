@@ -23,20 +23,20 @@ describe('Vehicle Controller Test', function () {
         expect(controller).toBeDefined();
     }));
 
-    it('Should Initialize The Controller With The Skip And The Limit ', function () {
+    it('Initializes The Controller With The Skip And The Limit ', function () {
         expect($scope.skip).toEqual(0);
         expect($scope.limit).toEqual(RESULT_SIZE);
     });
 
-    it('Should Initialize The Controller With The Vehicle', function () {
+    it('Initializes The Controller With The Vehicle', function () {
         expect($scope.vehicle).toBeDefined();
     });
 
-    it('Should Initialize The Controller With A List Of Vehicle Types', function () {
+    it('Initializes The Controller With A List Of Vehicle Types', function () {
         expect($scope.vehicleTypes.length >= 10).toEqual(true);
     });
 
-    it('Should Call The Service Get With The Given Skip And Limit And Set The Returned Page On The Scope', function () {
+    it('Calls The Service Get With The Given Skip And Limit And Set The Returned Page On The Scope', function () {
 
         $scope.skip = skip;
         $scope.limit = limit;
@@ -52,18 +52,18 @@ describe('Vehicle Controller Test', function () {
         expect($scope.page).toEqual(page);
     });
 
-    it('Should Assign The vehicle.companyName To The $scope.company name And vehicle.companyId To $scope.company.id', function () {
+    it('Assigns The vehicle.companyName To The $scope.company name And vehicle.companyId To $scope.company.id', function () {
         var company = {
-            id: 'Test Company Id To Be Set On The vehicle.companyId',
+            reference: 'Test Company Id To Be Set On The vehicle.companyId',
             tradingAs: 'Test Company Name To Be Set On vehicle.companyName'
         };
         $scope.company = company;
         $scope.saveClick();
-        expect($scope.vehicle.companyId).toEqual(company.id);
+        expect($scope.vehicle.companyId).toEqual(company.reference);
         expect($scope.vehicle.companyName).toEqual(company.tradingAs);
     });
 
-    it('Should Call VehicleService Save With The Vehicle On The Scope And Call Page AfterWards', function () {
+    it('Calls VehicleService Save With The Vehicle On The Scope And Call Page AfterWards', function () {
 
         expect($scope.saveClick).toBeDefined();
         var page = {size: 'Page'};
@@ -75,7 +75,7 @@ describe('Vehicle Controller Test', function () {
         expect($scope.list).toHaveBeenCalled();
     });
 
-    it('Should Revert The Vehicle Back To It\'s Pristine State', function () {
+    it('Reverts The Vehicle Back To It\'s Pristine State', function () {
         var prestine = $scope.vehicle;
         $scope.vehicle = {name: 'Vehicle Name To Be Reverted'};
         expect($scope.reset).toBeDefined();
@@ -83,7 +83,7 @@ describe('Vehicle Controller Test', function () {
         expect($scope.vehicle).toEqual(prestine);
     });
 
-    it('Should Call The FormSubmissionUtilService Can Save With The Form', function () {
+    it('Calls The FormSubmissionUtilService Can Save With The Form', function () {
         $scope.addForm = {$valid: true};
         spyOn(FormSubmissionUtilService, 'canSave').and.returnValue(true);
         expect($scope.canSave).toBeDefined();
@@ -93,18 +93,18 @@ describe('Vehicle Controller Test', function () {
         expect(actual).toBeTruthy();
     });
 
-    it('Should Call Service query With Bookable From And To Dates And Set The List Of Bookable Vehicles On The $scope',
+    it('Calls Service query With Bookable From And To Dates And Set The List Of Bookable Vehicles On The $scope',
 
         function () {
             var from = new Date();
             var to = new Date();
-            var companyId = 'Test Company Id';
+            var companyReference = 'Test Company Id';
 
             $scope.bookableFrom = from;
             $scope.bookableTo = to;
             $scope.skip = skip;
             $scope.limit = limit;
-            $scope.companyId = companyId;
+            $scope.companyId = companyReference;
 
             var bookable = ['Bookable Vehicle 1', 'Bookable Vehicle 2'];
 
@@ -117,7 +117,7 @@ describe('Vehicle Controller Test', function () {
 
             expect(VehicleService.query).toHaveBeenCalledWith({
                 pathVariable: 'bookable',
-                _companyId: companyId,
+                _companyId: companyReference,
                 bookableFrom: from,
                 bookableTo: to,
                 skip: skip,

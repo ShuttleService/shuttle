@@ -57,7 +57,7 @@ angular.module('controllers', ['services', 'ngMaterial']).controller('SharedCont
 
     $scope.saveClick = function () {
         if ($scope.company) {
-            $scope.driver.companyId = $scope.company.id;
+            $scope.driver.companyId = $scope.company.reference;
             $scope.driver.companyName = $scope.company.tradingAs;
         }
         if ($scope.new === true) {
@@ -109,7 +109,6 @@ angular.module('controllers', ['services', 'ngMaterial']).controller('SharedCont
     };
 
     $scope.saveClick = function () {
-        console.log('Attempting To Save The Trip');
 
         if ($scope.from && $scope.to) {
             $scope.trip.bookedRange = {from: $scope.from, to: $scope.to};
@@ -117,25 +116,23 @@ angular.module('controllers', ['services', 'ngMaterial']).controller('SharedCont
         }
 
         if ($scope.company) {
-            var companyId = $scope.company.id;
+            var companyReference = $scope.company.reference;
             var companyName = $scope.company.tradingAs;
-            $log.debug('Setting The Trip Company Id To ' + companyId + ' Company Name To ' + companyName);
-            $scope.trip.companyId = companyId;
+            $log.debug('Setting The Trip Company Id To ' + companyReference + ' Company Name To ' + companyName);
+            $scope.trip.companyId = companyReference;
             $scope.trip.companyName = companyName;
         }
         if ($scope.driver) {
-            var driverId = $scope.driver.id;
+            var driverReference = $scope.driver.reference;
             var driverName = $scope.driver.firstName + ' ' + $scope.driver.surname;
-            $log.debug('Setting The Driver Id To ' + driverId + ' And Driver Name To ' + driverName);
-            $scope.trip.driverId = driverId;
+            $scope.trip.driverId = driverReference;
             $scope.trip.driverName = driverName;
         }
         if ($scope.vehicle) {
             var vehicleName = $scope.vehicle.make + ' ' + $scope.vehicle.model + ' ' + $scope.vehicle.licenseNumber;
-            var vehicleId = $scope.vehicle.id;
-            $log.debug('Setting The VehicleName To ' + vehicleName + ' Vehicle License Number To ' + vehicleId);
+            var vehicleReference = $scope.vehicle.reference;
             $scope.trip.vehicleName = vehicleName;
-            $scope.trip.vehicleId = vehicleId;
+            $scope.trip.vehicleId = vehicleReference;
         }
         if ($scope.new === true) {
             console.log('About To Post Since This Is A New Trip ' + JSON.stringify($scope.trip));
@@ -163,10 +160,11 @@ angular.module('controllers', ['services', 'ngMaterial']).controller('SharedCont
 
     $scope.findBookableDriversAndVehicles = function () {
 
-        $log.debug('Attempting To Find The Bookable Drivers And The Bookable Vehicles ');
+        $log.debug('Attempting To Find The Bookable Drivers And The Bookable Vehicles, company ');
 
         if ($scope.from && $scope.to && $scope.company) {
             $log.debug('I Am Going Ahead Finding The Bookable Drivers And The Bookable Vehicles As All From, To And Company Have Values');
+
             var params = {
                 pathVariable: 'bookable',
                 _companyId: $scope.company.reference,
@@ -176,6 +174,7 @@ angular.module('controllers', ['services', 'ngMaterial']).controller('SharedCont
                 limit: 100
             };
 
+            $log.debug("from "+params.bookableFrom+" to "+params.bookableTo+" company id"+params._companyId);
             $scope.bookableDrivers = DriverService.query(params);
             $scope.bookableVehicles = VehicleService.query(params);
         } else {
@@ -223,7 +222,7 @@ angular.module('controllers', ['services', 'ngMaterial']).controller('SharedCont
     };
 
     $scope.reset = function () {
-        $log.debug('Reverting The Review To The Prestine State');
+        $log.debug('Reverting The Review To The Pristine State');
         $scope.review = angular.copy($scope.prestineReview);
     };
 
@@ -251,7 +250,7 @@ angular.module('controllers', ['services', 'ngMaterial']).controller('SharedCont
 
         if ($scope.agent) {
             $scope.company.agentName = $scope.agent.fullName;
-            $scope.company.agentId = $scope.agent.id;
+            $scope.company.agentId = $scope.agent.reference;
         }
         if ($scope.new === true) {
             $scope.recentlyAddedCompany = CompanyService.save($scope.company, function (data) {
@@ -294,10 +293,10 @@ angular.module('controllers', ['services', 'ngMaterial']).controller('SharedCont
 
         if ($scope.user.company) {
             var companyName = $scope.user.company.tradingAs;
-            var companyId = $scope.user.company.id;
-            $log.debug('Setting Company Name to ' + companyName + ' Company Id To ' + companyId);
+            var companyReference = $scope.user.company.reference;
+            $log.debug('Setting Company Name to ' + companyName + ' Company Reference To ' + companyReference);
             $scope.user.companyName = companyName;
-            $scope.user.companyId = companyId;
+            $scope.user.companyId = companyReference;
         } else {
             $log.debug("Did not set the Company Name Or Company Id As There Is No company on the scope");
         }
@@ -330,7 +329,7 @@ angular.module('controllers', ['services', 'ngMaterial']).controller('SharedCont
 
     $scope.reset = function () {
 
-        $log.debug('Reverting The User To It\'s Prestine State');
+        $log.debug("Reverting The User To It's Pristine State");
         $scope.user = angular.copy($scope.prestineUser);
         $scope.formHolder.confirmPassword = angular.copy($scope.confirmPasswordPrestine);
     };
@@ -363,7 +362,6 @@ angular.module('controllers', ['services', 'ngMaterial']).controller('SharedCont
     };
 
     $scope.canSave = function () {
-        $log.debug('Checking The Validity Of the Vehicle add Form');
         return FormSubmissionUtilService.canSave($scope.addForm);
     };
 
@@ -371,8 +369,8 @@ angular.module('controllers', ['services', 'ngMaterial']).controller('SharedCont
         $log.debug('Posting The Vehicle ' + $scope.vehicle);
         if ($scope.company) {
             var companyName = $scope.company.tradingAs;
-            var companyId = $scope.company.id;
-            $log.debug('Setting The Vehicle Company Name To ' + companyName + ' And The Company Id To ' + companyId);
+            var companyId = $scope.company.reference;
+            $log.debug('Setting The Vehicle Company Name To'+companyName+' And The Company Id To '+companyId+' company ref is '+$scope.company.reference);
             $scope.vehicle.companyId = companyId;
             $scope.vehicle.companyName = companyName;
         }
@@ -382,13 +380,10 @@ angular.module('controllers', ['services', 'ngMaterial']).controller('SharedCont
     };
 
     $scope.reset = function () {
-        $log.debug('Reverting The Vehicle To It\'s Pristine State');
         $scope.vehicle = angular.copy($scope.prestineVehicle);
     };
 
     $scope.bookableList = function () {
-
-        $log.debug('Finding Bookable Vehicles');
 
         $scope.bookable = VehicleService.query({
             pathVariable: 'bookable',

@@ -13,13 +13,13 @@ describe('Form Submission Util Service Test', function () {
         expect(FormSubmissionService).toBeDefined();
     }));
 
-    it('Should Return False When addForm is Dirty And Invalid', function () {
+    it('Returns False When addForm is Dirty And Invalid', function () {
 
         var addForm = {$dirty: true, $invalid: true};
         expect(FormSubmissionService.canSave(addForm)).toEqual(false);
     });
 
-    it('Should Return True When addForm is Dirty And Valid ', function () {
+    it('Returns True When addForm is Dirty And Valid ', function () {
 
         var addForm = {$dirty: true, $valid: true};
         expect(FormSubmissionService.canSave(addForm)).toEqual(true);

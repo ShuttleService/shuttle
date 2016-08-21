@@ -33,7 +33,7 @@
             <md-input-container flex>
                 <label>Agent</label>
                 <md-select name="agent" id="agent" ng-model="agent">
-                    <md-option ng-value="agent.fullName" ng-repeat="agent in sharedState.agentPage.content">
+                    <md-option ng-value="agent" ng-repeat="agent in sharedState.agentPage.content">
                         {{agent.fullName}}
                     </md-option>
                 </md-select>

@@ -22,27 +22,27 @@ describe('Testing The Agent Controller', function () {
         expect(RESULT_SIZE).toBeDefined();
     }));
 
-    it('Should Have An Agent On The Scope', function () {
+    it('Have An Agent On The Scope', function () {
         expect($scope.agent).toBeDefined();
     });
 
-    it('Should Have A Pristine Agent On The $scope',function(){
+    it('Have A Pristine Agent On The $scope',function(){
         expect($scope.pristineAgent).toBeDefined();
     });
 
-    it('Reset Should Restore The Pristine User ',function(){
+    it('Reset Restores The Pristine User ',function(){
         var pristineAgent = $scope.pristineAgent;
         $scope.agent = {data:'Not pristine Agent'};
         $scope.reset();
         expect($scope.agent).toEqual(pristineAgent);
     });
 
-    it('Should Have skip and limit defined with the default values',function(){
+    it('Have skip and limit defined with the default values',function(){
         expect($scope.skip).toEqual(0);
         expect($scope.limit).toEqual(RESULT_SIZE);
     });
 
-    it('Should Call Service Get And Set The Returned Page On The $scope', function () {
+    it('Call Service Get And Set The Returned Page On The $scope', function () {
         var page = {content: ['Test Content To Be Returned From Service.get']};
         var params = {skip: 0, limit: RESULT_SIZE};
         $scope.skip = params.skip;
@@ -55,7 +55,7 @@ describe('Testing The Agent Controller', function () {
         expect($scope.page).toEqual(page);
     });
 
-    it('Should Call FormSubmissionUtils canSave',function(){
+    it('Call FormSubmissionUtils canSave',function(){
         $scope.addForm = {};
         spyOn(FormSubmissionUtilService,'canSave').and.returnValue(false);
         expect($scope.canSave).toBeDefined();
@@ -64,7 +64,7 @@ describe('Testing The Agent Controller', function () {
         expect(actual).toEqual(false);
     });
 
-    it('Should Call Service Save With The Agent On The $scope', function () {
+    it('Call Service Save With The Agent On The $scope', function () {
 
         var agent = {name:'Test '};
         $scope.agent = agent;

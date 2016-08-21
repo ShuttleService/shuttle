@@ -14,13 +14,13 @@ describe('Testing The Agent Service', function () {
     }));
 
 
-    it('Should Have Save,Get,Query Methods To Be Defined',function(){
+    it('Save,Get,Query Methods Are Defined',function(){
         expect(AgentService.get).toBeDefined();
         expect(AgentService.save).toBeDefined();
         expect(AgentService.query).toBeDefined();
     });
 
-    it('Should Call The Correct URL To Save The Agent',function(){
+    it('Call The Correct URL To Save The Agent',function(){
 
         var agent = {name:'Test Agent Name To Be Saved'};
         $httpBackend.expectPOST('/agent',agent).respond(agent);
@@ -33,7 +33,7 @@ describe('Testing The Agent Service', function () {
         $httpBackend.verifyNoOutstandingRequest();
     });
 
-    it('Should Call The Correct URL To Return The Page',function(){
+    it('Call The Correct URL To Return The Page',function(){
         var agent = {name:'Test Agent Name For The Agent To Be Returned On The Page'};
         var page = {content:[agent]};
         var skip = 0, limit = 2;

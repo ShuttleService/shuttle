@@ -34,7 +34,7 @@ describe('Testing The User Controller', function () {
     }));
 
 
-    it('Should Call The UserService save if $scope.new is true', function () {
+    it('Calls The UserService save if $scope.new is true', function () {
 
         $scope.new = true;
         var user = {userName: 'Test UserName To POST '};
@@ -47,12 +47,12 @@ describe('Testing The User Controller', function () {
         expect($scope.list).toHaveBeenCalled();
     });
 
-    it('Should Have a user on the $scope at init', function () {
+    it('Has a user on the $scope at init', function () {
 
         expect($scope.user).toBeDefined();
     });
 
-    it('Should Call The User FormSubmissionUtil saveClick with addForm', function () {
+    it('Calls The User FormSubmissionUtil saveClick with addForm', function () {
 
         spyOn(FormSubmissionUtilService, 'canSave').and.returnValue(true);
         expect($scope.canSave).toBeDefined();
@@ -63,7 +63,7 @@ describe('Testing The User Controller', function () {
         expect(FormSubmissionUtilService.canSave).toHaveBeenCalledWith($scope.addForm);
     });
 
-    it('Should Call The Service get With The Given Skip And Limit', function () {
+    it('Calls The Service get With The Given Skip And Limit', function () {
         var skip = 0;
         var limit = 100;
         var params = {skip: skip, limit: limit};
@@ -78,12 +78,12 @@ describe('Testing The User Controller', function () {
         expect($scope.page).toEqual(page);
     });
 
-    it('Should Set Skip And Limit On The Scope On Init', function () {
+    it('Sets Skip And Limit On The Scope On Init', function () {
         expect($scope.range.skip).toEqual(0);
         expect($scope.range.limit).toEqual(RESULT_SIZE);
     });
 
-    it('Should Revert The User To It\'s Prestine State', function () {
+    it('Reverts The User To It\'s Prestine State', function () {
         var confirmPassword = $scope.confirmPassword;
         var prestine = $scope.user;
 
@@ -95,26 +95,26 @@ describe('Testing The User Controller', function () {
         expect($scope.formHolder.confirmPassword).toEqual(confirmPassword);
     });
 
-    it('saveClick Should Set The username To Be The Same As Email ', function () {
+    it('saveClick Sets The username To Be The Same As Email ', function () {
         var email = "Test Email To Be Copied To The User Name";
         $scope.user.email = email;
         $scope.saveClick();
         expect($scope.user.username).toEqual(email);
     });
 
-    it("saveClick Should Set The user.companyName and user.companyId from the values on the selected Company", function () {
+    it("saveClick Sets The user.companyName and user.companyId from the values on the selected Company", function () {
 
         var company = {
             tradingAs: 'Test Company Trading Name To Be Set On The User.CompanyName',
-            id: 'Test Company Id To Be Set On The User.CompanyId'
+            reference: 'Test Company Id To Be Set On The User.CompanyId'
         };
         $scope.user.company = company;
         $scope.saveClick();
-        expect($scope.user.companyId).toEqual(company.id);
+        expect($scope.user.companyId).toEqual(company.reference);
         expect($scope.user.companyName).toEqual(company.tradingAs);
     });
 
-    it('saveClick Should Set The Role As The List Of The Selected Role', function () {
+    it('saveClick  Sets The Role As The List Of The Selected Role', function () {
         var role = 'Test Role To Be Set As A Single Element In An Array Of Authorities.';
         $scope.user.authority = role;
         $scope.saveClick();
@@ -122,24 +122,24 @@ describe('Testing The User Controller', function () {
     });
 
 
-    it("saveClick Should Still work if there is no company set and user.companyId", function () {
+    it("saveClick Still works if there is no company set and user.companyId", function () {
 
         $scope.saveClick();
         expect($scope.user.companyId).toBeUndefined();
         expect($scope.user.companyName).toBeUndefined();
     });
 
-    it('Should Set The Company Name And Company Id Based On the Values On The Company', function () {
+    it('Sets The Company Name And Company Id Based On the Values On The Company', function () {
         var companyName = 'Test Company Name To Be Set On The user.companyName';
-        var companyId = 'Test Company Id To Be Set On user.companyId';
+        var reference = 'Test Company Id To Be Set On user.companyId';
 
-        $scope.user.company = {tradingAs: companyName, id: companyId};
+        $scope.user.company = {tradingAs: companyName, reference: reference};
         $scope.saveClick();
         expect($scope.user.companyName).toEqual(companyName);
-        expect($scope.user.companyId).toEqual(companyId);
+        expect($scope.user.companyId).toEqual(reference);
     });
 
-    it('Should Be Able To Save When The password And Password Retype Are The Same.', function () {
+    it('Is Able To Save When The password And Password Retype Are The Same.', function () {
         var samePassword = 'Test Password The Same For Both Password And Password Retype';
         $scope.user.password = samePassword;
         $scope.formHolder.confirmPassword = samePassword;
@@ -150,7 +150,7 @@ describe('Testing The User Controller', function () {
         expect(actual).toBe(true);
         expect(FormSubmissionUtilService.canSave).toHaveBeenCalled();
     });
-    it('Should Be Unable To Save When The Password And Password Retype Are Different', function () {
+    it('Is Unable To Save When The Password And Password Retype Are Different', function () {
         $scope.user.password = 'Test Password Different From Password Retype';
         $scope.formHolder.confirmPassword = 'Test Retype Password Different From Password';
 
@@ -161,7 +161,7 @@ describe('Testing The User Controller', function () {
         expect(actual).toBe(false);
         expect(FormSubmissionUtilService.canSave).toHaveBeenCalled();
     });
-    it('Should Call The update (with parameters on the scope i.e username,currentPassword and newPassword) To Change The Password ', function () {
+    it('Calls The update (with parameters on the scope i.e username,currentPassword and newPassword) To Change The Password ', function () {
 
         $scope.username = 'Test Username';
         $scope.currentPassword = 'Test Current Password';
@@ -179,7 +179,7 @@ describe('Testing The User Controller', function () {
         });
     });
 
-    it('Should Call FormSubmissionUtil.canSave With Change Password Form', function () {
+    it('Calls FormSubmissionUtil.canSave With Change Password Form', function () {
         spyOn(FormSubmissionUtilService, 'canSave').and.returnValue(true);
         $scope.canChangePasswordForm = {};
         expect($scope.canChangePassword).toBeDefined();

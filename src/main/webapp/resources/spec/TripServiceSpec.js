@@ -17,11 +17,11 @@ describe('Testing The Trip Service', function () {
         expect($httpBackend).toBeDefined();
     }));
 
-    it('Should Verify That The $resource Methods Are Defined ', function () {
+    it('Verifies That The $resource Methods Are Defined ', function () {
         expect(TripService.query).toBeDefined();
     });
 
-    it('Should Call The Trip List Rest Service', function () {
+    it('Calls The Trip List Rest Service', function () {
         var trip1 = 'Test Trip';
         var trips = [trip1];
         var skip = 1;

@@ -39,7 +39,7 @@ describe('Testing The Trip Controller', function () {
 
     }));
 
-    it('Should Call Get On Trip Service With Params On The Scope And Set The Result Page On The Scope', function () {
+    it('Calls Get On Trip Service With Params On The Scope And Set The Result Page On The Scope', function () {
 
         var controller = $controller('TripController', {
             $scope: $scope
@@ -62,7 +62,7 @@ describe('Testing The Trip Controller', function () {
         expect($scope.page).toEqual(page);
     });
 
-    it('Should Have A trip on The $scope', function () {
+    it('Has A trip on The $scope', function () {
 
         $controller('TripController', {
             $scope: $scope
@@ -71,7 +71,7 @@ describe('Testing The Trip Controller', function () {
         expect($scope.trip).toBeDefined();
     });
 
-    it('Should Call canSave On The FormSubmissionUtilService', function () {
+    it('Calls canSave On The FormSubmissionUtilService', function () {
 
         $controller('TripController', {
             $scope: $scope
@@ -85,7 +85,7 @@ describe('Testing The Trip Controller', function () {
         expect(FormSubmissionUtilService.canSave).toHaveBeenCalledWith($scope.addForm);
     });
 
-    it('saveClick Should Set The Company Id And Company Name To The Values On The $scope.company', function () {
+    it('saveClick Sets The Company reference And Company Name To The Values On The $scope.company', function () {
 
         $scope.company = company;
 
@@ -95,13 +95,13 @@ describe('Testing The Trip Controller', function () {
 
         $scope.saveClick();
 
-        expect($scope.trip.companyId).toEqual(company.id);
+        expect($scope.trip.companyId).toEqual(company.reference);
         expect($scope.trip.companyName).toEqual(company.tradingAs);
     });
 
-    it('saveClick Should Set The Driver Id And Driver Name To The Values On $scope.driver', function () {
+    it('saveClick Should Set The Driver Id to Driver Reference And Driver Name To The Values On $scope.driver', function () {
         var driver = {
-            id: 'Test Driver Id To Be Assigned The trip.driverId',
+            reference: 'Test Driver Id To Be Assigned The trip.driverId',
             firstName: 'Test Driver Name To Be Assigned To The trip.driverName',
             surname: 'Test Driver Surname To Be Assigned To The trip.driver.name '
         };
@@ -112,13 +112,13 @@ describe('Testing The Trip Controller', function () {
         });
 
         $scope.saveClick();
-        expect($scope.trip.driverId).toEqual(driver.id);
+        expect($scope.trip.driverId).toEqual(driver.reference);
         expect($scope.trip.driverName).toEqual(driver.firstName + ' ' + driver.surname);
     });
 
-    it('saveClick Should Set The Vehicle Id And Vehicle Name To Values on $scope.vehicle', function () {
+    it('saveClick Sets The Vehicle Reference And Vehicle Name From Values on $scope.vehicle', function () {
         var vehicle = {
-            id: 'Test Vehicle Id To Be Assigned To trip.vehicleId',
+            reference: 'Test Vehicle Reference To Be Assigned To trip.vehicleId',
             make: 'Test Vehicle Make To Be Assigned To trip.vehicleMake',
             model: 'Test Vehicle Model To Be Assigned To Vehicle Name',
             licenseNumber: 'Test Vehicle License Number To Be Assigned to trip.vehicleLicenseNumber'
@@ -130,12 +130,12 @@ describe('Testing The Trip Controller', function () {
         });
 
         $scope.saveClick();
-        expect($scope.trip.vehicleId).toEqual(vehicle.id);
+        expect($scope.trip.vehicleId).toEqual(vehicle.reference);
         expect($scope.trip.vehicleName).toEqual(vehicle.make + ' ' + vehicle.model + ' ' + vehicle.licenseNumber);
 
     });
 
-    it('Should Call TripService Save When $scope.new is true', function () {
+    it('Calls TripService Save When $scope.new is true', function () {
 
         $controller('TripController', {
             $scope: $scope
@@ -157,7 +157,7 @@ describe('Testing The Trip Controller', function () {
         expect($scope.list).toHaveBeenCalled();
     });
 
-    it('Should Calculate The Price Per Km And The Distance And Set The Price On The Scope', function () {
+    it('Calculates The Price Per Km And The Distance And Set The Price On The Scope', function () {
 
         $controller('TripController', {
             $scope: $scope
@@ -176,7 +176,7 @@ describe('Testing The Trip Controller', function () {
         expect($scope.trip.price.amount).toEqual(distance * pricePerKm);
     });
 
-    it('Should Call List On The Service With The Given skip and limit and Save The Page On The Scope', function () {
+    it('Calls List On The Service With The Given skip and limit and Save The Page On The Scope', function () {
         var skip = 0;
         var limit = 10;
         $controller('TripController', {
@@ -194,31 +194,31 @@ describe('Testing The Trip Controller', function () {
         expect($scope.page).toBeDefined(page);
     });
 
-    it('Should Set Skip And Limit On The $scope At Startup', function () {
+    it('Sets Skip And Limit On The $scope At Startup', function () {
         $controller('TripController', {$scope: $scope});
 
         expect($scope.skip).toEqual(0);
         expect($scope.limit).toEqual(RESULT_SIZE);
     });
 
-    it('Should Revert The Trip To The Prestine State', function () {
+    it('Reverts The Trip To The Pristine State', function () {
         $controller('TripController', {
             $scope: $scope
         });
 
-        var prestine = $scope.trip;
+        var pristine = $scope.trip;
         $scope.trip = {name: 'Test Trip To Be Reverted'};
         expect($scope.trip).toBeDefined();
         $scope.reset();
-        expect($scope.trip).toEqual(prestine);
+        expect($scope.trip).toEqual(pristine);
     });
 
-    it('Should Set The List Of Currencies On The Scope. Should this be on the Front End?', function () {
+    it('Sets The List Of Currencies On The Scope. Should this be on the Front End?', function () {
         $controller('TripController', {$scope: $scope});
         expect($scope.currencyCodes.length).toEqual(1);
     });
 
-    it('Should Define The Currency on the Trip Price', function () {
+    it('Defines The Currency on the Trip Price', function () {
 
         $controller('TripController', {
             $scope: $scope
@@ -226,7 +226,7 @@ describe('Testing The Trip Controller', function () {
         expect($scope.trip.price.currency).toBeDefined();
     });
 
-    it('Should Set A Booked Range On The Trip Given A From Date And A To Date ', function () {
+    it('Sets A Booked Range On The Trip Given A From Date And A To Date ', function () {
 
         $controller('TripController', {
             $scope: $scope
@@ -245,7 +245,7 @@ describe('Testing The Trip Controller', function () {
 
     });
 
-    it('When The From Date Is Not Set. No Call Should Be Made To Find Bookable Drivers And Bookable Vehicles', function () {
+    it('When The From Date Is Not Set. No Call Is Be Made To Find Bookable Drivers And Bookable Vehicles', function () {
 
         $controller('TripController', {$scope: $scope});
         $scope.to = new Date();
@@ -262,7 +262,7 @@ describe('Testing The Trip Controller', function () {
 
     });
 
-    it('When The To Date Is Not Set. No Call Should Be Made To Find Bookable Drivers And Bookable Vehicles', function () {
+    it('When The To Date Is Not Set. No Call Is Made To Find Bookable Drivers And Bookable Vehicles', function () {
         $controller('TripController', {$scope: $scope});
         $scope.from = new Date();
         $scope.company = company;
@@ -277,7 +277,7 @@ describe('Testing The Trip Controller', function () {
         expect($scope.bookableVehicles).toEqual({});
     });
 
-    it('When The Company Is Not Set. No Call Should Be Made To Find Bookable Drivers And Bookable Vehicles', function () {
+    it('When The Company Is Not Set. No Call Is Be Made To Find Bookable Drivers And Bookable Vehicles', function () {
         $controller('TripController', {$scope: $scope});
         $scope.from = new Date();
         $scope.to = new Date();
@@ -292,7 +292,7 @@ describe('Testing The Trip Controller', function () {
         expect($scope.bookableDrivers).toEqual({});
         expect($scope.bookableVehicles).toEqual({});
     });
-    it('Should Find A List Of Bookable Drivers When The Company, From And To Are All Set', function () {
+    it('Finds A List Of Bookable Drivers When The Company, From And To Are All Set', function () {
         $controller('TripController', {$scope: $scope});
         $scope.from = new Date(1978, 09, 07);
         $scope.to = new Date();

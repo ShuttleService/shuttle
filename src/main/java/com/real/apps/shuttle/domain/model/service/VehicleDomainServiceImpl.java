@@ -27,7 +27,7 @@ public class VehicleDomainServiceImpl implements VehicleDomainService {
 
     @Override
     public Set<Vehicle> bookable(ObjectId companyId, Pageable pageable, BookedRange bookedRange) {
-        logger.debug(String.format("Finding Bookable Vehicles {companyId:%s,pageable:%s,bookedRange:%s}", companyId, pageable, bookedRange));
+        logger.info(String.format("Finding Bookable Vehicles {companyId:%s,pageable:%s,bookedRange:%s}", companyId, pageable, bookedRange));
         Page<Vehicle> page = repository.findByCompanyId(companyId, pageable);
         logger.debug(String.format("{Page:%s, Total Elements:%d, Content Size:%d}", page, page.getTotalElements(), page.getContent().size()));
 
@@ -46,12 +46,12 @@ public class VehicleDomainServiceImpl implements VehicleDomainService {
 
     @Override
     public boolean book(Vehicle vehicle, BookedRange bookedRange) {
-        logger.debug(String.format("Booking Vehicle:%s, BookedRange:%s ", vehicle, bookedRange));
+        logger.info(String.format("Booking Vehicle:%s, BookedRange:%s ", vehicle, bookedRange));
         if (bookedRange == null) {
             return false;
         }
         boolean bookable = bookedRangeService.availableForBooking(vehicle.getBookedRanges(), bookedRange);
-
+        logger.info(String.format("Bookable %s", bookable));
         if (bookable) {
             vehicle = repository.findOne(vehicle.getId());
             vehicle.getBookedRanges().add(bookedRange);

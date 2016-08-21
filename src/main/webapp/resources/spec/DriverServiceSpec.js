@@ -23,7 +23,7 @@ describe('Driver Service Test', function () {
         expect(DriverService.query).toBeDefined();
     });
 
-    it('Should Call The Spring List Rest Service', function () {
+    it('Calls The Spring List Rest Service', function () {
         var driver1 = 'Driver 1';
         var driver2 = 'Driver 2';
         var drivers = [driver1, driver2];
@@ -35,7 +35,7 @@ describe('Driver Service Test', function () {
         expect(result[1]).toEqual(driver2);
     });
 
-    it('Should Get A Set Of All Bookable Drivers For Given From And To Booking Range', function () {
+    it('Gets A Set Of All Bookable Drivers For Given From And To Booking Range', function () {
         var bookableDrivers = [{name: 'Test Bookable Driver Available For Booking'}];
         var from = new Date(2015, 04, 05).toISOString();
         var to = new Date(2015, 04, 06).toISOString();

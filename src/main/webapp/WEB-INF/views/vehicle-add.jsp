@@ -1,4 +1,4 @@
-<div layout="column" flex ng-controller="VehicleController">
+<div layout="column" layout-padding flex ng-controller="VehicleController">
     <form name="addForm" layout="column" layout-padding>
         <div flex layout-gt-sm="row">
             <md-input-container flex>
@@ -34,8 +34,8 @@
             </md-input-container>
             <md-input-container flex>
                 <label>Company</label>
-                <md-select ng-model="company" name="company" required>
-                    <md-option ng-value="company.tradingAs" ng-repeat="company in sharedState.companyPage.content">
+                <md-select ng-model="company" name="company">
+                    <md-option ng-value="company" ng-repeat="company in sharedState.companyPage.content">
                         {{company.tradingAs}}
                     </md-option>
                 </md-select>

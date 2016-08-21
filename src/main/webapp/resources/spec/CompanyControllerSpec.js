@@ -28,7 +28,7 @@ describe('Company Controller Test.', function () {
         });
     }));
 
-    it('Should Return False When addForm is Dirty And Invalid', function () {
+    it('Return False When addForm is Dirty And Invalid', function () {
         var addForm = {$dirty: true, $valid: false};
 
         spyOn(FormSubmissionUtilService, 'canSave').and.returnValue(false);
@@ -39,7 +39,7 @@ describe('Company Controller Test.', function () {
         expect(FormSubmissionUtilService.canSave).toHaveBeenCalledWith(addForm);
     });
 
-    it('Should Return True When addForm is Dirty And Valid ', function () {
+    it('Return True When addForm is Dirty And Valid ', function () {
         var addForm = {$dirty: true, $valid: true};
 
         $scope.addForm = addForm;
@@ -49,7 +49,7 @@ describe('Company Controller Test.', function () {
         expect(FormSubmissionUtilService.canSave).toHaveBeenCalledWith(addForm);
     });
 
-    it('Should Call Get On Service And Set The Returned Company On The Scope', function () {
+    it('Call Get On Service And Set The Returned Company On The Scope', function () {
         expect($scope.get).toBeDefined();
 
         var company = {name: 'Test Company Spy Name For Get', id: 'Test Company Spy Name For Get'};
@@ -67,12 +67,12 @@ describe('Company Controller Test.', function () {
 
     });
 
-    it('Should Have A Company Object On The Scope On Init And Should Default To $scope.new == true', function () {
+    it('Have A Company Object On The Scope On Init And Should Default To $scope.new == true', function () {
         expect($scope.company).toBeDefined();
         expect($scope.new).toEqual(true);
     });
 
-    it('Should Call Service Post On Submit When Creating A Company ', function () {
+    it('Call Service Post On Submit When Creating A Company ', function () {
         var companyToSave = {name: 'Test Company Name To Be Called With Posted'};
         var savedCompany = {name: 'Test Company Name To Be Returned From After POST'};
         $scope.company = companyToSave;
@@ -87,7 +87,7 @@ describe('Company Controller Test.', function () {
         expect($scope.recentlyAddedCompany).toEqual(savedCompany);
     });
 
-    it('Should Call Service get with given skip and limit', function () {
+    it('Call Service get with given skip and limit', function () {
         var size = 23;
         var page = {size:size};
 
@@ -104,12 +104,12 @@ describe('Company Controller Test.', function () {
         expect($scope.page).toEqual(page);
     });
 
-    it('Should Set The limit To the Default Result Size, Set Limit  And skip on the scope',function(){
+    it('Sets The limit To the Default Result Size, Set Limit  And skip on the scope',function(){
         expect($scope.skip).toEqual(0);
         expect($scope.limit).toEqual(RESULT_SIZE);
     });
 
-    it('Should Reset The Company On The $scope To The Original One',function(){
+    it('Resets The Company On The $scope To The Original One',function(){
         var prestineCompany = $scope.company;
         $scope.company = {name:'Test Company Name Dirty'};
         expect($scope.reset).toBeDefined();
@@ -117,12 +117,12 @@ describe('Company Controller Test.', function () {
         expect($scope.company).toEqual(prestineCompany);
     });
 
-    it('Should Assign The Agent Name And Agent Id  From The Agent On The $scope To The Company To Be Saved',function(){
-        var agent = {fullName:'Test AgentFull Name To Be Set On The agent to be saved',id:'Test Agent Id To Be Set On The agent to be saved'};
+    it('Assigns The Agent Name And Agent Id As Reference From The Agent On The $scope To The Company To Be Saved',function(){
+        var agent = {fullName:'Test AgentFull Name To Be Set On The agent to be saved',reference:'Test Agent Id To Be Set On The agent to be saved'};
         $scope.agent = agent;
         $scope.saveClick();
         expect($scope.company.agentName).toEqual(agent.fullName);
-        expect($scope.company.agentId).toEqual(agent.id);
+        expect($scope.company.agentId).toEqual(agent.reference);
     });
 
 });

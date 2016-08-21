@@ -25,7 +25,7 @@ describe('The Company Service Test', function () {
 
     });
 
-    it('Should Call Get And Return The Got Company', function () {
+    it('Call Get And Return The Gotten Company', function () {
 
         var company = {name: 'Test Company Name To Get', id: 'TestCompanyIdToGet'};
 
@@ -44,7 +44,7 @@ describe('The Company Service Test', function () {
 
     });
 
-    it('Should Call Get On The Service And Return A List Of Companies', function () {
+    it('Call Get On The Service And Return A List Of Companies', function () {
 
         var company = {name: 'Test Company Name To Be Gotten In A List', id: 'Test Company Id To Be Gotten In A List'};
         var companyArray = [company];
@@ -63,7 +63,7 @@ describe('The Company Service Test', function () {
         expect(actualCompanyArray[0].id).toEqual(company.id);
     });
 
-    it('Should Post The Company To The Correct URL', function () {
+    it('Post The Company To The Correct URL', function () {
 
         var company = {name: 'Test Company Name To Post', id: 'Test Company Id To Post'};
 
@@ -84,7 +84,7 @@ describe('The Company Service Test', function () {
 
     });
 
-    it('Should Put The Company To The Correct URL', function () {
+    it('Put The Company To The Correct URL', function () {
         var company = {name: 'Test Company Name To Put', id: 'Test Company Id To Put'};
 
         var url = '/company';
@@ -102,7 +102,7 @@ describe('The Company Service Test', function () {
         expect(actualCompany.id).toEqual(company.id);
     });
 
-    it('Should Delete The Company On The Correct URL', function () {
+    it('Delete The Company On The Correct URL', function () {
         var company = {name: 'Test Company Name To Delete', id: 'TestCompanyIDToDelete'};
 
         var url =  '/company/' + company.id;

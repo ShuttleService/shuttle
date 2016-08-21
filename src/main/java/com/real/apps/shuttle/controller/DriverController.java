@@ -174,7 +174,7 @@ public class DriverController {
         final BookedRange bookedRange = new BookedRange(from, to);
 
         final Pageable pageable = new PageRequest(skip, limit);
-        logger.debug(String.format("Finding Bookable Drivers {BookedRange:%s, LoggedInUser:%s, skip:%d,limit:%d}", bookedRange, user, skip, limit));
+        logger.info(String.format("Finding Bookable Drivers {BookedRange:%s, LoggedInUser:%s, skip:%d,limit:%d}", bookedRange, user, skip, limit));
 
         if (user == null) {
             return new HashSet<>();

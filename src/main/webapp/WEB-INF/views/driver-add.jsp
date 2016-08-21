@@ -22,8 +22,8 @@
         </div>
         <md-input-container flex>
             <label>Company</label>
-            <md-select name="company" ng-model="company" required>
-                <md-option ng-value="company.tradingAs" ng-repeat="company in sharedState.companyPage.content">
+            <md-select name="company" ng-model="company">
+                <md-option ng-value="company" ng-repeat="company in sharedState.companyPage.content">
                     {{company.tradingAs}}
                 </md-option>
             </md-select>

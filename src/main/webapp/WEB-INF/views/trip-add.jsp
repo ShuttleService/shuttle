@@ -57,8 +57,8 @@
 
         <md-input-container flex>
             <label>Company</label>
-            <md-select name="company" ng-model="company" ng-change="findBookableDriversAndVehicles()" required>
-                <md-option ng-value="company.tradingAs" ng-repeat="company in sharedState.companyPage.content">
+            <md-select name="company" ng-model="company" ng-change="findBookableDriversAndVehicles()">
+                <md-option ng-value="company" ng-repeat="company in sharedState.companyPage.content">
                     {{company.tradingAs}}
                 </md-option>
             </md-select>
@@ -78,7 +78,7 @@
         <div layout-gt-sm="row" flex>
             <md-input-container flex>
                 <label>Vehicle</label>
-                <md-select name="vehicle" ng-model="vehicle" required>
+                <md-select name="vehicle" ng-model="vehicle">
                     <md-option ng-value="vehicle" ng-repeat="vehicle in bookableVehicles">
                         {{vehicle.make+' '+vehicle.model+' '+vehicle.licenseNumber}}
                     </md-option>
@@ -86,7 +86,7 @@
             </md-input-container>
             <md-input-container flex>
                 <label>Driver</label>
-                <md-select name="driver" ng-model="driver" required>
+                <md-select name="driver" ng-model="driver">
                     <md-option ng-value="driver" ng-repeat="driver in bookableDrivers">
                         {{driver.firstName+' '+driver.surname}}
                     </md-option>

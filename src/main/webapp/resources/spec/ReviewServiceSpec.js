@@ -14,12 +14,12 @@ describe('Testing The Review Service', function () {
         $httpBackend = _$httpBackend_;
     }));
 
-    it('Should Verify The $resource Methods Are Defined', function () {
+    it('Verifies The $resource Methods Are Defined', function () {
 
         expect(ReviewService.query).toBeDefined();
     });
 
-    it('Should Call The List Review Rest Service', function () {
+    it('Calls The List Review Rest Service', function () {
 
         var review = 'Test Review';
         var reviews = [review];

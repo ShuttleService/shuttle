@@ -14,7 +14,7 @@ describe('Vehicle Service Test', function () {
         expect($httpBackend).toBeDefined();
     }));
 
-    it('Should Verify That The $resource Methods Are Defined On The Service', function () {
+    it('Verifies That The $resource Methods Are Defined On The Service', function () {
         expect(VehicleService.get).toBeDefined();
         expect(VehicleService.query).toBeDefined();
         expect(VehicleService.save).toBeDefined();
@@ -22,7 +22,7 @@ describe('Vehicle Service Test', function () {
         expect(VehicleService.remove).toBeDefined();
     });
 
-    it('Should Call Get With The Given Skip And Limit', function () {
+    it('Calls Get With The Given Skip And Limit', function () {
         var url =  '/vehicle/' + skip + '/' + limit;
         var page = {size: limit};
         $httpBackend.expectGET(url).respond(page);
@@ -32,7 +32,7 @@ describe('Vehicle Service Test', function () {
         expect(actual.size).toEqual(page.size);
     });
 
-    it('Should Get A Set Of Bookable Vehicles With The Given BookedRange, skip and limit', function () {
+    it('Gets A Set Of Bookable Vehicles With The Given BookedRange, skip and limit', function () {
         var from = new Date().toISOString();
         var to = new Date().toISOString();
         console.log("From Date " + from + " ,To Date " + to);
